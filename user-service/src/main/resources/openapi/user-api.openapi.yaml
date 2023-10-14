@@ -252,6 +252,8 @@ components:
         - ROLE_TEACHER
         - ROLE_CURATOR
         - ROLE_ENROLLEE
+        - ROLE_MODERATOR
+        - ROLE_COMMITTE
         
     SignupRequestOpenApi:
       type: object
