@@ -1,12 +1,12 @@
-openapi: "3.0.2"
+openapi: 3.0.0
 info:
   title: News API
-  version: "0.0.1"
+  version: 0.0.1
 servers:
-  - url: http://localhost:8081/api/news
+  - url: http://localhost:8081/api
 paths:
 
-  /:
+  /news:
     get:
       summary: All News Info
       tags:
@@ -91,7 +91,7 @@ paths:
         '404':
           description: News With This ID Was Not Found
 
-  /{id}:
+  /news/{id}:
     get:
       summary: News Info by Id
       tags:
@@ -102,6 +102,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
             minimum: 1
       operationId: showNewsIdInfo
       responses:
