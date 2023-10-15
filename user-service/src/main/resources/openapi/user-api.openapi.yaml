@@ -1,0 +1,471 @@
+openapi: "3.0.2"
+info:
+  title: API Title
+  version: "1.0"
+servers:
+  - url: https://localhost:8082/api/user
+    description: user server
+paths:
+  /{id}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: User Info
+      tags:
+        - User
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      operationId: showUserInfo
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserOpenApi"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: User not found!
+          
+  /auth/signup:
+    post:
+      summary: Register
+      tags:
+        - Authorization
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequestOpenApi'
+      responses:
+        '201':
+          description: User registered successfully and waits for email verification!
+        '400':
+          description: Account with such email is already in use!
+        '409':
+          description: Account with such username is already in use!
+          
+  /auth/signin:
+    post:
+      summary: Login
+      tags:
+        - Authorization
+      operationId: authenticateUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequestOpenApi'
+      responses:
+        '200':
+          description: Successfully Logged In
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtResponseOpenApi'
+              
+        '400':
+          description: Authentication error! Incorrect login/password input.
+          
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+          
+  /auth/update-token:
+    post:
+      security:
+        - bearerAuth: [ ]
+      summary: Update token
+      tags:
+        - Authorization
+      operationId: updateUserToken
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserOpenApi'
+      responses:
+        '200':
+          description: Successfully Updated Token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtResponseOpenApi'
+        '400':
+          description: Bad request!
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '403':
+          description: Foribidden error!
+        '404':
+          description: User not found!
+        
+          
+  /:
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: Get all users
+      tags:
+        - User
+      operationId: getAllUsers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserOpenApi"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '400':
+          description: Bad request!
+      
+      
+    put:
+      security:
+        - bearerAuth: [ ]
+      summary: Update user
+      tags:
+        - User
+      operationId: updateUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserOpenApi'
+      responses:
+        '200':
+          description: Successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JwtResponseOpenApi"
+
+        '400':
+          description: Updated error! 
+          
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+          
+        '403':
+          description: Forbidden error!
+          
+        '404':
+          description: User not found!
+          
+        
+          
+    delete:
+      security:
+        - bearerAuth: [ ]
+      summary: Remove user
+      tags:
+        - User
+      operationId: deleteUser
+      parameters:
+        - in: query
+          name: id
+          description: User id
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successfully removed
+        '400':
+          description: Removed error!
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: User Not Found!
+
+  /request/{id}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: Request Info
+      tags:
+        - Request
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      operationId: showRequestInfo
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RequestOpenApi"
+        '400':
+          description: Bad request!
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: Request not found!
+
+  /request:
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: Get all requests
+      tags:
+        - Request
+      operationId: getAllRequests
+      responses:
+        '200':
+          description: Successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RequestOpenApi'
+        '400':
+          description: Bad request!
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+
+    delete:
+      security:
+        - bearerAuth: [ ]
+      summary: Remove request
+      tags:
+        - Request
+      operationId: deleteRequest
+      parameters:
+        - in: query
+          name: id
+          description: Request id
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successfully removed
+        '400':
+          description: Removed error!
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: Request Not Found!
+
+    post:
+      security:
+        - bearerAuth: [ ]
+      summary: Add request
+      tags:
+        - Request
+      operationId: addRequest
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestOpenApi'
+      responses:
+        '200':
+          description: Successfully Created Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestOpenApi'
+        '400':
+          description: Request with such id is already exists!
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '403':
+          description: Foribidden error!
+
+
+    put:
+      security:
+        - bearerAuth: [ ]
+      summary: Update request
+      tags:
+        - Request
+      operationId: updateRequest
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestOpenApi'
+      responses:
+        '200':
+          description: Successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JwtResponseOpenApi"
+
+        '400':
+          description: Updated error!
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '403':
+          description: Forbidden error!
+    
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+
+      
+  schemas:
+    UserOpenApi:
+      type: object
+      required:
+        - login
+        - name
+        - surname
+        - email
+      properties:
+        id:
+          type: integer
+          format: int64
+        login:
+          type: string
+        name:
+          type: string
+        surname:
+          type: string
+        patronymic:
+          type: string
+        email:
+          type: string
+        group:
+          type: string
+        photo:
+          type: string
+          description: base64 string
+        roles:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoleOpenApi"
+    
+    RoleOpenApi:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          $ref: "#/components/schemas/ERoleOpenApi"
+          
+    ERoleOpenApi:
+      type: string
+      enum:
+        - ROLE_STUDENT
+        - ROLE_ADMIN
+        - ROLE_TEACHER
+        - ROLE_CURATOR
+        - ROLE_ENROLLEE
+        - ROLE_MODERATOR
+        - ROLE_COMMITTE
+        
+    SignupRequestOpenApi:
+      type: object
+      required:
+        - login
+        - name
+        - surname
+        - email
+        - password
+      properties:
+        login:
+          type: string
+        name:
+          type: string
+        surname:
+          type: string
+        patronymic:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+          
+    LoginRequestOpenApi:
+      type: object
+      required:
+        - login
+        - password
+      properties:
+        login:
+          type: string
+        password:
+          type: string
+          
+    JwtResponseOpenApi:
+      type: object
+      required:
+        - accessToken
+        - user
+      properties:
+        accessToken:
+          type: string
+          pattern: ^Bearer\s.+$
+        user:
+          $ref:  "#/components/schemas/UserOpenApi"
+
+    RequestOpenApi:
+      type: object
+      required:
+        - user
+        - leaderName
+        - subunitName
+        - currentPosition
+        - workExperience
+        - personalAchievements
+        - motivationMessage
+      properties:
+        id:
+          type: integer
+          format: int64
+        leaderName:
+          type: string
+        subunitName:
+          type: string
+        currentPosition:
+          type: string
+        workExperience:
+          type: string
+        personalAchievements:
+          type: string
+        motivationMessage:
+          type: string
+        user:
+          $ref: "#/components/schemas/UserOpenApi"
+
+            
+        
+          
+          
+
