@@ -31,6 +31,8 @@ paths:
                 $ref: "#/components/schemas/UserOpenApi"
         '401':
           $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: User not found!
           
   /auth/signup:
     post:
@@ -190,7 +192,137 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '404':
           description: User Not Found!
-          
+
+  /request/{id}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: Request Info
+      tags:
+        - Request
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      operationId: showRequestInfo
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RequestOpenApi"
+        '400':
+          description: Bad request!
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: Request not found!
+
+  /request:
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: Get all requests
+      tags:
+        - Request
+      operationId: getAllRequests
+      responses:
+        '200':
+          description: Successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RequestOpenApi'
+        '400':
+          description: Bad request!
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+
+    delete:
+      security:
+        - bearerAuth: [ ]
+      summary: Remove request
+      tags:
+        - Request
+      operationId: deleteRequest
+      parameters:
+        - in: query
+          name: id
+          description: Request id
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successfully removed
+        '400':
+          description: Removed error!
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: Request Not Found!
+
+    post:
+      security:
+        - bearerAuth: [ ]
+      summary: Add request
+      tags:
+        - Request
+      operationId: addRequest
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestOpenApi'
+      responses:
+        '200':
+          description: Successfully Created Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestOpenApi'
+        '400':
+          description: Request with such id is already exists!
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '403':
+          description: Foribidden error!
+
+
+    put:
+      security:
+        - bearerAuth: [ ]
+      summary: Update request
+      tags:
+        - Request
+      operationId: updateRequest
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestOpenApi'
+      responses:
+        '200':
+          description: Successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JwtResponseOpenApi"
+
+        '400':
+          description: Updated error!
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '403':
+          description: Forbidden error!
     
 components:
   securitySchemes:
@@ -213,6 +345,9 @@ components:
         - surname
         - email
       properties:
+        id:
+          type: integer
+          format: int64
         login:
           type: string
         name:
@@ -252,6 +387,8 @@ components:
         - ROLE_TEACHER
         - ROLE_CURATOR
         - ROLE_ENROLLEE
+        - ROLE_MODERATOR
+        - ROLE_COMMITTE
         
     SignupRequestOpenApi:
       type: object
@@ -297,7 +434,36 @@ components:
           pattern: ^Bearer\s.+$
         user:
           $ref:  "#/components/schemas/UserOpenApi"
-        
+
+    RequestOpenApi:
+      type: object
+      required:
+        - user
+        - leaderName
+        - subunitName
+        - currentPosition
+        - workExperience
+        - personalAchievements
+        - motivationMessage
+      properties:
+        id:
+          type: integer
+          format: int64
+        leaderName:
+          type: string
+        subunitName:
+          type: string
+        currentPosition:
+          type: string
+        workExperience:
+          type: string
+        personalAchievements:
+          type: string
+        motivationMessage:
+          type: string
+        user:
+          $ref: "#/components/schemas/UserOpenApi"
+
             
         
           

@@ -1,1 +1,20 @@
+server:
+  port: 8083
+  error:
+    include-message: always
+    include-binding-errors: always
 
+spring:
+  datasource:
+    username: jabka
+    password: 123
+    url: jdbc:postgresql://localhost:5436/jabka_study
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show_sql: true
+    properties:
+      hibernate:
+      format_sql: true
+      database: postgresql
+      database-platform: org.hibernate.dialect.PostgreSQL95Dialect

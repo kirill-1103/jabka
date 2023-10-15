@@ -7,7 +7,7 @@ server:
 spring:
   datasource:
     username: jabka
-    password: 12
+    password: 123
     url: jdbc:postgresql://localhost:5434/jabka_news
   jpa:
     hibernate:
