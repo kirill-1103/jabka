@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.sovkombank.openapi.model.ERoleOpenApi;
+import ru.sovcombank.openapi.model.ERoleOpenApi;
 
 @Entity
 @Getter

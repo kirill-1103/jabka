@@ -1,9 +1,9 @@
 package sovcombank.jabka.userservice.controller;
 
 import org.springframework.http.ResponseEntity;
-import ru.sovkombank.openapi.api.RequestApiDelegate;
-import ru.sovkombank.openapi.model.JwtResponseOpenApi;
-import ru.sovkombank.openapi.model.RequestOpenApi;
+import ru.sovcombank.openapi.api.RequestApiDelegate;
+import ru.sovcombank.openapi.model.JwtResponseOpenApi;
+import ru.sovcombank.openapi.model.RequestOpenApi;
 
 import java.util.List;
 

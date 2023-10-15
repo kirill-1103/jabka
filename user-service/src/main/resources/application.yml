@@ -18,3 +18,13 @@ spring:
       format_sql: true
       database: postgresql
       database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+
+jwt:
+  secret: 984hg493gh0439rthr0429uruj2309yh937gc763fe87t3f89723gf
+  lifetime: 2h
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
