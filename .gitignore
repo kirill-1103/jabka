@@ -12,6 +12,7 @@
 
 # Package Files #
 *.jar
+!**/security.jar
 *.war
 *.nar
 *.ear
