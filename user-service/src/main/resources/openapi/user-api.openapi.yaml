@@ -48,11 +48,11 @@ paths:
               $ref: '#/components/schemas/SignupRequestOpenApi'
       responses:
         '201':
-          description: User registered successfully and waits for email verification!
+          description: User registered successfully!
         '400':
-          description: Account with such email is already in use!
+          description: Bad request!
         '409':
-          description: Account with such username is already in use!
+          description: Account with such username or email is already in use!
           
   /auth/signin:
     post:
@@ -106,7 +106,7 @@ paths:
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '403':
-          description: Foribidden error!
+          description: Forbidden error!
         '404':
           description: User not found!
         
@@ -363,6 +363,8 @@ components:
         photo:
           type: string
           description: base64 string
+        password:
+          type: string
         roles:
           type: array
           items:

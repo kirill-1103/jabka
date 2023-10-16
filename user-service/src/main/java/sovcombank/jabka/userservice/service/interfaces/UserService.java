@@ -1,11 +1,16 @@
 package sovcombank.jabka.userservice.service.interfaces;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
-import sovcombank.jabka.userservice.model.User;
+import org.springframework.transaction.annotation.Transactional;
+import ru.sovcombank.openapi.model.SignupRequestOpenApi;
+import sovcombank.jabka.userservice.model.UserEntity;
 
 import java.util.List;
 
 public interface UserService extends UserDetailsService {
-    List<User> getAll();
-    User loadUserByUsername(String login);
+    List<UserEntity> getAll();
+    UserEntity loadUserByUsername(String login);
+
+    @Transactional
+    UserEntity saveOrUpdate(SignupRequestOpenApi signupRequestOpenApi);
 }

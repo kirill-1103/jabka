@@ -1,10 +1,17 @@
 package sovcombank.jabka.userservice.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import sovcombank.jabka.userservice.model.User;
+import org.springframework.stereotype.Repository;
+import sovcombank.jabka.userservice.model.UserEntity;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User,Long> {
-    Optional<User> findOneByLogin(String login);
+@Repository
+public interface UserRepository extends JpaRepository<UserEntity,Long> {
+    Optional<UserEntity> findOneByLogin(String login);
+
+    Optional<UserEntity> findOneById(Long id);
+
+    Optional<UserEntity> findOneByEmail(String email);
+
 }
