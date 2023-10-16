@@ -7,14 +7,14 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.sovcombank.openapi.model.JwtResponseOpenApi;
 import ru.sovcombank.openapi.model.LoginRequestOpenApi;
+import ru.sovcombank.openapi.model.UserOpenApi;
 import sovcombank.jabka.libs.security.utils.JwtUtils;
 import sovcombank.jabka.userservice.exception.BadRequestException;
 import sovcombank.jabka.userservice.mapper.UserMapper;
-import sovcombank.jabka.userservice.model.User;
+import sovcombank.jabka.userservice.model.UserEntity;
 import sovcombank.jabka.userservice.service.interfaces.AuthService;
 import sovcombank.jabka.userservice.service.interfaces.UserService;
 
@@ -47,7 +47,16 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public JwtResponseOpenApi createAuthToken(LoginRequestOpenApi loginRequestOpenApi){
-        User user = userService.loadUserByUsername(loginRequestOpenApi.getLogin());
+        return createAuthTokenByLogin(loginRequestOpenApi.getLogin());
+    }
+
+    @Override
+    public JwtResponseOpenApi createAuthToken(UserOpenApi userOpenApi){
+        return createAuthTokenByLogin(userOpenApi.getLogin());
+    }
+
+    private JwtResponseOpenApi createAuthTokenByLogin(String login){
+        UserEntity user = userService.loadUserByUsername(login);
         String token = jwtUtils.generateToken(user.getUsername(),
                 user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
         return new JwtResponseOpenApi(token, userMapper.toUserOpenApi(user));
