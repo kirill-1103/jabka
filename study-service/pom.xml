@@ -161,8 +161,8 @@
                                 ./src/main/resources/openapi/study-api.openapi.yml
                             </inputSpec>
                             <generatorName>spring</generatorName>
-                            <apiPackage>ru.sovkombank.openapi.api</apiPackage>
-                            <modelPackage>ru.sovkombank.openapi.model</modelPackage>
+                            <apiPackage>ru.sovcombank.openapi.api</apiPackage>
+                            <modelPackage>ru.sovcombank.openapi.model</modelPackage>
                             <generateModelTests>false</generateModelTests>
                             <generateApiTests>false</generateApiTests>
                             <supportingFilesToGenerate>
@@ -172,7 +172,6 @@
                                 <useResponseEntity>true</useResponseEntity>
                                 <delegatePattern>true</delegatePattern>
                                 <useTags>true</useTags>
-                                <interfaceOnly>true</interfaceOnly>
                             </configOptions>
                         </configuration>
                     </execution>
