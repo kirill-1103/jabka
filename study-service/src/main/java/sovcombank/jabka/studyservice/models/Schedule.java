@@ -13,10 +13,8 @@ public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Temporal(TemporalType.DATE)
-    private Date date;
-    @Temporal(TemporalType.TIME)
-    private Date time;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateTime;
     private StudyGroup group;
     @ManyToOne
     private Subject subject;
