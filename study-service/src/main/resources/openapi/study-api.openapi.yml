@@ -428,20 +428,16 @@ components:
           type: string
           format: date-time
         studyGroup:
-          type: object
           $ref: "#/components/schemas/StudyGroupOpenAPI"
         subject:
-          type: object
           $ref: "#/components/schemas/SubjectOpenAPI"
         classFormat:
-          type: object
           $ref: "#/components/schemas/ClassFormat"
         auditorium:
           type: string
         linkForTheClass:
           type: string
         professor:
-          type: object
           $ref: "#/components/schemas/ProfessorSubjectOpenAPI"
 
     StudyGroupOpenAPI:
@@ -467,13 +463,10 @@ components:
         name:
           type: string
         studyGroup:
-          type: object
           $ref: "#/components/schemas/StudyGroupOpenAPI"
         studyMaterials:
-          type: object
           $ref: "#/components/schemas/StudyMaterialsOpenAPI"
         schedule:
-          type: object
           $ref: "#/components/schemas/ScheduleOpenAPI"
 
     ProfessorSubjectOpenAPI:
@@ -512,15 +505,12 @@ components:
           type: integer
           format: int64
         studyMaterialsType:
-          type: object
           $ref: "#/components/schemas/StudyMaterialsType"
         materialsText:
           type: string
         subject:
-          type: object
           $ref: "#/components/schemas/SubjectOpenAPI"
         homework:
-          type: object
           $ref: "#/components/schemas/HomeworkOpenAPI"
 
     HomeworkOpenAPI:
@@ -532,7 +522,6 @@ components:
           type: integer
           format: int64
         studyMaterials:
-          type: object
           $ref: "#/components/schemas/StudyMaterialsOpenAPI"
 
 
