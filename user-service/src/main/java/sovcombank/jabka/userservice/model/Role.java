@@ -21,7 +21,7 @@ public class Role {
     @Column(unique = true)
     private ERoleOpenApi name;
 
-    public Role(ERoleOpenApi name){
+    public Role(ERoleOpenApi name) {
         this.name = name;
     }
 }

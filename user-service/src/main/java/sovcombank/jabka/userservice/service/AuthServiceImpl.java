@@ -32,13 +32,13 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public JwtResponseOpenApi createTokenAndAuthorized(LoginRequestOpenApi loginRequestOpenApi) {
-        try{
+        try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestOpenApi.getLogin(),
                     loginRequestOpenApi.getPassword()));
             log.debug(String.format("USER %s has logged in", loginRequestOpenApi.getLogin()));
-        } catch (BadCredentialsException | InternalAuthenticationServiceException e){
+        } catch (BadCredentialsException | InternalAuthenticationServiceException e) {
             throw new BadRequestException("Authentication error! Incorrect login/password input.");
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new BadRequestException("Authentication error!");
         }
@@ -46,16 +46,16 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public JwtResponseOpenApi createAuthToken(LoginRequestOpenApi loginRequestOpenApi){
+    public JwtResponseOpenApi createAuthToken(LoginRequestOpenApi loginRequestOpenApi) {
         return createAuthTokenByLogin(loginRequestOpenApi.getLogin());
     }
 
     @Override
-    public JwtResponseOpenApi createAuthToken(UserOpenApi userOpenApi){
+    public JwtResponseOpenApi createAuthToken(UserOpenApi userOpenApi) {
         return createAuthTokenByLogin(userOpenApi.getLogin());
     }
 
-    private JwtResponseOpenApi createAuthTokenByLogin(String login){
+    private JwtResponseOpenApi createAuthTokenByLogin(String login) {
         UserEntity user = userService.loadUserByUsername(login);
         String token = jwtUtils.generateToken(user.getUsername(),
                 user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
