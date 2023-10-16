@@ -146,7 +146,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserOpenApi'
+              $ref: '#/components/schemas/UpdateUserOpenApi'
       responses:
         '200':
           description: Successfully updated
@@ -166,6 +166,9 @@ paths:
           
         '404':
           description: User not found!
+
+        '409':
+          description: Account with such username or email is already in use!
           
         
           
@@ -315,7 +318,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/JwtResponseOpenApi"
+                $ref: "#/components/schemas/RequestOpenApi"
 
         '400':
           description: Updated error!
@@ -466,7 +469,16 @@ components:
         user:
           $ref: "#/components/schemas/UserOpenApi"
 
-            
+    UpdateUserOpenApi:
+      type: object
+      required:
+        - oldUser
+        - newUser
+      properties:
+        oldUser:
+          $ref: "#/components/schemas/UserOpenApi"
+        newUser:
+          $ref: "#/components/schemas/UserOpenApi"
         
           
           

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import sovcombank.jabka.userservice.exception.BadRequestException;
 import sovcombank.jabka.userservice.exception.ForbiddenException;
+import sovcombank.jabka.userservice.exception.NotFoundException;
 import sovcombank.jabka.userservice.exception.StateException;
 
 @ControllerAdvice
@@ -21,7 +22,12 @@ public class ExceptionsHandler {
     }
 
     @ExceptionHandler(ForbiddenException.class)
-    public ResponseEntity<?> handlerForibiddenException(ForbiddenException e){
+    public ResponseEntity<?> handlerForibiddenException(ForbiddenException e) {
         return new ResponseEntity<>(e.getMessage().isBlank() ? "Foribidden error" : e.getMessage(), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<?> handlerNotFoundException(NotFoundException e) {
+        return new ResponseEntity<>(e.getMessage().isBlank() ? "Not Fount Error" : e.getMessage(), HttpStatus.FORBIDDEN);
     }
 }
