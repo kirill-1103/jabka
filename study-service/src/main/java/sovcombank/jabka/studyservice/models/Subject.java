@@ -23,4 +23,6 @@ public class Subject {
     private StudyGroup studyGroup;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private StudyMaterials studyMaterials;
+    @OneToMany
+    private Schedule schedule;
 }
