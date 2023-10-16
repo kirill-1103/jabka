@@ -16,6 +16,7 @@ public class StudyMaterials {
     @ManyToOne
     @JoinColumn(name = "subject_id")
     private Subject subject;
+    private String materialsText;
     @OneToMany
     @JoinColumn(name = "homework_id")
     private Homework homework;
