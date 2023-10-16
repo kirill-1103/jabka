@@ -69,4 +69,15 @@ public class RequestServiceImpl implements RequestService {
                 .orElseThrow(() -> new NotFoundException("Request with such id is not exists"));
         requestRepository.delete(request);
     }
+
+    @Override
+    @Transactional
+    public Optional<Request> byUserId(Long id){
+        if(Objects.isNull(id)){
+            throw new BadRequestException("Id is null");
+        }
+        Request request = requestRepository.findByUserId(id)
+                .orElseThrow(()->new NotFoundException(String.format("User with such id not found. Id:%d",id)));
+        return Optional.of(request);
+    }
 }

@@ -1,5 +1,6 @@
 package sovcombank.jabka.userservice.service.interfaces;
 
+import org.springframework.transaction.annotation.Transactional;
 import ru.sovcombank.openapi.model.RequestOpenApi;
 import sovcombank.jabka.userservice.model.Request;
 
@@ -16,4 +17,8 @@ public interface RequestService {
     Optional<Request> update(RequestOpenApi requestOpenApi);
 
     void delete(Long id);
+
+
+    @Transactional
+    Optional<Request> byUserId(Long id);
 }

@@ -50,4 +50,11 @@ public class RequestController implements RequestApiDelegate {
     public ResponseEntity<RequestOpenApi> updateRequest(RequestOpenApi requestOpenApi) {
         return ResponseEntity.ok(requestService.update(requestOpenApi).map(requestMapper::toRequestOpenApi).get());
     }
+
+    @Override
+    public ResponseEntity<RequestOpenApi> requestByUserId(Long id) {
+        return ResponseEntity.ok(requestService.byUserId(id)
+                .map(requestMapper::toRequestOpenApi)
+                .get());
+    }
 }
