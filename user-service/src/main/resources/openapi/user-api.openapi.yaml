@@ -225,6 +225,35 @@ paths:
         '404':
           description: Request not found!
 
+  /request/user/{id}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: Request Info By User Id
+      tags:
+        - Request
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      operationId: requestByUserId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RequestOpenApi"
+        '400':
+          description: Bad request!
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: Request not found!
+
   /request:
     get:
       security:
