@@ -18,21 +18,20 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="users")
+@Table(name = "users")
 public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotBlank
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String login;
 
     @NotBlank
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @NotBlank
     @Column(nullable = false)
     private String password;
 
@@ -50,19 +49,20 @@ public class UserEntity implements UserDetails {
 
     private String groupNumber;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(
-            name="users_roles",
+            name = "users_roles",
             joinColumns = @JoinColumn(
-                    name="user_id", referencedColumnName = "id"),
+                    name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(
-                    name="role_id",referencedColumnName = "id"
+                    name = "role_id", referencedColumnName = "id"
             )
     )
     private Set<Role> roles = new HashSet<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(r->new SimpleGrantedAuthority(r.getName().getValue())).collect(Collectors.toList());
+        return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName().getValue())).collect(Collectors.toList());
     }
 
     @Override

@@ -146,7 +146,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserOpenApi'
+              $ref: '#/components/schemas/UpdateUserOpenApi'
       responses:
         '200':
           description: Successfully updated
@@ -166,6 +166,9 @@ paths:
           
         '404':
           description: User not found!
+
+        '409':
+          description: Account with such username or email is already in use!
           
         
           
@@ -197,9 +200,9 @@ paths:
     get:
       security:
         - bearerAuth: [ ]
-      summary: Request Info
+      summary: Applicant Request Info
       tags:
-        - Request
+        - ApplicantRequest
       parameters:
         - in: path
           name: id
@@ -207,29 +210,58 @@ paths:
           schema:
             type: integer
             format: int64
-      operationId: showRequestInfo
+      operationId: showApplicantRequestInfo
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/RequestOpenApi"
+                $ref: "#/components/schemas/ApplicantRequestOpenApi"
         '400':
           description: Bad request!
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '404':
-          description: Request not found!
+          description: Applicant Request not found!
+
+  /request/user/{id}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: Applicant Request Info By User Id
+      tags:
+        - ApplicantRequest
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      operationId: applicantRequestByUserId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApplicantRequestOpenApi"
+        '400':
+          description: Bad request!
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: Applicant Request not found!
 
   /request:
     get:
       security:
         - bearerAuth: [ ]
-      summary: Get all requests
+      summary: Get all applicant requests
       tags:
-        - Request
-      operationId: getAllRequests
+        - ApplicantRequest
+      operationId: getAllApplicantRequests
       responses:
         '200':
           description: Successfully.
@@ -238,7 +270,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/RequestOpenApi'
+                  $ref: '#/components/schemas/ApplicantRequestOpenApi'
         '400':
           description: Bad request!
         '401':
@@ -247,14 +279,14 @@ paths:
     delete:
       security:
         - bearerAuth: [ ]
-      summary: Remove request
+      summary: Remove applicant request
       tags:
-        - Request
-      operationId: deleteRequest
+        - ApplicantRequest
+      operationId: deleteApplicantRequest
       parameters:
         - in: query
           name: id
-          description: Request id
+          description: Applicant Request id
           schema:
             type: integer
             format: int64
@@ -266,30 +298,30 @@ paths:
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '404':
-          description: Request Not Found!
+          description: Applicant Request Not Found!
 
     post:
       security:
         - bearerAuth: [ ]
-      summary: Add request
+      summary: Add Applicant Request
       tags:
-        - Request
-      operationId: addRequest
+        - ApplicantRequest
+      operationId: addApplicantRequest
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RequestOpenApi'
+              $ref: '#/components/schemas/ApplicantRequestOpenApi'
       responses:
         '200':
-          description: Successfully Created Request
+          description: Successfully Created Applicant Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RequestOpenApi'
+                $ref: '#/components/schemas/ApplicantRequestOpenApi'
         '400':
-          description: Request with such id is already exists!
+          description: Applicant Request with such id is already exists!
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '403':
@@ -299,23 +331,23 @@ paths:
     put:
       security:
         - bearerAuth: [ ]
-      summary: Update request
+      summary: Update Applicant Request
       tags:
-        - Request
-      operationId: updateRequest
+        - ApplicantRequest
+      operationId: updateApplicantRequest
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RequestOpenApi'
+              $ref: '#/components/schemas/ApplicantRequestOpenApi'
       responses:
         '200':
           description: Successfully updated
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/JwtResponseOpenApi"
+                $ref: "#/components/schemas/ApplicantRequestOpenApi"
 
         '400':
           description: Updated error!
@@ -437,7 +469,7 @@ components:
         user:
           $ref:  "#/components/schemas/UserOpenApi"
 
-    RequestOpenApi:
+    ApplicantRequestOpenApi:
       type: object
       required:
         - user
@@ -466,7 +498,16 @@ components:
         user:
           $ref: "#/components/schemas/UserOpenApi"
 
-            
+    UpdateUserOpenApi:
+      type: object
+      required:
+        - oldUser
+        - newUser
+      properties:
+        oldUser:
+          $ref: "#/components/schemas/UserOpenApi"
+        newUser:
+          $ref: "#/components/schemas/UserOpenApi"
         
           
           

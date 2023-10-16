@@ -8,6 +8,7 @@ import sovcombank.jabka.userservice.model.UserEntity;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
     UserEntity toUser(UserOpenApi userOpenApi);
+
     UserOpenApi toUserOpenApi(UserEntity user);
 
     UserEntity toUser(SignupRequestOpenApi signupRequestOpenApi);

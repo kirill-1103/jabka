@@ -18,8 +18,6 @@ import sovcombank.jabka.userservice.exception.ForbiddenException;
 import sovcombank.jabka.userservice.service.interfaces.AuthService;
 import sovcombank.jabka.userservice.service.interfaces.UserService;
 
-import java.security.Principal;
-
 @RestController
 @RequestMapping("/api/user/auth")
 @RequiredArgsConstructor
@@ -49,7 +47,7 @@ public class AuthController implements AuthorizationApiDelegate {
     @GetMapping(MAPPING_UPDATE_TOKEN)
     public ResponseEntity<JwtResponseOpenApi> updateUserToken(UserOpenApi userOpenApi) {
         String authenticatedName = SecurityContextHolder.getContext().getAuthentication().getName();
-        if(!authenticatedName.equals(userOpenApi.getLogin())){
+        if (!authenticatedName.equals(userOpenApi.getLogin())) {
             throw new ForbiddenException("User can't update token for other user!");
         }
         return ResponseEntity.ok(authService.createAuthToken(userOpenApi));
