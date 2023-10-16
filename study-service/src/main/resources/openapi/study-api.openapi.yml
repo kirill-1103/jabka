@@ -7,98 +7,8 @@ servers:
 paths:
   /schedule:
     get:
-      summary: Schedule Information
-      tags:
-        - Schedule
-      operationId: getScheduleByGroup
-      parameters:
-        - in: query
-          name: groupId
-          schema:
-            type: integer
-            format: int64
-          required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/ScheduleOpenAPI"
-        '401':
-          $ref: "#/components/responses/UnauthorizedError"
-        '403':
-          description: Do Not Have Necessary Rights to Execute This Operation
-        '404':
-          description: Not Found
-    post:
-      summary: Create a Schedule
-      tags:
-        - Schedule
-      operationId: createSchedule
-      requestBody:
-        description: Schedule Object
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ScheduleOpenAPI'
-      responses:
-        '201':
-          description: Created
-        '400':
-          description: Bad Request
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '403':
-          description: Do Not Have Necessary Rights to Execute This Operation
-    delete:
-      summary: Delete a Schedule by Id
-      tags:
-        - Schedule
-      operationId: deleteSchedule
-      parameters:
-        - in: query
-          name: scheduleId
-          schema:
-            type: integer
-            format: int64
-          required: true
-      responses:
-        '200':
-          description: Deleted
-        '400':
-          description: Bad Request
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '403':
-          description: Do Not Have Necessary Rights to Execute This Operation
-    put:
-      summary: Update a Schedule
-      tags:
-        - Schedule
-      operationId: updateSchedule
-      requestBody:
-        description: Schedule Object
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ScheduleOpenAPI'
-      responses:
-        '200':
-          description: Updated
-        '400':
-          description: Bad Request
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '403':
-          description: Do Not Have Necessary Rights to Execute This Operation
-
-  /schedule/all:
-    get:
+      security:
+        - bearerAuth: [ ]
       summary: Get All Schedule
       tags:
         - Schedule
@@ -120,9 +30,116 @@ paths:
           description: Do Not Have Necessary Rights to Execute This Operation
         '404':
           description: Not Found
+    post:
+      security:
+        - bearerAuth: [ ]
+      summary: Create a Schedule
+      tags:
+        - Schedule
+      operationId: createSchedule
+      requestBody:
+        description: Schedule Object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScheduleOpenAPI'
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          description: Do Not Have Necessary Rights to Execute This Operation
+
+  /schedule/{id}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: Schedule Information by Id
+      tags:
+        - Schedule
+      operationId: getScheduleByGroup
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScheduleOpenAPI"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '403':
+          description: Do Not Have Necessary Rights to Execute This Operation
+        '404':
+          description: Not Found
+    delete:
+      security:
+        - bearerAuth: [ ]
+      summary: Delete a Schedule by Id
+      tags:
+        - Schedule
+      operationId: deleteSchedule
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        '200':
+          description: Deleted
+        '400':
+          description: Bad Request
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          description: Do Not Have Necessary Rights to Execute This Operation
+    put:
+      security:
+        - bearerAuth: [ ]
+      summary: Update a Schedule by Id
+      tags:
+        - Schedule
+      operationId: updateSchedule
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      requestBody:
+        description: Schedule Object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScheduleOpenAPI'
+      responses:
+        '200':
+          description: Updated
+        '400':
+          description: Bad Request
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          description: Do Not Have Necessary Rights to Execute This Operation
 
   /schedule/professor:
     get:
+      security:
+        - bearerAuth: [ ]
       summary: Get Schedule By Professor Id
       tags:
         - Schedule
@@ -154,13 +171,15 @@ paths:
 
   /group/{id}:
     get:
+      security:
+        - bearerAuth: [ ]
       summary: Group Information
       tags:
         - Group
       operationId: getGroupById
       parameters:
         - in: path
-          name: groupId
+          name: id
           schema:
             type: integer
             format: int64
@@ -179,13 +198,15 @@ paths:
         '404':
           description: Not Found
     delete:
+      security:
+        - bearerAuth: [ ]
       summary: Delete a Group By Id
       tags:
         - Group
       operationId: deleteGroupById
       parameters:
         - in: path
-          name: groupId
+          name: id
           schema:
             type: integer
             format: int64
@@ -200,8 +221,10 @@ paths:
         '403':
           description: Do Not Have Necessary Rights to Execute This Operation
 
-  /group/all:
+  /group:
     get:
+      security:
+        - bearerAuth: [ ]
       summary: All Groups Information
       tags:
         - Group
@@ -222,6 +245,8 @@ paths:
         '404':
           description: Not Found
     post:
+      security:
+        - bearerAuth: [ ]
       summary: Create a Group
       tags:
         - Group
@@ -245,13 +270,62 @@ paths:
 
   /materials:
     get:
+      security:
+        - bearerAuth: [ ]
+      summary: All Materials Information
+      tags:
+        - Materials
+      operationId: getAllMaterials
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StudyMaterialsOpenAPI"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '403':
+          description: Do Not Have Necessary Rights to Execute This Operation
+        '404':
+          description: Not Found
+    post:
+      security:
+        - bearerAuth: [ ]
+      summary: Create a Material
+      tags:
+        - Materials
+      operationId: createMaterials
+      requestBody:
+        description: Materials Object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudyMaterialsOpenAPI'
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          description: Do Not Have Necessary Rights to Execute This Operation
+
+  /materials/{id}:
+    get:
+      security:
+        - bearerAuth: [ ]
       summary: Materials Information
       tags:
         - Materials
-      operationId: getMaterials
+      operationId: getMaterialsById
       parameters:
-        - in: query
-          name: groupId
+        - in: path
+          name: id
           schema:
             type: integer
             format: int64
@@ -262,30 +336,37 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/ScheduleOpenAPI"
+                $ref: "#/components/schemas/StudyMaterialsOpenAPI"
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '403':
           description: Do Not Have Necessary Rights to Execute This Operation
         '404':
           description: Not Found
-    post:
-      summary: Create a Schedule
+    put:
+      security:
+        - bearerAuth: [ ]
+      summary: Update a Materials
       tags:
-        - Schedule
-      operationId: createSchedule
+        - Materials
+      operationId: updateMaterials
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
       requestBody:
-        description: Schedule Object
+        description: Materials Object
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ScheduleOpenAPI'
+              $ref: '#/components/schemas/StudyMaterialsOpenAPI'
       responses:
-        '201':
-          description: Created
+        '200':
+          description: Updated
         '400':
           description: Bad Request
         '401':
@@ -293,13 +374,15 @@ paths:
         '403':
           description: Do Not Have Necessary Rights to Execute This Operation
     delete:
-      summary: Delete a Schedule by Id
+      security:
+        - bearerAuth: [ ]
+      summary: Delete a Material by Id
       tags:
-        - Schedule
-      operationId: deleteSchedule
+        - Materials
+      operationId: deleteMaterials
       parameters:
-        - in: query
-          name: scheduleId
+        - in: path
+          name: id
           schema:
             type: integer
             format: int64
@@ -313,27 +396,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           description: Do Not Have Necessary Rights to Execute This Operation
-    put:
-      summary: Update a Schedule
-      tags:
-        - Schedule
-      operationId: updateSchedule
-      requestBody:
-        description: Schedule Object
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ScheduleOpenAPI'
-      responses:
-        '200':
-          description: Updated
-        '400':
-          description: Bad Request
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '403':
-          description: Do Not Have Necessary Rights to Execute This Operation
+
+
 
 components:
   responses:
