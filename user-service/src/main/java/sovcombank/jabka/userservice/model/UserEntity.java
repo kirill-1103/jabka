@@ -1,7 +1,6 @@
 package sovcombank.jabka.userservice.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.Constraint;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,7 +19,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="users")
-public class User implements UserDetails {
+public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -51,7 +50,7 @@ public class User implements UserDetails {
 
     private String groupNumber;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name="users_roles",
             joinColumns = @JoinColumn(
