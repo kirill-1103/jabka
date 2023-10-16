@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = userRepository.findOneByLogin(username)
+        UserEntity user = userRepository.findByLogin(username)
                 .orElseThrow(()-> new BadRequestException("User not found"));
         return user;
     }
@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void deleteUser(Long id){
-        userRepository.findOneById(id)
+        userRepository.findById(id)
                 .ifPresentOrElse(
                         userRepository::delete,
                         ()->{throw new NotFoundException(String.format("User with id %d Not Found!",id));});
@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity getUserById(Long id) {
-        return userRepository.findOneById(id)
+        return userRepository.findById(id)
                 .orElseThrow(()->new NotFoundException("User not found"));
     }
 
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
         UserOpenApi newUser = updateUserOpenApi.getNewUser();
         newUser.setId(oldUser.getId());
 
-        userRepository.findOneById(newUser.getId())
+        userRepository.findById(newUser.getId())
                 .orElseThrow(()->new BadRequestException(String.format("User with such id is not exists. Id: %d",newUser.getId())));
 
         if(!newUser.getEmail().equals(oldUser.getEmail())){
@@ -118,12 +118,12 @@ public class UserServiceImpl implements UserService {
     }
 
     private void loginExistsCheck(String login){
-        userRepository.findOneByLogin(login)
+        userRepository.findByLogin(login)
                 .ifPresent((u)->{throw new StateException("User with such login is already exists");});
     }
 
     private void emailExistsCheck(String email){
-        userRepository.findOneByEmail(email)
+        userRepository.findByEmail(email)
                 .ifPresent((u)->{throw new StateException("User with such email is already exists");});
     }
 
