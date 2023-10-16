@@ -1,4 +1,4 @@
-version: '3.0'
+version: '3'
 
 services: 
 
@@ -10,8 +10,8 @@ services:
       - POSTGRES_PASSWORD=123
     ports:
       - 5434:5432
-    volumes:
-      - db_data_news:/var/lib/postgresql/data
+#    volumes:
+#      - db_data_news:/var/lib/postgresql/data
 
   db-user:
     image: postgres
@@ -21,8 +21,8 @@ services:
       - POSTGRES_PASSWORD=123
     ports:
       - 5435:5432
-    volumes:
-      - db_data_user:/var/lib/postgresql/data
+#    volumes:
+#      - db_data_user:/var/lib/postgresql/data
 
   db-study:
     image: postgres
@@ -32,23 +32,37 @@ services:
       - POSTGRES_PASSWORD=123
     ports:
       - 5436:5432
-    volumes:
-      - db_data_study:/var/lib/postgresql/data
-volumes:
-  db_data_user:
-    driver: local
-    driver_opts:
-      type: none
-      device: ${PWD}/../db_data/user
-      o: bind 
-  db_data_news:
-    driver: local
-    driver_opts:
-      type: none
-      device: ${PWD}/../db_data/news
-      o: bind
-  db_data_study:
-    driver_opts:
-      type: none
-      device: ${PWD}/../db_data/study
-      o: bind
+
+  
+  study-service:
+    depends_on:
+      - db-user
+    container_name: user-service
+    build:
+      context: .
+      dockerfile: dockerfile-user
+    network_mode: host
+
+#    restart: on-failure
+
+
+#    volumes:
+#      - db_data_study:/var/lib/postgresql/data
+#volumes:
+#  db_data_user:
+#    driver: local
+#    driver_opts:
+#      type: none
+#      device: ${PWD}/../db_data/user
+#      o: bind 
+#  db_data_news:
+#    driver: local
+#    driver_opts:
+#      type: none
+#      device: ${PWD}/../db_data/news
+#      o: bind
+#  db_data_study:
+#    driver_opts:
+#      type: none
+#      device: ${PWD}/../db_data/study
+#      o: bind
