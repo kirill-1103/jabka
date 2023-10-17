@@ -3,7 +3,7 @@ info:
   title: Study API
   version: 0.0.1
 servers:
-  - url: http://localhost:8083/api
+  - url: http://localhost:8083/api/study
 paths:
   /schedule:
     get:
@@ -411,7 +411,6 @@ components:
       bearerFormat: JWT
 
   schemas:
-
     ScheduleOpenAPI:
       type: object
       required:
