@@ -3,6 +3,7 @@ package sovcombank.jabka.studyservice.controllers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import ru.sovcombank.openapi.api.HomeworkApiDelegate;
 import ru.sovcombank.openapi.model.HomeworkOpenAPI;
 
@@ -12,8 +13,13 @@ import java.util.List;
 @RequestMapping("/api/study/homework")
 public class HomeworkController implements HomeworkApiDelegate {
     @Override
-    public ResponseEntity<Void> createHomework(HomeworkOpenAPI homeworkOpenAPI) {
-        return HomeworkApiDelegate.super.createHomework(homeworkOpenAPI);
+    public ResponseEntity<Void> createHomework(HomeworkOpenAPI homework, List<MultipartFile> file) {
+        return HomeworkApiDelegate.super.createHomework(homework, file);
+    }
+
+    @Override
+    public ResponseEntity<Void> updateHomework(HomeworkOpenAPI homework, List<MultipartFile> file) {
+        return HomeworkApiDelegate.super.updateHomework(homework, file);
     }
 
     @Override
@@ -41,8 +47,5 @@ public class HomeworkController implements HomeworkApiDelegate {
         return HomeworkApiDelegate.super.getHomeworkByStudentId(studentId);
     }
 
-    @Override
-    public ResponseEntity<Void> updateHomework(HomeworkOpenAPI homeworkOpenAPI) {
-        return HomeworkApiDelegate.super.updateHomework(homeworkOpenAPI);
-    }
+
 }
