@@ -385,14 +385,22 @@ paths:
           description: Do Not Have Necessary Rights to Execute This Operation
         '404':
           description: Not Found
-  /homework:
+
+  /materials/{materialsId}/homework/all:
     get:
       security:
         - bearerAuth: [ ]
-      summary: All Homeworks Information
+      summary: All Homeworks Information by Materials Id
       tags:
         - Homework
-      operationId: getAllHomeworks
+      operationId: getAllHomeworksByMaterials
+      parameters:
+        - in: path
+          name: materialsId
+          schema:
+            type: integer
+            format: int64
+          required: true
       responses:
         '200':
           description: OK
@@ -408,6 +416,8 @@ paths:
           description: Do Not Have Necessary Rights to Execute This Operation
         '404':
           description: Not Found
+
+  /materials/{materialsId}/homework:
     post:
       security:
         - bearerAuth: [ ]
@@ -415,6 +425,14 @@ paths:
       tags:
         - Homework
       operationId: createHomework
+      parameters:
+        - in:
+            path
+          name: materialsId
+          schema:
+            type: integer
+            format: int64
+          required: true
       requestBody:
         description: Homework Object
         required: true
@@ -438,6 +456,13 @@ paths:
       tags:
         - Homework
       operationId: updateHomework
+      parameters:
+        - in: path
+          name: materialsId
+          schema:
+            type: integer
+            format: int64
+          required: true
       requestBody:
         description: Homework Object
         required: true
@@ -455,7 +480,7 @@ paths:
         '403':
           description: Do Not Have Necessary Rights to Execute This Operation
 
-  /homework/{id}:
+  /materials/{materialsId}/homework/{homeworkId}:
     get:
       security:
         - bearerAuth: [ ]
@@ -465,11 +490,17 @@ paths:
       operationId: getHomeworkById
       parameters:
         - in: path
-          name: id
+          name: materialsId
+          required: true
           schema:
             type: integer
             format: int64
+        - in: path
+          name: homeworkId
           required: true
+          schema:
+            type: integer
+            format: int64
       responses:
         '200':
           description: OK
@@ -483,21 +514,26 @@ paths:
           description: Do Not Have Necessary Rights to Execute This Operation
         '404':
           description: Not Found
-
     delete:
       security:
         - bearerAuth: [ ]
-      summary: Delete a Homework by Id
+      summary: Delete a Homework
       tags:
         - Homework
       operationId: deleteHomework
       parameters:
         - in: path
-          name: id
+          name: materialsId
+          required: true
           schema:
             type: integer
             format: int64
+        - in: path
+          name: homeworkId
           required: true
+          schema:
+            type: integer
+            format: int64
       responses:
         '200':
           description: Deleted
@@ -507,8 +543,6 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           description: Do Not Have Necessary Rights to Execute This Operation
-        '404':
-          description: Not Found
 
   /homework/student/{studentId}:
     get:
@@ -519,8 +553,8 @@ paths:
         - Homework
       operationId: getHomeworkByStudentId
       parameters:
-        - in: path
-          name: studentId
+        - name: studentId
+          in: path
           schema:
             type: integer
             format: int64
@@ -541,30 +575,70 @@ paths:
         '404':
           description: Student Not Found
 
-  /homework/materials/{materialsId}:
+  /materials/{materialsId}/homework/student/{studentId}:
     get:
       security:
         - bearerAuth: [ ]
-      summary: All Homeworks Information In Materials
+      summary: Get Student's Homework by Material
       tags:
         - Homework
-      operationId: getHomeworkByMaterialsId
+      operationId: getHomeworkByStudentAndMaterials
       parameters:
-        - in: path
-          name: materialsId
-          schema:
-            type: integer
-            format: int64
-          required: true
+          - name: materialsId
+            in: path
+            schema:
+              type: integer
+              format: int64
+            required: true
+          - name: studentId
+            in: path
+            schema:
+              type: integer
+              format: int64
+            required: true
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/HomeworkOpenAPI"
+                $ref: "#/components/schemas/HomeworkOpenAPI"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '403':
+          description: Do Not Have Necessary Rights to Execute This Operation
+        '404':
+          description: Student Not Found
+    put:
+      security:
+        - bearerAuth: [ ]
+      summary: Grade Student's Homework
+      tags:
+        - Homework
+      operationId: gradeHomeworkByStudent
+      parameters:
+        - name: materialsId
+          in: path
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - name: studentId
+          in: path
+          schema:
+            type: integer
+            format: int64
+          required: true
+      requestBody:
+        description: Task Evaluation Object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskEvaluationOpenAPI"
+      responses:
+        '200':
+          description: OK
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '403':
@@ -859,7 +933,7 @@ components:
         - file
       properties:
         homework:
-          $ref : "#/components/schemas/HomeworkOpenAPI"
+          $ref: "#/components/schemas/HomeworkOpenAPI"
         file:
           type: array
           items:
@@ -867,5 +941,14 @@ components:
             format: binary
             description: File with homework
 
+    TaskEvaluationOpenAPI:
+      type: object
+      required:
+        - grade
+      properties:
+        grade:
+          type: integer
+        comment:
+          type: string
 
 
