@@ -43,32 +43,32 @@ services:
       dockerfile: dockerfile-user
     network_mode: host
   
-#  study-service:
-#    depends_on:
-#      - db-study
-#    container_name: study-service
-#    build:
-#      context: .
-#      dockerfile: dockerfile-study
-#    network_mode: host
-#  
-#  gateway-service:
-#    depends_on:
-#      - db-study
-#    container_name: gateway-service
-#    build:
-#      context: .
-#      dockerfile: dockerfile-gateway
-#    network_mode: host
-#    
-#  news-service:
-#    depends_on:
-#      - db-study
-#    container_name: news-service
-#    build:
-#      context: .
-#      dockerfile: dockerfile-news
-#    network_mode: host
+  study-service:
+    depends_on:
+      - db-study
+    container_name: study-service
+    build:
+      context: .
+      dockerfile: dockerfile-study
+    network_mode: host
+  
+  gateway-service:
+    depends_on:
+      - db-study
+    container_name: gateway-service
+    build:
+      context: .
+      dockerfile: dockerfile-gateway
+    network_mode: host
+    
+  news-service:
+    depends_on:
+      - db-study
+    container_name: news-service
+    build:
+      context: .
+      dockerfile: dockerfile-news
+    network_mode: host
 
 #    restart: on-failure
 
