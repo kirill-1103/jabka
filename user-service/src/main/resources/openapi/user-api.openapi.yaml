@@ -353,7 +353,7 @@ paths:
         '403':
           description: Forbidden error!
 
-  /activation:
+  /auth/activation:
     get:
       summary: Activate User from Email Link
       tags:
