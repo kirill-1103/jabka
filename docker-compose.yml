@@ -34,14 +34,14 @@ services:
       - 5436:5432
 
   
-  user-service:
-    depends_on:
-      - db-user
-    container_name: user-service
-    build:
-      context: .
-      dockerfile: dockerfile-user
-    network_mode: host
+#  user-service:
+#    depends_on:
+#      - db-user
+#    container_name: user-service
+#    build:
+#      context: .
+#      dockerfile: dockerfile-user
+#    network_mode: host
   
 #  study-service:
 #    depends_on:

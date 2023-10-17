@@ -3,7 +3,7 @@ info:
   title: API Title
   version: "1.0"
 servers:
-  - url: https://localhost:8082/api/user
+  - url: http://localhost:8082/api/user
     description: user server
 paths:
   /{id}:
