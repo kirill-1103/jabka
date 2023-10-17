@@ -4,10 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import sovcombank.jabka.studyservice.exceptions.BadRequestException;
-import sovcombank.jabka.studyservice.exceptions.ForbiddenException;
-import sovcombank.jabka.studyservice.exceptions.NotFoundException;
-import sovcombank.jabka.studyservice.exceptions.StateException;
+import sovcombank.jabka.studyservice.exceptions.*;
 
 @ControllerAdvice
 public class ExceptionsHandler {
@@ -29,6 +26,11 @@ public class ExceptionsHandler {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<?> handlerNotFoundException(NotFoundException e) {
-        return new ResponseEntity<>(e.getMessage().isBlank() ? "Not Fount Error" : e.getMessage(), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(e.getMessage().isBlank() ? "Not Fount Error" : e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(FileException.class)
+    public ResponseEntity<?> handlerFileException(FileException e){
+        return new ResponseEntity<>(e.getMessage().isBlank() ? "File exception!" : e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

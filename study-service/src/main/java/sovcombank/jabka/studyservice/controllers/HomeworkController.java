@@ -10,6 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import ru.sovcombank.openapi.api.HomeworkApiDelegate;
 import ru.sovcombank.openapi.model.HomeworkOpenAPI;
 
@@ -64,10 +66,12 @@ public class HomeworkController implements HomeworkApiDelegate {
         return HomeworkApiDelegate.super.getHomeworkByStudentId(studentId);
     }
 
+
     @PutMapping
     @Override
     public ResponseEntity<Void> updateHomework(HomeworkOpenAPI homework, List<MultipartFile> file) {
         return HomeworkApiDelegate.super.updateHomework(homework, file);
 
     }
+
 }
