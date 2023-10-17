@@ -15,6 +15,7 @@ import ru.sovcombank.openapi.model.LoginRequestOpenApi;
 import ru.sovcombank.openapi.model.SignupRequestOpenApi;
 import ru.sovcombank.openapi.model.UserOpenApi;
 import sovcombank.jabka.userservice.exception.ForbiddenException;
+import sovcombank.jabka.userservice.model.UserEntity;
 import sovcombank.jabka.userservice.service.interfaces.AuthService;
 import sovcombank.jabka.userservice.service.interfaces.UserService;
 
@@ -39,7 +40,8 @@ public class AuthController implements AuthorizationApiDelegate {
     @Override
     @PostMapping(MAPPING_REGISTRATION)
     public ResponseEntity<Void> registerUser(SignupRequestOpenApi signupRequestOpenApi) {
-        userService.saveOrUpdate(signupRequestOpenApi);
+        UserEntity user = userService.saveOrUpdate(signupRequestOpenApi);
+
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

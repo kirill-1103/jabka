@@ -13,8 +13,10 @@ import sovcombank.jabka.userservice.exception.BadRequestException;
 import sovcombank.jabka.userservice.exception.NotFoundException;
 import sovcombank.jabka.userservice.exception.StateException;
 import sovcombank.jabka.userservice.mapper.UserMapper;
+import sovcombank.jabka.userservice.model.ActivationToken;
 import sovcombank.jabka.userservice.model.Role;
 import sovcombank.jabka.userservice.model.UserEntity;
+import sovcombank.jabka.userservice.repositories.ActivationTokenRepository;
 import sovcombank.jabka.userservice.repositories.RoleRepository;
 import sovcombank.jabka.userservice.repositories.UserRepository;
 import sovcombank.jabka.userservice.service.interfaces.UserService;
@@ -28,9 +30,9 @@ import java.util.Set;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-
+    private final MailSenderService mailService;
     private final PasswordEncoder passwordEncoder;
-
+    private final ActivationTokenRepository tokenRepository;
     private final RoleRepository roleRepository;
 
     @Override
@@ -50,6 +52,15 @@ public class UserServiceImpl implements UserService {
     public UserEntity saveOrUpdate(SignupRequestOpenApi signupRequestOpenApi){
         UserEntity user = userMapper.toUser(signupRequestOpenApi);
         return saveOrUpdate(user);
+    }
+
+    @Override
+    @Transactional
+    public void sendVerificationEmail(UserEntity user){
+        String userEmail = user.getEmail();
+        ActivationToken activationToken = new ActivationToken(user);
+        mailService.sendVerificationEmail(userEmail, activationToken);
+        tokenRepository.save(activationToken);
     }
 
     @Override

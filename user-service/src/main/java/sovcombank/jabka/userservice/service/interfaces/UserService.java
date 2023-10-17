@@ -21,6 +21,9 @@ public interface UserService extends UserDetailsService {
     UserEntity saveOrUpdate(UserOpenApi userOpenApi);
 
     @Transactional
+    void sendVerificationEmail(UserEntity user);
+
+    @Transactional
     void deleteUser(Long id);
 
     UserEntity getUserById(Long id);
