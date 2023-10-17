@@ -3,6 +3,8 @@ package sovcombank.jabka.studyservice.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Set;
+
 @Entity
 @Data
 @Table(name = "subject")
@@ -10,19 +12,23 @@ public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String name;
     @ManyToMany
     @JoinTable(
-            name="group_subject",
+            name = "group_subject",
             joinColumns = @JoinColumn(
-                    name="subject_name", referencedColumnName = "name"),
+                    name = "subject_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(
-                    name="study_groups_name", referencedColumnName = "name"
+                    name = "study_groups_name", referencedColumnName = "name"
             )
     )
-    private StudyGroup studyGroup;
+    private Set<StudyGroup> studyGroup;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private StudyMaterials studyMaterials;
-    @OneToMany
-    private Schedule schedule;
+    private Set<StudyMaterials> studyMaterials;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Schedule> schedule;
+
+    @Column(nullable = false)
+    private Long creatorId;
 }

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import sovcombank.jabka.studyservice.models.enums.StudyMaterialsType;
 
+import java.util.Set;
+
 @Data
 @Entity
 @Table(name = "study_materials")
@@ -19,5 +21,5 @@ public class StudyMaterials {
     private String materialsText;
     @OneToMany
     @JoinColumn(name = "homework_id")
-    private Homework homework;
+    private Set<Homework> homeworks;
 }
