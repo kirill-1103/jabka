@@ -46,52 +46,6 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '403':
           description: Don't Have Necessary Rights
-    put:
-      summary: Edit News by ID
-      tags:
-        - News
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/NewsOpenAPI"
-      operationId: editNewsById
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/NewsOpenAPI"
-        '401':
-          description: Access Token Isn't Valid
-          $ref: "#/components/responses/UnauthorizedError"
-        '404':
-          description: News Post with this ID Was Not Found
-    delete:
-      summary: Delete News by ID
-      tags:
-        - News
-      operationId: deleteNewsById
-      parameters:
-        - in: query
-          name: id
-          description: News Id
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: News Successfully Deleted
-        '400':
-          description: Error Occured while Removing
-        '401':
-          description: Access Token Isn't Valid
-          $ref: "#/components/responses/UnauthorizedError"
-        '404':
-          description: News With This ID Was Not Found
 
   /news/{id}:
     get:
@@ -119,6 +73,56 @@ paths:
           description: Bad Request
         '404':
           description: News Post with this ID Was Not Found
+    put:
+      summary: Edit News by ID
+      tags:
+        - News
+      operationId: editNewsById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: News Id
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewsOpenAPI"
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Access Token Isn't Valid
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: News Post with this ID Was Not Found
+    delete:
+      summary: Delete News by ID
+      tags:
+        - News
+      operationId: deleteNewsById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: News Id
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: News Successfully Deleted
+        '400':
+          description: Error Occurred while Removing
+        '401':
+          description: Access Token Isn't Valid
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: News With This ID Was Not Found
 
 components:
   responses:
