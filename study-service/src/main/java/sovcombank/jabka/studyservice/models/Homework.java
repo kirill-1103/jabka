@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NonNull;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
