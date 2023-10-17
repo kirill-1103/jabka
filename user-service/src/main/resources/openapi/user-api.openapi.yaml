@@ -33,7 +33,7 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '404':
           description: User not found!
-          
+
   /auth/signup:
     post:
       summary: Register
@@ -53,7 +53,7 @@ paths:
           description: Bad request!
         '409':
           description: Account with such username or email is already in use!
-          
+
   /auth/signin:
     post:
       summary: Login
@@ -73,13 +73,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/JwtResponseOpenApi'
-              
+
         '400':
           description: Authentication error! Incorrect login/password input.
-          
+
         '401':
           $ref: "#/components/responses/UnauthorizedError"
-          
+
   /auth/update-token:
     post:
       security:
@@ -109,8 +109,8 @@ paths:
           description: Forbidden error!
         '404':
           description: User not found!
-        
-          
+
+
   /:
     get:
       security:
@@ -132,8 +132,8 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '400':
           description: Bad request!
-      
-      
+
+
     put:
       security:
         - bearerAuth: [ ]
@@ -156,22 +156,22 @@ paths:
                 $ref: "#/components/schemas/JwtResponseOpenApi"
 
         '400':
-          description: Updated error! 
-          
+          description: Updated error!
+
         '401':
           $ref: "#/components/responses/UnauthorizedError"
-          
+
         '403':
           description: Forbidden error!
-          
+
         '404':
           description: User not found!
 
         '409':
           description: Account with such username or email is already in use!
-          
-        
-          
+
+
+
     delete:
       security:
         - bearerAuth: [ ]
@@ -326,8 +326,6 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '403':
           description: Foribidden error!
-
-
     put:
       security:
         - bearerAuth: [ ]
@@ -348,14 +346,77 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApplicantRequestOpenApi"
-
         '400':
           description: Updated error!
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '403':
           description: Forbidden error!
-    
+
+  /auth/activation:
+    get:
+      summary: Activate User from Email Link
+      tags:
+        - Authorization
+      operationId: activateUser
+      parameters:
+        - in: query
+          name: token
+          description: Activation Token
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User was Activated Successfully
+        '400':
+          description: Bad Request (Token isn't Valid (Type, Expiration Time))
+        '404':
+          description: The Link Isn't Valid (Token or User Not Found)
+
+  /auth/forget:
+    put:
+      summary: Send Recovery Password Email
+      tags:
+        - Authorization
+      operationId: sendRecoveryPasswordMail
+      requestBody:
+        required: true
+        content:
+          text/plain:
+            schema:
+             type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+
+  /auth/recovery:
+    put:
+      summary: New Password Input
+      tags:
+        - Authorization
+      operationId: recoveryPassword
+      parameters:
+        - in: query
+          name: token
+          description: Recovery Password Token
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          text/plain:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+
+
+
 components:
   securitySchemes:
     bearerAuth:
@@ -367,7 +428,7 @@ components:
     UnauthorizedError:
       description: Access token is missing or invalid
 
-      
+
   schemas:
     UserOpenApi:
       type: object
@@ -401,6 +462,14 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/RoleOpenApi"
+        activationStatus:
+          $ref: "#/components/schemas/ActivationStatusOpenAPI"
+
+    ActivationStatusOpenAPI:
+      type: string
+      enum:
+        - ACTIVATED
+        - WAIT_FOR_EMAIL_VERIFICATION
     
     RoleOpenApi:
       type: object
@@ -412,7 +481,7 @@ components:
           format: int64
         name:
           $ref: "#/components/schemas/ERoleOpenApi"
-          
+
     ERoleOpenApi:
       type: string
       enum:
@@ -423,7 +492,7 @@ components:
         - ROLE_ENROLLEE
         - ROLE_MODERATOR
         - ROLE_COMMITTE
-        
+
     SignupRequestOpenApi:
       type: object
       required:
@@ -445,7 +514,7 @@ components:
           type: string
         password:
           type: string
-          
+
     LoginRequestOpenApi:
       type: object
       required:
@@ -456,7 +525,7 @@ components:
           type: string
         password:
           type: string
-          
+
     JwtResponseOpenApi:
       type: object
       required:
@@ -467,7 +536,7 @@ components:
           type: string
           pattern: ^Bearer\s.+$
         user:
-          $ref:  "#/components/schemas/UserOpenApi"
+          $ref: "#/components/schemas/UserOpenApi"
 
     ApplicantRequestOpenApi:
       type: object

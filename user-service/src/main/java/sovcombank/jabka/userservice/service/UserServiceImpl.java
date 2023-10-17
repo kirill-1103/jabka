@@ -28,16 +28,13 @@ import java.util.Set;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-
     private final PasswordEncoder passwordEncoder;
-
     private final RoleRepository roleRepository;
 
     @Override
     public UserEntity loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = userRepository.findByLogin(username)
-                .orElseThrow(()-> new BadRequestException("User not found"));
-        return user;
+        return userRepository.findByLogin(username)
+                .orElseThrow(() -> new BadRequestException("User not found"));
     }
 
     @Override
@@ -47,24 +44,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserEntity saveOrUpdate(SignupRequestOpenApi signupRequestOpenApi){
+    public UserEntity saveOrUpdate(SignupRequestOpenApi signupRequestOpenApi) {
         UserEntity user = userMapper.toUser(signupRequestOpenApi);
         return saveOrUpdate(user);
     }
 
     @Override
     @Transactional
-    public UserEntity saveOrUpdate(UserOpenApi userOpenApi){
+    public UserEntity saveOrUpdate(UserOpenApi userOpenApi) {
         UserEntity user = userMapper.toUser(userOpenApi);
         return saveOrUpdate(user);
     }
 
-    private UserEntity saveOrUpdate(UserEntity user){
-        if(Objects.nonNull(user.getPassword())){
+
+    private UserEntity saveOrUpdate(UserEntity user) {
+        if (Objects.nonNull(user.getPassword())) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
-        if(Objects.isNull(user.getId())){
-           loginOrEmailExistsCheck(user);
+        if (Objects.isNull(user.getId())) {
+            loginOrEmailExistsCheck(user);
         }
         setRole(user);
         return userRepository.save(user);
@@ -72,26 +70,28 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void deleteUser(Long id){
+    public void deleteUser(Long id) {
         userRepository.findById(id)
                 .ifPresentOrElse(
                         userRepository::delete,
-                        ()->{throw new NotFoundException(String.format("User with id %d Not Found!",id));});
+                        () -> {
+                            throw new NotFoundException(String.format("User with id %d Not Found!", id));
+                        });
     }
 
     @Override
     public UserEntity getUserById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(()->new NotFoundException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
     @Override
     @Transactional
     public void update(UpdateUserOpenApi updateUserOpenApi) {
-        if(Objects.isNull(updateUserOpenApi.getNewUser())  || Objects.isNull(updateUserOpenApi.getOldUser())){
+        if (Objects.isNull(updateUserOpenApi.getNewUser()) || Objects.isNull(updateUserOpenApi.getOldUser())) {
             throw new BadRequestException("Old or new user is null");
         }
-        if(Objects.isNull(updateUserOpenApi.getOldUser().getId())){
+        if (Objects.isNull(updateUserOpenApi.getOldUser().getId())) {
             throw new BadRequestException("Id is null");
         }
         UserOpenApi oldUser = updateUserOpenApi.getOldUser();
@@ -99,38 +99,41 @@ public class UserServiceImpl implements UserService {
         newUser.setId(oldUser.getId());
 
         userRepository.findById(newUser.getId())
-                .orElseThrow(()->new BadRequestException(String.format("User with such id is not exists. Id: %d",newUser.getId())));
+                .orElseThrow(() -> new BadRequestException(String.format("User with such id is not exists. Id: %d", newUser.getId())));
 
-        if(!newUser.getEmail().equals(oldUser.getEmail())){
+        if (!newUser.getEmail().equals(oldUser.getEmail())) {
             emailExistsCheck(newUser.getEmail());
         }
-        if(!newUser.getLogin().equals(oldUser.getLogin())){
+        if (!newUser.getLogin().equals(oldUser.getLogin())) {
             loginExistsCheck(newUser.getLogin());
         }
         UserEntity userEntity = userMapper.toUser(newUser);
         setRole(userEntity);
         userRepository.save(userEntity);
     }
-
-    private void loginOrEmailExistsCheck(UserEntity user){
+    private void loginOrEmailExistsCheck(UserEntity user) {
         loginExistsCheck(user.getLogin());
         emailExistsCheck(user.getEmail());
     }
 
-    private void loginExistsCheck(String login){
+    private void loginExistsCheck(String login) {
         userRepository.findByLogin(login)
-                .ifPresent((u)->{throw new StateException("User with such login is already exists");});
+                .ifPresent((u) -> {
+                    throw new StateException("User with such login is already exists");
+                });
     }
 
-    private void emailExistsCheck(String email){
+    private void emailExistsCheck(String email) {
         userRepository.findByEmail(email)
-                .ifPresent((u)->{throw new StateException("User with such email is already exists");});
+                .ifPresent((u) -> {
+                    throw new StateException("User with such email is already exists");
+                });
     }
 
-    private void setRole(UserEntity user){
+    private void setRole(UserEntity user) {
         roleRepository.findByName(ERoleOpenApi.ENROLLEE).ifPresentOrElse(
-                (role)->{user.setRoles(Set.of(role));},
-                ()->user.setRoles(Set.of(new Role(ERoleOpenApi.ENROLLEE)))
+                (role) -> user.setRoles(Set.of(role)),
+                () -> user.setRoles(Set.of(new Role(ERoleOpenApi.ENROLLEE)))
         );
     }
 }
