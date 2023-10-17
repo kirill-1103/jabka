@@ -10,8 +10,8 @@ import java.util.UUID;
 
 @Data
 @Entity
-@Table(name="activation_token")
-public class ActivationToken {
+@Table(name="recovery_token")
+public class RecoveryToken {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -23,7 +23,7 @@ public class ActivationToken {
     private UserEntity userEntity;
 
 
-    public ActivationToken(UserEntity userEntity) {
+    public RecoveryToken(UserEntity userEntity) {
         this.userEntity = userEntity;
         token = UUID.randomUUID().toString();
         Calendar cal = Calendar.getInstance();
