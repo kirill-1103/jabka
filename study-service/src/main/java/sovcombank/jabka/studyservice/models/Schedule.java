@@ -15,6 +15,7 @@ public class Schedule {
     private Long id;
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateTime;
+    @ManyToOne
     private StudyGroup group;
     @ManyToOne
     private Subject subject;
