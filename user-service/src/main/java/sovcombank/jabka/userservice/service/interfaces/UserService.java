@@ -22,18 +22,6 @@ public interface UserService extends UserDetailsService {
     UserEntity saveOrUpdate(UserOpenApi userOpenApi);
 
     @Transactional
-    void sendVerificationEmail(UserEntity user);
-
-    @Transactional
-    ResponseEntity<Void> activateUser(String token);
-
-    @Transactional
-    ResponseEntity<Void> recoveryPassword(String password, String token);
-
-    @Transactional
-    ResponseEntity<Void> sendRecoveryPasswordMail(String email);
-
-    @Transactional
     void deleteUser(Long id);
 
     UserEntity getUserById(Long id);

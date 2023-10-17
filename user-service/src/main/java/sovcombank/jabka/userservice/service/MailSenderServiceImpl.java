@@ -6,12 +6,12 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import sovcombank.jabka.userservice.model.ActivationToken;
-import sovcombank.jabka.userservice.model.RecoveryToken;
+import sovcombank.jabka.userservice.model.EmailToken;
+import sovcombank.jabka.userservice.service.interfaces.MailSenderService;
 
 @Service
 @PropertySource(value = "classpath:application.yml")
-public class MailSenderService {
+public class MailSenderServiceImpl implements MailSenderService {
     @Autowired
     private JavaMailSender mailSender;
     @Value("${spring.mail.username}")
@@ -21,11 +21,12 @@ public class MailSenderService {
     @Value("${mail-service.recovery.uri}")
     private String recoveryUrl;
 
-    public void sendVerificationEmail(String userEmail, ActivationToken activationToken){
+    @Override
+    public void sendVerificationEmail(String userEmail, EmailToken emailToken){
         String subject = "Email address confirmation";
         String messageBody = String.format("Для подтверждения Ваше электронной почты и " +
                 "активации аккаунта необходимо перейти по ссылке %s", activationUri);
-        messageBody = messageBody.replace("{token}", activationToken.getToken());
+        messageBody = messageBody.replace("{token}", emailToken.getToken());
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
 
@@ -37,7 +38,8 @@ public class MailSenderService {
         mailSender.send(mailMessage);
     }
 
-    public void sendRecoveryPassword(String userEmail, RecoveryToken recoveryToken){
+    @Override
+    public void sendRecoveryPassword(String userEmail, EmailToken recoveryToken){
         String subject = "Password Recovery";
         String messageBody = String.format("Для сброса пароля " +
                 "Вам необходимо перейти по ссылке %s", recoveryUrl);

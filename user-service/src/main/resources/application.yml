@@ -23,8 +23,8 @@ spring:
     host: smtp.yandex.ru
     port: 465
     protocol: smtps
-    username:
-    password:
+    username: jabka.edu@yandex.ru
+    password: casexejycawpefvp
     test-connection: true
     properties:
       mail:
@@ -33,7 +33,7 @@ spring:
         ssl:
           enable: true
         sender:
-          email:
+          email: jabka.edu@yandex.ru
 
 mail-service:
   activation:

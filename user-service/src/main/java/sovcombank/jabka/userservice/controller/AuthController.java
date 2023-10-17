@@ -42,7 +42,7 @@ public class AuthController implements AuthorizationApiDelegate {
     @PostMapping(MAPPING_REGISTRATION)
     public ResponseEntity<Void> registerUser(SignupRequestOpenApi signupRequestOpenApi) {
         UserEntity user = userService.saveOrUpdate(signupRequestOpenApi);
-        userService.sendVerificationEmail(user);
+        authService.sendVerificationEmail(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -59,7 +59,7 @@ public class AuthController implements AuthorizationApiDelegate {
     @Override
     @GetMapping(MAPPING_ACTIVATION)
     public ResponseEntity<Void> activateUser(@RequestParam(name = "token") String token) {
-        return userService.activateUser(token);
+        return authService.activateUser(token);
     }
 
     @Override
@@ -67,13 +67,13 @@ public class AuthController implements AuthorizationApiDelegate {
     @PutMapping(MAPPING_RECOVERY)
     public ResponseEntity<Void> recoveryPassword(@RequestBody String body,
                                                  @RequestParam(name = "token") String token) {
-        return userService.recoveryPassword(body, token);
+        return authService.recoveryPassword(body, token);
     }
 
     @Override
     @Transactional
     @PutMapping(MAPPING_FORGET)
     public ResponseEntity<Void> sendRecoveryPasswordMail(String body) {
-        return userService.sendRecoveryPasswordMail(body);
+        return authService.sendRecoveryPasswordMail(body);
     }
 }

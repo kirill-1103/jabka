@@ -2,6 +2,7 @@ package sovcombank.jabka.userservice.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import sovcombank.jabka.userservice.model.enums.TokenType;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -10,8 +11,8 @@ import java.util.UUID;
 
 @Data
 @Entity
-@Table(name="recovery_token")
-public class RecoveryToken {
+@Table(name="activation_token")
+public class EmailToken {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -21,9 +22,11 @@ public class RecoveryToken {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
     private UserEntity userEntity;
+    @Enumerated(EnumType.STRING)
+    private TokenType tokenType;
 
 
-    public RecoveryToken(UserEntity userEntity) {
+    public EmailToken(UserEntity userEntity) {
         this.userEntity = userEntity;
         token = UUID.randomUUID().toString();
         Calendar cal = Calendar.getInstance();
