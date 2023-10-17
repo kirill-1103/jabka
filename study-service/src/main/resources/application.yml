@@ -11,7 +11,7 @@ spring:
     url: jdbc:postgresql://localhost:5436/jabka_study
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show_sql: true
     properties:
       hibernate:

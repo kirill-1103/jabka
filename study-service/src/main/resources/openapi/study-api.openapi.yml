@@ -419,9 +419,9 @@ paths:
         description: Homework Object
         required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
-              $ref: '#/components/schemas/HomeworkOpenAPI'
+              $ref: '#/components/schemas/SaveHomeworkRequestOpenApi'
       responses:
         '201':
           description: Created
@@ -442,9 +442,9 @@ paths:
         description: Homework Object
         required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
-              $ref: '#/components/schemas/HomeworkOpenAPI'
+              $ref: '#/components/schemas/SaveHomeworkRequestOpenApi'
       responses:
         '200':
           description: Updated
@@ -832,14 +832,14 @@ components:
     HomeworkOpenAPI:
       type: object
       required:
-        - studyMaterials
+        - task
         - studentId
         - date
       properties:
         id:
           type: integer
           format: int64
-        studyMaterials:
+        task:
           $ref: "#/components/schemas/StudyMaterialsOpenAPI"
         studentId:
           type: integer
@@ -851,5 +851,21 @@ components:
           type: integer
         comment:
           type: string
+
+    SaveHomeworkRequestOpenApi:
+      type: object
+      required:
+        - homework
+        - file
+      properties:
+        homework:
+          $ref : "#/components/schemas/HomeworkOpenAPI"
+        file:
+          type: array
+          items:
+            type: string
+            format: binary
+            description: File with homework
+
 
 
