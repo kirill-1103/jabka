@@ -2,26 +2,33 @@ package sovcombank.jabka.studyservice.controllers;
 
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.sovcombank.openapi.api.HomeworkApiDelegate;
 import ru.sovcombank.openapi.model.HomeworkOpenAPI;
 import ru.sovcombank.openapi.model.TaskEvaluationOpenAPI;
+import sovcombank.jabka.studyservice.services.interfaces.HomeworkService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/study")
+@RequestMapping("/api/study/homework")
+@RequiredArgsConstructor
 public class HomeworkController implements HomeworkApiDelegate {
+
+    private final HomeworkService homeworkService;
+
     @PostMapping("/materials/{materialsId}/homework")
     @Override
     public ResponseEntity<Void> createHomework(
             @Valid @PathVariable(name = "materialsId") Long materialsId,
             @RequestBody HomeworkOpenAPI homework,
-            @RequestBody List<MultipartFile> file
+            @RequestBody List<MultipartFile> files
     ) {
-        return HomeworkApiDelegate.super.createHomework(materialsId, homework, file);
+
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/materials/{materialsId}/homework/{homeworkId}")

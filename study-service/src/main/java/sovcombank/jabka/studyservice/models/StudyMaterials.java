@@ -19,7 +19,7 @@ public class StudyMaterials {
     @JoinColumn(name = "subject_id")
     private Subject subject;
     private String materialsText;
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "homework_id")
     private Set<Homework> homeworks;
     private Set<String> attachedFiles;
