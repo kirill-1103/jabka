@@ -3,6 +3,7 @@ package sovcombank.jabka.studyservice.services.interfaces;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
+import sovcombank.jabka.studyservice.models.enums.StudyMaterialsType;
 
 import java.util.List;
 
@@ -19,5 +20,5 @@ public interface FileService {
 
     void removeFileByPath(String path);
 
-    String generateFileName(String fileName);
+    String generateFileName(String fileName, StudyMaterialsType materialsType);
 }

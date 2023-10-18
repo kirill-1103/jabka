@@ -518,7 +518,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/StudyMaterialsOpenAPI'
+              $ref: '#/components/schemas/StudyMaterialsBody'
       responses:
         '201':
           description: Created
@@ -541,7 +541,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/StudyMaterialsOpenAPI'
+              $ref: '#/components/schemas/StudyMaterialsBody'
       responses:
         '200':
           description: Updated
@@ -994,6 +994,7 @@ paths:
 
 
 components:
+
   responses:
     UnauthorizedError:
       description: Access token is missing or invalid
@@ -1005,6 +1006,20 @@ components:
       bearerFormat: JWT
 
   schemas:
+    StudyMaterialsBody:
+      type: object
+      required:
+        - studyMaterials
+      properties:
+        studyMaterials:
+          $ref: "#/components/schemas/StudyMaterialsOpenAPI"
+        file:
+          type: array
+          items:
+            type: string
+            format: binary
+            description: File with homework
+
     ScheduleOpenAPI:
       type: object
       required:
@@ -1147,9 +1162,7 @@ components:
         - file
       properties:
         homework:
-
           $ref: "#/components/schemas/HomeworkOpenAPI"
-
         file:
           type: array
           items:

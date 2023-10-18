@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.sovcombank.openapi.model.StudyMaterialsBody;
 import ru.sovcombank.openapi.model.StudyMaterialsOpenAPI;
 import sovcombank.jabka.studyservice.mappers.StudyMaterialsMapper;
 import sovcombank.jabka.studyservice.models.StudyMaterials;
@@ -23,7 +24,8 @@ public class StudyMaterialsServiceImpl implements StudyMaterialsService {
 
     @Transactional
     @Override
-    public ResponseEntity<Void> createMaterials(StudyMaterialsOpenAPI studyMaterialsOpenAPI) {
+    public ResponseEntity<Void> createMaterials(StudyMaterialsBody studyMaterialsBody) {
+        StudyMaterialsOpenAPI studyMaterialsOpenAPI = studyMaterialsBody.getStudyMaterials();
         StudyMaterials studyMaterials = materialsMapper.toStudyMaterials(studyMaterialsOpenAPI);
         materialsRepository.save(studyMaterials);
         return ResponseEntity
@@ -76,7 +78,8 @@ public class StudyMaterialsServiceImpl implements StudyMaterialsService {
 
     @Transactional
     @Override
-    public ResponseEntity<Void> updateMaterials(StudyMaterialsOpenAPI studyMaterialsOpenAPI) {
+    public ResponseEntity<Void> updateMaterials(StudyMaterialsBody studyMaterialsBody) {
+        StudyMaterialsOpenAPI studyMaterialsOpenAPI = studyMaterialsBody.getStudyMaterials();
         Optional<StudyMaterials> studyMaterialsOpt = materialsRepository.findById(studyMaterialsOpenAPI.getId());
         if (studyMaterialsOpt.isEmpty()) {
             return ResponseEntity

@@ -4,7 +4,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.sovcombank.openapi.api.MaterialsApiDelegate;
+import ru.sovcombank.openapi.model.StudyMaterialsBody;
 import ru.sovcombank.openapi.model.StudyMaterialsOpenAPI;
 import sovcombank.jabka.studyservice.services.interfaces.StudyMaterialsService;
 
@@ -15,10 +17,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StudyMaterialsController implements MaterialsApiDelegate {
     private final StudyMaterialsService studyMaterialsService;
+
     @PostMapping
     @Override
-    public ResponseEntity<Void> createMaterials(@RequestBody StudyMaterialsOpenAPI studyMaterialsOpenAPI) {
-        return studyMaterialsService.createMaterials(studyMaterialsOpenAPI);
+    public ResponseEntity<Void> createMaterials(@RequestBody StudyMaterialsBody studyMaterialsBody
+    ) {
+        return studyMaterialsService.createMaterials(studyMaterialsBody);
     }
 
     @DeleteMapping("/{id}")
@@ -43,7 +47,7 @@ public class StudyMaterialsController implements MaterialsApiDelegate {
 
     @PutMapping
     @Override
-    public ResponseEntity<Void> updateMaterials(@RequestBody StudyMaterialsOpenAPI studyMaterialsOpenAPI) {
-        return studyMaterialsService.updateMaterials(studyMaterialsOpenAPI);
+    public ResponseEntity<Void> updateMaterials(@RequestBody StudyMaterialsBody studyMaterialsBody) {
+        return studyMaterialsService.updateMaterials(studyMaterialsBody);
     }
 }

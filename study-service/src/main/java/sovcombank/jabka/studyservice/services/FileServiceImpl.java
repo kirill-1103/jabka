@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,11 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 import sovcombank.jabka.studyservice.exceptions.FileException;
 import sovcombank.jabka.studyservice.exceptions.NotFoundException;
+import sovcombank.jabka.studyservice.models.enums.StudyMaterialsType;
 import sovcombank.jabka.studyservice.services.interfaces.FileService;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
@@ -91,7 +94,18 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public String generateFileName(String fileName) {
+    public String generateFileName(String fileName, StudyMaterialsType materialsType) {
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        String formattedDate = dateFormat.format(date);
+        switch (materialsType) {
+            case TASK -> {
+                return "HOMEWORK"+"_"+formattedDate+"_"+fileName;
+            }
+            case MATERIAL ->  {
+                return "MATERIAL"+"_"+formattedDate+"_"+fileName;
+            }
+        }
         return null;
     }
 }
