@@ -933,7 +933,9 @@ components:
         - file
       properties:
         homework:
+
           $ref: "#/components/schemas/HomeworkOpenAPI"
+
         file:
           type: array
           items:

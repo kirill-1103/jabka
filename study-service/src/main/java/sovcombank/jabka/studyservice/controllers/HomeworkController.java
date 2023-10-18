@@ -1,5 +1,6 @@
 package sovcombank.jabka.studyservice.controllers;
 
+
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -88,5 +89,6 @@ public class HomeworkController implements HomeworkApiDelegate {
             @RequestBody List<MultipartFile> file
     ) {
         return HomeworkApiDelegate.super.updateHomework(materialsId, homework, file);
+
     }
 }
