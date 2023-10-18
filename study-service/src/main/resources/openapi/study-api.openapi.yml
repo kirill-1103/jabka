@@ -1154,6 +1154,10 @@ components:
           type: integer
         comment:
           type: string
+        filesNames:
+          type: array
+          items:
+            type: string
 
     SaveHomeworkRequestOpenApi:
       type: object

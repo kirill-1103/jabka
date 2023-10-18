@@ -13,5 +13,4 @@ public class File {
     private String initialName;
     @Column(unique = true)
     private String nameS3;
-
 }

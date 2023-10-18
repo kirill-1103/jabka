@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NonNull;
 
 import java.util.Date;
+import java.util.Set;
 
 @Data
 @Entity
@@ -25,6 +26,10 @@ public class Homework {
     private Long grade;
 
     private String comment;
+
+    @OneToMany
+    @JoinColumn(name = "files_id")
+    private Set<File> files;
 
     @ManyToOne
     @JoinColumn(name = "study_materials_id")
