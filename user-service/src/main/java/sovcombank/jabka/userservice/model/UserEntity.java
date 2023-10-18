@@ -50,6 +50,8 @@ public class UserEntity implements UserDetails {
 
     private String groupNumber;
 
+    private ActivationStatus activationStatus;
+
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
@@ -60,11 +62,12 @@ public class UserEntity implements UserDetails {
             )
     )
     private Set<Role> roles = new HashSet<>();
-    private ActivationStatus activationStatus;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName().getValue())).collect(Collectors.toList());
+        return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName()
+                .getValue())).collect(Collectors.toList());
     }
 
     @Override

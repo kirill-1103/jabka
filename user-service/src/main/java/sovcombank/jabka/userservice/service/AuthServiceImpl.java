@@ -8,6 +8,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import ru.sovcombank.openapi.model.UserOpenApi;
 import sovcombank.jabka.libs.security.utils.JwtUtils;
 import sovcombank.jabka.userservice.exception.BadRequestException;
 import sovcombank.jabka.userservice.mapper.UserMapper;
+
 import sovcombank.jabka.userservice.model.EmailToken;
 import sovcombank.jabka.userservice.model.UserEntity;
 import sovcombank.jabka.userservice.model.enums.ActivationStatus;

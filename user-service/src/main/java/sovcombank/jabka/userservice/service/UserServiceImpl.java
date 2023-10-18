@@ -28,7 +28,9 @@ import java.util.Set;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+
     private final PasswordEncoder passwordEncoder;
+
     private final RoleRepository roleRepository;
 
     @Override
@@ -44,6 +46,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+
     public UserEntity saveOrUpdate(SignupRequestOpenApi signupRequestOpenApi) {
         UserEntity user = userMapper.toUser(signupRequestOpenApi);
         return saveOrUpdate(user);
@@ -51,6 +54,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+
     public UserEntity saveOrUpdate(UserOpenApi userOpenApi) {
         UserEntity user = userMapper.toUser(userOpenApi);
         return saveOrUpdate(user);
@@ -70,6 +74,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+
     public void deleteUser(Long id) {
         userRepository.findById(id)
                 .ifPresentOrElse(
@@ -81,6 +86,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity getUserById(Long id) {
+
         return userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User not found"));
     }
@@ -88,6 +94,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void update(UpdateUserOpenApi updateUserOpenApi) {
+
         if (Objects.isNull(updateUserOpenApi.getNewUser()) || Objects.isNull(updateUserOpenApi.getOldUser())) {
             throw new BadRequestException("Old or new user is null");
         }
@@ -97,6 +104,7 @@ public class UserServiceImpl implements UserService {
         UserOpenApi oldUser = updateUserOpenApi.getOldUser();
         UserOpenApi newUser = updateUserOpenApi.getNewUser();
         newUser.setId(oldUser.getId());
+
 
         userRepository.findById(newUser.getId())
                 .orElseThrow(() -> new BadRequestException(String.format("User with such id is not exists. Id: %d", newUser.getId())));
@@ -111,10 +119,12 @@ public class UserServiceImpl implements UserService {
         setRole(userEntity);
         userRepository.save(userEntity);
     }
+
     private void loginOrEmailExistsCheck(UserEntity user) {
         loginExistsCheck(user.getLogin());
         emailExistsCheck(user.getEmail());
     }
+
 
     private void loginExistsCheck(String login) {
         userRepository.findByLogin(login)

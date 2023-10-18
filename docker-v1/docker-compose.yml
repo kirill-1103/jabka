@@ -51,17 +51,19 @@ services:
       context: .
       dockerfile: dockerfile-study
     network_mode: host
-#  
+  
   gateway-service:
+    depends_on:
+      - db-study
     container_name: gateway-service
     build:
       context: .
       dockerfile: dockerfile-gateway
     network_mode: host
-#    
+    
   news-service:
     depends_on:
-      - db-news
+      - db-study
     container_name: news-service
     build:
       context: .

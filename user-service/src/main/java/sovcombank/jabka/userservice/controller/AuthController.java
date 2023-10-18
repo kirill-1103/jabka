@@ -5,15 +5,24 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
 import ru.sovcombank.openapi.api.AuthorizationApiDelegate;
 import ru.sovcombank.openapi.model.JwtResponseOpenApi;
 import ru.sovcombank.openapi.model.LoginRequestOpenApi;
 import ru.sovcombank.openapi.model.SignupRequestOpenApi;
 import ru.sovcombank.openapi.model.UserOpenApi;
 import sovcombank.jabka.userservice.exception.ForbiddenException;
+
 import sovcombank.jabka.userservice.model.UserEntity;
+
 import sovcombank.jabka.userservice.service.interfaces.AuthService;
 import sovcombank.jabka.userservice.service.interfaces.UserService;
 
@@ -41,8 +50,10 @@ public class AuthController implements AuthorizationApiDelegate {
     @Override
     @PostMapping(MAPPING_REGISTRATION)
     public ResponseEntity<Void> registerUser(SignupRequestOpenApi signupRequestOpenApi) {
+
         UserEntity user = userService.saveOrUpdate(signupRequestOpenApi);
         authService.sendVerificationEmail(user);
+
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

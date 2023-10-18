@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.sovcombank.openapi.model.JwtResponseOpenApi;
 import ru.sovcombank.openapi.model.LoginRequestOpenApi;
 import ru.sovcombank.openapi.model.UserOpenApi;
+
 import sovcombank.jabka.userservice.model.UserEntity;
 
 @Service

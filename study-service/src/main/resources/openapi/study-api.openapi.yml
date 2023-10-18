@@ -784,7 +784,6 @@ components:
       bearerFormat: JWT
 
   schemas:
-
     ScheduleOpenAPI:
       type: object
       required:
