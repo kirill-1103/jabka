@@ -53,8 +53,6 @@ services:
     network_mode: host
 #  
   gateway-service:
-    depends_on:
-      - db-study
     container_name: gateway-service
     build:
       context: .
@@ -63,7 +61,7 @@ services:
 #    
   news-service:
     depends_on:
-      - db-study
+      - db-news
     container_name: news-service
     build:
       context: .
