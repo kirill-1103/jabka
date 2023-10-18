@@ -129,7 +129,7 @@ paths:
         '403':
           description: Do Not Have Necessary Rights to Execute This Operation
 
-  /schedule/professor:
+  /schedule/professor/{professorId}:
     get:
       security:
         - bearerAuth: [ ]
@@ -138,7 +138,7 @@ paths:
         - Schedule
       operationId: getScheduleByProfessorId
       parameters:
-        - in: query
+        - in: path
           name: professorId
           schema:
             type: integer
@@ -698,7 +698,7 @@ paths:
       summary: Update a Subject
       tags:
         - Subject
-      operationId: updateHSubject
+      operationId: updateSubject
       requestBody:
         description: Subject Object
         required: true
