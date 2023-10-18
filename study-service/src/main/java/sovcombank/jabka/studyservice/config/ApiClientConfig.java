@@ -43,7 +43,8 @@ public class ApiClientConfig {
     }
 
     @Bean
-    public UserApi userApi(){
-        return new UserApi();
+    public UserApi userApi(ApiClient apiClient){
+        return new UserApi(apiClient);
     }
+
 }
