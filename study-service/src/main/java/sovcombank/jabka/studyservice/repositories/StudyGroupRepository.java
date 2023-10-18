@@ -1,0 +1,12 @@
+package sovcombank.jabka.studyservice.repositories;
+
+import lombok.NonNull;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import sovcombank.jabka.studyservice.models.StudyGroup;
+
+@Repository
+public interface StudyGroupRepository extends JpaRepository<StudyGroup, Long> {
+    boolean existsByGroupName(String name);
+    boolean existsById(@NonNull Long id);
+}
