@@ -3,6 +3,7 @@ package sovcombank.jabka.userservice.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -42,14 +43,14 @@ public class AuthController implements AuthorizationApiDelegate {
 
     @Override
     @PostMapping(MAPPING_AUTH)
-    public ResponseEntity<JwtResponseOpenApi> authenticateUser(LoginRequestOpenApi loginRequestOpenApi) {
+    public ResponseEntity<JwtResponseOpenApi> authenticateUser(@RequestBody LoginRequestOpenApi loginRequestOpenApi) {
         JwtResponseOpenApi jwtResponseOpenApi = authService.createTokenAndAuthorized(loginRequestOpenApi);
         return ResponseEntity.ok(jwtResponseOpenApi);
     }
 
     @Override
     @PostMapping(MAPPING_REGISTRATION)
-    public ResponseEntity<Void> registerUser(SignupRequestOpenApi signupRequestOpenApi) {
+    public ResponseEntity<Void> registerUser(@RequestBody SignupRequestOpenApi signupRequestOpenApi) {
 
         UserEntity user = userService.saveOrUpdate(signupRequestOpenApi);
         authService.sendVerificationEmail(user);
@@ -59,7 +60,7 @@ public class AuthController implements AuthorizationApiDelegate {
 
     @Override
     @GetMapping(MAPPING_UPDATE_TOKEN)
-    public ResponseEntity<JwtResponseOpenApi> updateUserToken(UserOpenApi userOpenApi) {
+    public ResponseEntity<JwtResponseOpenApi> updateUserToken(@RequestBody UserOpenApi userOpenApi) {
         String authenticatedName = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!authenticatedName.equals(userOpenApi.getLogin())) {
             throw new ForbiddenException("User can't update token for other user!");
@@ -84,7 +85,7 @@ public class AuthController implements AuthorizationApiDelegate {
     @Override
     @Transactional
     @PutMapping(MAPPING_FORGET)
-    public ResponseEntity<Void> sendRecoveryPasswordMail(String body) {
+    public ResponseEntity<Void> sendRecoveryPasswordMail(@RequestBody String body) {
         return authService.sendRecoveryPasswordMail(body);
     }
 }
