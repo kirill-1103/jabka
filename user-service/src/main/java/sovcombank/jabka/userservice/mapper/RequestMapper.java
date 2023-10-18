@@ -1,13 +1,13 @@
 package sovcombank.jabka.userservice.mapper;
 
 import org.mapstruct.Mapper;
-import ru.sovcombank.openapi.model.RequestOpenApi;
-import sovcombank.jabka.userservice.model.Request;
+import ru.sovcombank.openapi.model.ApplicantRequestOpenApi;
+import sovcombank.jabka.userservice.model.ApplicantRequest;
 
 @Mapper(componentModel = "spring")
 
 public interface RequestMapper {
-    Request toRequest(RequestOpenApi requestOpenApi);
+    ApplicantRequest toRequest(ApplicantRequestOpenApi requestOpenApi);
 
-    RequestOpenApi toRequestOpenApi(Request request);
+    ApplicantRequestOpenApi toRequestOpenApi(ApplicantRequest request);
 }
