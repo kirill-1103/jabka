@@ -30,11 +30,11 @@ public class HomeworkServiceImpl implements HomeworkService {
                 studyMaterialsRepository.findById(materialsId).orElseThrow(()->
                         new BadRequestException(String.format("Materials with id %d not found",materialsId)));
 
-        Homework homework = homeworkMapper.toHomework
-
-        studyMaterials.getHomeworks().add();
+        Homework homework = homeworkMapper.toHomework(homeworkOpenApi);
 
 
 
+        studyMaterials.getHomeworks().add(homework);
+        studyMaterialsRepository.save(studyMaterials);
     }
 }

@@ -39,13 +39,13 @@ public class NewsController implements NewsApi {
     }
 
 
-    @Override
-    @PutMapping("/{id}")
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<Void> editNewsById(@PathVariable(name = "id") Long id,
-                                             @Valid @RequestBody NewsOpenAPI newsOpenAPI) {
-        return newsService.editNewsById(id, newsOpenAPI);
-    }
+//    @Override
+//    @PutMapping("/{id}")
+//    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+//    public ResponseEntity<Void> editNewsById(@PathVariable(name = "id") Long id,
+//                                             @Valid @RequestBody NewsOpenAPI newsOpenAPI) {
+//        return newsService.editNewsById(id, newsOpenAPI);
+//    }
 
     @Override
     @GetMapping("/{id}")
