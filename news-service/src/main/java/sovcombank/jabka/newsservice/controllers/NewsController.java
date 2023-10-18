@@ -20,7 +20,7 @@ public class NewsController implements NewsApi {
     @Override
     @PostMapping
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<Void> createNewsPost(NewsOpenAPI newsOpenAPI) {
+    public ResponseEntity<Void> createNewsPost(@RequestBody NewsOpenAPI newsOpenAPI) {
         return newsService.createNewsPost(newsOpenAPI);
     }
 
