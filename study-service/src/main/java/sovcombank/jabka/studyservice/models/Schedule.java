@@ -5,6 +5,7 @@ import lombok.Data;
 import sovcombank.jabka.studyservice.models.enums.ClassFormat;
 
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Data
@@ -15,6 +16,7 @@ public class Schedule {
     private Long id;
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateTime;
+    @ManyToOne
     private StudyGroup group;
     @ManyToOne
     private Subject subject;
@@ -24,4 +26,7 @@ public class Schedule {
     private String linkForTheClass;
     @ManyToOne
     private ProfessorSubject professor;
+    @OneToMany
+    @JoinColumn(name = "attendance_id")
+    private Set<AttendanceStatistics> attendanceStatistics;
 }

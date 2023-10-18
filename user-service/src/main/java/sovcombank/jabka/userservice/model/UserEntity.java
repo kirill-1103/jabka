@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import sovcombank.jabka.userservice.model.enums.ActivationStatus;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -49,6 +50,8 @@ public class UserEntity implements UserDetails {
 
     private String groupNumber;
 
+    private ActivationStatus activationStatus;
+
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
@@ -59,6 +62,7 @@ public class UserEntity implements UserDetails {
             )
     )
     private Set<Role> roles = new HashSet<>();
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

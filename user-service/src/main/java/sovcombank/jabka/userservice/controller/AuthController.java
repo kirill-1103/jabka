@@ -5,16 +5,24 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+
 import ru.sovcombank.openapi.api.AuthorizationApiDelegate;
 import ru.sovcombank.openapi.model.JwtResponseOpenApi;
 import ru.sovcombank.openapi.model.LoginRequestOpenApi;
 import ru.sovcombank.openapi.model.SignupRequestOpenApi;
 import ru.sovcombank.openapi.model.UserOpenApi;
 import sovcombank.jabka.userservice.exception.ForbiddenException;
+
+import sovcombank.jabka.userservice.model.UserEntity;
+
 import sovcombank.jabka.userservice.service.interfaces.AuthService;
 import sovcombank.jabka.userservice.service.interfaces.UserService;
 
@@ -28,6 +36,9 @@ public class AuthController implements AuthorizationApiDelegate {
     private static final String MAPPING_AUTH = "/signin";
     private static final String MAPPING_UPDATE_TOKEN = "/update-token";
     private static final String MAPPING_REGISTRATION = "/signup";
+    private static final String MAPPING_ACTIVATION = "/activation";
+    private static final String MAPPING_FORGET = "/forget";
+    private static final String MAPPING_RECOVERY = "/recovery";
 
     @Override
     @PostMapping(MAPPING_AUTH)
@@ -39,7 +50,10 @@ public class AuthController implements AuthorizationApiDelegate {
     @Override
     @PostMapping(MAPPING_REGISTRATION)
     public ResponseEntity<Void> registerUser(SignupRequestOpenApi signupRequestOpenApi) {
-        userService.saveOrUpdate(signupRequestOpenApi);
+
+        UserEntity user = userService.saveOrUpdate(signupRequestOpenApi);
+        authService.sendVerificationEmail(user);
+
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -53,4 +67,24 @@ public class AuthController implements AuthorizationApiDelegate {
         return ResponseEntity.ok(authService.createAuthToken(userOpenApi));
     }
 
+    @Override
+    @GetMapping(MAPPING_ACTIVATION)
+    public ResponseEntity<Void> activateUser(@RequestParam(name = "token") String token) {
+        return authService.activateUser(token);
+    }
+
+    @Override
+    @Transactional
+    @PutMapping(MAPPING_RECOVERY)
+    public ResponseEntity<Void> recoveryPassword(@RequestBody String body,
+                                                 @RequestParam(name = "token") String token) {
+        return authService.recoveryPassword(body, token);
+    }
+
+    @Override
+    @Transactional
+    @PutMapping(MAPPING_FORGET)
+    public ResponseEntity<Void> sendRecoveryPasswordMail(String body) {
+        return authService.sendRecoveryPasswordMail(body);
+    }
 }

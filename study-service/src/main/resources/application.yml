@@ -5,16 +5,26 @@ server:
     include-binding-errors: always
 
 spring:
+  application:
+    name: study-service
+
   datasource:
     username: jabka
     password: 123
     url: jdbc:postgresql://localhost:5436/jabka_study
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show_sql: true
     properties:
       hibernate:
       format_sql: true
       database: postgresql
       database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+
+aws:
+  accessKeyId: YCAJE7I2o8E0LXtPZM7wL8QKu
+  secretKey: YCPos-12DCtvxsSMbGoWzpDICO2oyjX8cqDvrr9R
+  region: ru-central1
+  bucketName: jabka
+  baseUri: https://storage.yandexcloud.net

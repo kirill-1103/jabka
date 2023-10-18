@@ -33,7 +33,7 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '404':
           description: User not found!
-          
+
   /auth/signup:
     post:
       summary: Register
@@ -53,7 +53,7 @@ paths:
           description: Bad request!
         '409':
           description: Account with such username or email is already in use!
-          
+
   /auth/signin:
     post:
       summary: Login
@@ -73,13 +73,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/JwtResponseOpenApi'
-              
+
         '400':
           description: Authentication error! Incorrect login/password input.
-          
+
         '401':
           $ref: "#/components/responses/UnauthorizedError"
-          
+
   /auth/update-token:
     post:
       security:
@@ -109,8 +109,8 @@ paths:
           description: Forbidden error!
         '404':
           description: User not found!
-        
-          
+
+
   /:
     get:
       security:
@@ -132,8 +132,8 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '400':
           description: Bad request!
-      
-      
+
+
     put:
       security:
         - bearerAuth: [ ]
@@ -156,22 +156,20 @@ paths:
                 $ref: "#/components/schemas/JwtResponseOpenApi"
 
         '400':
-          description: Updated error! 
-          
+          description: Updated error!
+
         '401':
           $ref: "#/components/responses/UnauthorizedError"
-          
+
         '403':
           description: Forbidden error!
-          
+
         '404':
           description: User not found!
 
         '409':
           description: Account with such username or email is already in use!
-          
-        
-          
+
     delete:
       security:
         - bearerAuth: [ ]
@@ -200,9 +198,9 @@ paths:
     get:
       security:
         - bearerAuth: [ ]
-      summary: Request Info
+      summary: Applicant Request Info
       tags:
-        - Request
+        - ApplicantRequest
       parameters:
         - in: path
           name: id
@@ -210,28 +208,28 @@ paths:
           schema:
             type: integer
             format: int64
-      operationId: showRequestInfo
+      operationId: showApplicantRequestInfo
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/RequestOpenApi"
+                $ref: "#/components/schemas/ApplicantRequestOpenApi"
         '400':
           description: Bad request!
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '404':
-          description: Request not found!
+          description: Applicant Request not found!
 
   /request/user/{id}:
     get:
       security:
         - bearerAuth: [ ]
-      summary: Request Info By User Id
+      summary: Applicant Request Info By User Id
       tags:
-        - Request
+        - ApplicantRequest
       parameters:
         - in: path
           name: id
@@ -239,29 +237,29 @@ paths:
           schema:
             type: integer
             format: int64
-      operationId: requestByUserId
+      operationId: applicantRequestByUserId
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/RequestOpenApi"
+                $ref: "#/components/schemas/ApplicantRequestOpenApi"
         '400':
           description: Bad request!
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '404':
-          description: Request not found!
+          description: Applicant Request not found!
 
   /request:
     get:
       security:
         - bearerAuth: [ ]
-      summary: Get all requests
+      summary: Get all applicant requests
       tags:
-        - Request
-      operationId: getAllRequests
+        - ApplicantRequest
+      operationId: getAllApplicantRequests
       responses:
         '200':
           description: Successfully.
@@ -270,7 +268,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/RequestOpenApi'
+                  $ref: '#/components/schemas/ApplicantRequestOpenApi'
         '400':
           description: Bad request!
         '401':
@@ -279,14 +277,14 @@ paths:
     delete:
       security:
         - bearerAuth: [ ]
-      summary: Remove request
+      summary: Remove applicant request
       tags:
-        - Request
-      operationId: deleteRequest
+        - ApplicantRequest
+      operationId: deleteApplicantRequest
       parameters:
         - in: query
           name: id
-          description: Request id
+          description: Applicant Request id
           schema:
             type: integer
             format: int64
@@ -298,64 +296,125 @@ paths:
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '404':
-          description: Request Not Found!
+          description: Applicant Request Not Found!
 
     post:
       security:
         - bearerAuth: [ ]
-      summary: Add request
+      summary: Add Applicant Request
       tags:
-        - Request
-      operationId: addRequest
+        - ApplicantRequest
+      operationId: addApplicantRequest
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RequestOpenApi'
+              $ref: '#/components/schemas/ApplicantRequestOpenApi'
       responses:
         '200':
-          description: Successfully Created Request
+          description: Successfully Created Applicant Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RequestOpenApi'
+                $ref: '#/components/schemas/ApplicantRequestOpenApi'
         '400':
-          description: Request with such id is already exists!
+          description: Applicant Request with such id is already exists!
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '403':
           description: Foribidden error!
-
-
     put:
       security:
         - bearerAuth: [ ]
-      summary: Update request
+      summary: Update Applicant Request
       tags:
-        - Request
-      operationId: updateRequest
+        - ApplicantRequest
+      operationId: updateApplicantRequest
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RequestOpenApi'
+              $ref: '#/components/schemas/ApplicantRequestOpenApi'
       responses:
         '200':
           description: Successfully updated
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/RequestOpenApi"
-
+                $ref: "#/components/schemas/ApplicantRequestOpenApi"
         '400':
           description: Updated error!
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '403':
           description: Forbidden error!
-    
+
+  /auth/activation:
+    get:
+      summary: Activate User from Email Link
+      tags:
+        - Authorization
+      operationId: activateUser
+      parameters:
+        - in: query
+          name: token
+          description: Activation Token
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User was Activated Successfully
+        '400':
+          description: Bad Request (Token isn't Valid (Type, Expiration Time))
+        '404':
+          description: The Link Isn't Valid (Token or User Not Found)
+
+  /auth/forget:
+    put:
+      summary: Send Recovery Password Email
+      tags:
+        - Authorization
+      operationId: sendRecoveryPasswordMail
+      requestBody:
+        required: true
+        content:
+          text/plain:
+            schema:
+             type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+
+  /auth/recovery:
+    put:
+      summary: New Password Input
+      tags:
+        - Authorization
+      operationId: recoveryPassword
+      parameters:
+        - in: query
+          name: token
+          description: Recovery Password Token
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          text/plain:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+
+
+
 components:
   securitySchemes:
     bearerAuth:
@@ -367,7 +426,7 @@ components:
     UnauthorizedError:
       description: Access token is missing or invalid
 
-      
+
   schemas:
     UserOpenApi:
       type: object
@@ -401,6 +460,14 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/RoleOpenApi"
+        activationStatus:
+          $ref: "#/components/schemas/ActivationStatusOpenAPI"
+
+    ActivationStatusOpenAPI:
+      type: string
+      enum:
+        - ACTIVATED
+        - WAIT_FOR_EMAIL_VERIFICATION
     
     RoleOpenApi:
       type: object
@@ -412,7 +479,7 @@ components:
           format: int64
         name:
           $ref: "#/components/schemas/ERoleOpenApi"
-          
+
     ERoleOpenApi:
       type: string
       enum:
@@ -423,7 +490,7 @@ components:
         - ROLE_ENROLLEE
         - ROLE_MODERATOR
         - ROLE_COMMITTE
-        
+
     SignupRequestOpenApi:
       type: object
       required:
@@ -445,7 +512,7 @@ components:
           type: string
         password:
           type: string
-          
+
     LoginRequestOpenApi:
       type: object
       required:
@@ -456,7 +523,7 @@ components:
           type: string
         password:
           type: string
-          
+
     JwtResponseOpenApi:
       type: object
       required:
@@ -467,9 +534,9 @@ components:
           type: string
           pattern: ^Bearer\s.+$
         user:
-          $ref:  "#/components/schemas/UserOpenApi"
+          $ref: "#/components/schemas/UserOpenApi"
 
-    RequestOpenApi:
+    ApplicantRequestOpenApi:
       type: object
       required:
         - user
