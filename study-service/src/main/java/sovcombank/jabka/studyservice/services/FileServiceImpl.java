@@ -19,6 +19,7 @@ import sovcombank.jabka.studyservice.services.interfaces.FileService;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -98,12 +99,13 @@ public class FileServiceImpl implements FileService {
         Date date = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
         String formattedDate = dateFormat.format(date);
+        String newFileName = "_"+formattedDate+"_"+UUID.randomUUID()+"_"+fileName;
         switch (materialsType) {
             case TASK -> {
-                return "HOMEWORK"+"_"+formattedDate+"_"+fileName;
+                return "HOMEWORK"+newFileName;
             }
             case MATERIAL ->  {
-                return "MATERIAL"+"_"+formattedDate+"_"+fileName;
+                return "MATERIAL"+newFileName;
             }
         }
         return null;
