@@ -89,4 +89,9 @@ public class FileServiceImpl implements FileService {
             throw new FileException("Failed remove file.");
         }
     }
+
+    @Override
+    public String generateFileName(String fileName) {
+        return null;
+    }
 }
