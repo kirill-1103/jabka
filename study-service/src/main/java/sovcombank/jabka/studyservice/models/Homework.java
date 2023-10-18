@@ -29,7 +29,7 @@ public class Homework {
 
     @OneToMany
     @JoinColumn(name = "files_id")
-    private Set<File> files;
+    private Set<FileName> fileNames;
 
     @ManyToOne
     @JoinColumn(name = "study_materials_id")

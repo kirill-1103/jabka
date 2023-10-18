@@ -830,42 +830,6 @@ paths:
           description: Do Not Have Necessary Rights to Execute This Operation
         '404':
           description: Student Not Found
-    put:
-      security:
-        - bearerAuth: [ ]
-      summary: Grade Student's Homework
-      tags:
-        - Homework
-      operationId: gradeHomeworkByStudent
-      parameters:
-        - name: materialsId
-          in: path
-          schema:
-            type: integer
-            format: int64
-          required: true
-        - name: studentId
-          in: path
-          schema:
-            type: integer
-            format: int64
-          required: true
-      requestBody:
-        description: Task Evaluation Object
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/TaskEvaluationOpenAPI"
-      responses:
-        '200':
-          description: OK
-        '401':
-          $ref: "#/components/responses/UnauthorizedError"
-        '403':
-          description: Do Not Have Necessary Rights to Execute This Operation
-        '404':
-          description: Student Not Found
 
   /subject:
     get:
@@ -1173,16 +1137,6 @@ components:
             type: string
             format: binary
             description: File with homework
-
-    TaskEvaluationOpenAPI:
-      type: object
-      required:
-        - grade
-      properties:
-        grade:
-          type: integer
-        comment:
-          type: string
 
     UserInGroupRequestOpenApi:
       type: object

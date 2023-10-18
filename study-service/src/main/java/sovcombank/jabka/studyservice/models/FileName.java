@@ -1,11 +1,13 @@
 package sovcombank.jabka.studyservice.models;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 @Entity
 @Table(name = "files")
 @Data
-public class File {
+@Builder
+public class FileName {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
