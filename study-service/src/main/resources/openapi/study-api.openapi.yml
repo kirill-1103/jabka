@@ -261,6 +261,227 @@ paths:
         '403':
           description: Do Not Have Necessary Rights to Execute This Operation
 
+  /group/user:
+    post:
+      security:
+        - bearerAuth: [ ]
+      summary: Add user in group
+      tags:
+        - Group
+      operationId: addUserInGroup
+      requestBody:
+        description: User id, group id
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInGroupRequestOpenApi'
+      responses:
+        '201':
+          description: Added
+        '400':
+          description: Bad Request
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          description: Do Not Have Necessary Rights to Execute This Operation
+
+    delete:
+      security:
+        - bearerAuth: [ ]
+      summary: Delete user from group
+      tags:
+        - Group
+      operationId: deleteUserFromGroup
+      requestBody:
+        description: User id, group id
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInGroupRequestOpenApi'
+      responses:
+        '200':
+          description: Deleted
+        '400':
+          description: Bad Request
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          description: Do Not Have Necessary Rights to Execute This Operation
+
+  /group/users:
+    post:
+      security:
+        - bearerAuth: [ ]
+      summary: Add users in group
+      tags:
+        - Group
+      operationId: addUsersInGroup
+      requestBody:
+        description: User's ids, group's ids
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/UserInGroupRequestOpenApi'
+      responses:
+        '201':
+          description: Added
+        '400':
+          description: Bad Request
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          description: Do Not Have Necessary Rights to Execute This Operation
+
+    delete:
+      security:
+        - bearerAuth: [ ]
+      summary: Delete users in group
+      tags:
+        - Group
+      operationId: deleteUsersFromGroup
+      requestBody:
+        description: User's ids, group's ids
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/UserInGroupRequestOpenApi'
+      responses:
+        '200':
+          description: Deleted
+        '400':
+          description: Bad Request
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          description: Do Not Have Necessary Rights to Execute This Operation
+
+  /attendance-statistics:
+    post:
+      security:
+        - bearerAuth: [ ]
+      summary: Add/Update Statistics
+      tags:
+        - AttendanceStatistics
+      operationId: addStatistics
+      requestBody:
+        description: Attendance Statistics Entity
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/AttendanceStatisticsOpenApi'
+      responses:
+        '201':
+          description: Added
+        '400':
+          description: Bad Request
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          description: Do Not Have Necessary Rights to Execute This Operation
+
+
+  /attendance-statistics/{id}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: Attendance statistics Information
+      tags:
+        - AttendanceStatistics
+      operationId: getStatisticsById
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AttendanceStatisticsOpenApi"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '403':
+          description: Do Not Have Necessary Rights to Execute This Operation
+        '404':
+          description: Not Found
+
+  /attendance-statistics/group/{group_id}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: Group's Attendance Statistics Information
+      tags:
+        - AttendanceStatistics
+      operationId: getStatisticsByGroupId
+      parameters:
+        - in: path
+          name: group_id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AttendanceStatisticsOpenApi"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '403':
+          description: Do Not Have Necessary Rights to Execute This Operation
+        '404':
+          description: Not Found
+
+  /attendance-statistics/subject/{subject_id}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: Subject's Attendance Statistics Information
+      tags:
+        - AttendanceStatistics
+      operationId: getStatisticsBySubjectId
+      parameters:
+        - in: path
+          name: subject_id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AttendanceStatisticsOpenApi"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '403':
+          description: Do Not Have Necessary Rights to Execute This Operation
+        '404':
+          description: Not Found
+
   /materials:
     get:
       security:
@@ -791,7 +1012,7 @@ components:
         - studyGroup
         - subject
         - classFormat
-        - professor
+        - professorId
       properties:
         id:
           type: integer
@@ -809,8 +1030,11 @@ components:
           type: string
         linkForTheClass:
           type: string
+        professorId:
+          type: integer
+          format: int64
         professor:
-          $ref: "#/components/schemas/ProfessorSubjectOpenAPI"
+          $ref: "#/components/schemas/UserOpenApi"
 
     StudyGroupOpenAPI:
       type: object
@@ -822,6 +1046,10 @@ components:
           format: int64
         name:
           type: string
+        students:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserOpenApi"
 
     SubjectOpenAPI:
       type: object
@@ -855,19 +1083,6 @@ components:
           items:
             type: integer
             format: int64
-
-    ProfessorSubjectOpenAPI:
-      type: object
-      required:
-        - subjectId
-        - professorId
-      properties:
-        subjectId:
-          type: integer
-          format: int64
-        professorId:
-          type: integer
-          format: int64
 
     ClassFormat:
       type: string
@@ -952,4 +1167,101 @@ components:
         comment:
           type: string
 
+    UserInGroupRequestOpenApi:
+      type: object
+      required:
+        - userId
+        - groupId
+      properties:
+        userId:
+          type: integer
+          format: base64
+        groupId:
+          type: integer
+          format: base64
 
+    UserOpenApi:
+      type: object
+      required:
+        - login
+        - name
+        - surname
+        - email
+      properties:
+        id:
+          type: integer
+          format: int64
+        login:
+          type: string
+        name:
+          type: string
+        surname:
+          type: string
+        patronymic:
+          type: string
+        email:
+          type: string
+        group:
+          type: string
+        photo:
+          type: string
+          description: base64 string
+        password:
+          type: string
+        roles:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoleOpenApi"
+        activationStatus:
+          $ref: "#/components/schemas/ActivationStatusOpenAPI"
+
+    ActivationStatusOpenAPI:
+      type: string
+      enum:
+        - ACTIVATED
+        - WAIT_FOR_EMAIL_VERIFICATION
+
+    RoleOpenApi:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          $ref: "#/components/schemas/ERoleOpenApi"
+
+    ERoleOpenApi:
+      type: string
+      enum:
+        - ROLE_STUDENT
+        - ROLE_ADMIN
+        - ROLE_TEACHER
+        - ROLE_CURATOR
+        - ROLE_ENROLLEE
+        - ROLE_MODERATOR
+        - ROLE_COMMITTE
+
+    AttendanceStatisticsOpenApi:
+      type: object
+      required:
+        - schedule
+        - userId
+        - status
+      properties:
+        schedule:
+          $ref: "#/components/schemas/ScheduleOpenAPI"
+        status:
+          $ref: "#/components/schemas/AttendanceStatusOpenApi"
+        userId:
+          type: integer
+          format: int64
+        user:
+          $ref: "#/components/schemas/UserOpenApi"
+
+    AttendanceStatusOpenApi:
+      type: string
+      enum:
+        - ATTENDED
+        - MISSED
