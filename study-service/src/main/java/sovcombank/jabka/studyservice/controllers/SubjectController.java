@@ -1,8 +1,8 @@
 package sovcombank.jabka.studyservice.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.sovcombank.openapi.api.SubjectApiDelegate;
 import ru.sovcombank.openapi.model.SubjectOpenAPI;
 
@@ -11,28 +11,35 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/study/subject")
 public class SubjectController implements SubjectApiDelegate {
+    @PostMapping
     @Override
-    public ResponseEntity<Void> createSubject(SubjectOpenAPI subjectOpenAPI) {
+    public ResponseEntity<Void> createSubject(@RequestBody SubjectOpenAPI subjectOpenAPI) {
         return SubjectApiDelegate.super.createSubject(subjectOpenAPI);
     }
 
+    @DeleteMapping("/{id}")
     @Override
-    public ResponseEntity<Void> deleteSubject(Long id) {
+    public ResponseEntity<Void> deleteSubject(@Valid @PathVariable(name = "id") Long id) {
         return SubjectApiDelegate.super.deleteSubject(id);
     }
 
+    @GetMapping
     @Override
+    @ResponseBody
     public ResponseEntity<List<SubjectOpenAPI>> getAllSubjects() {
         return SubjectApiDelegate.super.getAllSubjects();
     }
 
+    @GetMapping("/{id}")
     @Override
-    public ResponseEntity<SubjectOpenAPI> getSubjectById(Long id) {
+    @ResponseBody
+    public ResponseEntity<SubjectOpenAPI> getSubjectById(@Valid @PathVariable(name = "id")Long id) {
         return SubjectApiDelegate.super.getSubjectById(id);
     }
 
+    @PutMapping
     @Override
-    public ResponseEntity<Void> updateHSubject(SubjectOpenAPI subjectOpenAPI) {
-        return SubjectApiDelegate.super.updateHSubject(subjectOpenAPI);
+    public ResponseEntity<Void> updateSubject(@RequestBody SubjectOpenAPI subjectOpenAPI) {
+        return SubjectApiDelegate.super.updateSubject(subjectOpenAPI);
     }
 }
