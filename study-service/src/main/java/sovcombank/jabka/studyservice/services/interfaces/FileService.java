@@ -5,8 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import sovcombank.jabka.studyservice.models.enums.StudyMaterialsType;
 
-import java.util.List;
-
 public interface FileService {
     String MATERIALS_PREFIX = "materials/";
 
@@ -20,5 +18,7 @@ public interface FileService {
 
     void removeFileByPath(String path);
 
-    String generateFileName(String fileName, StudyMaterialsType materialsType);
+    String generateMaterialsFileName(String fileName, StudyMaterialsType materialsType);
+
+    String generateHomeworkFileName(String fileName, Long studentId);
 }

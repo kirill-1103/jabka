@@ -25,5 +25,5 @@ public class StudyMaterials {
     private Set<String> attachedFiles;
     @OneToMany
     @JoinColumn(name = "files_id")
-    private Set<File> files;
+    private Set<FileName> fileNames;
 }

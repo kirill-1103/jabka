@@ -95,19 +95,30 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public String generateFileName(String fileName, StudyMaterialsType materialsType) {
-        Date date = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-        String formattedDate = dateFormat.format(date);
+    public String generateMaterialsFileName(String fileName, StudyMaterialsType materialsType) {
+        String formattedDate = getDateString();
         String newFileName = "_"+formattedDate+"_"+UUID.randomUUID()+"_"+fileName;
         switch (materialsType) {
             case TASK -> {
-                return "HOMEWORK"+newFileName;
+                return "TASK"+newFileName;
             }
             case MATERIAL ->  {
                 return "MATERIAL"+newFileName;
             }
         }
         return null;
+    }
+
+    @Override
+    public String generateHomeworkFileName(String fileName, Long studentId){
+        String formattedDate = getDateString();
+        String newFileName = "HOMEWORK_"+studentId+"_"+formattedDate+"_"+UUID.randomUUID()+"_"+fileName;
+        return newFileName;
+    }
+
+    private String getDateString(){
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        return dateFormat.format(date);
     }
 }
