@@ -125,6 +125,12 @@
             <artifactId>s3</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.swagger.codegen.v3</groupId>
+            <artifactId>swagger-codegen-maven-plugin</artifactId>
+            <version>3.0.24</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -193,6 +199,36 @@
                                 <delegatePattern>true</delegatePattern>
                                 <useTags>true</useTags>
                             </configOptions>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>user-open-api</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <generatorName>spring</generatorName>
+                            <inputSpec>${project.basedir}/src/main/resources/openapi/user-api.openapi.yaml</inputSpec>
+                            <apiPackage>ru.sovcombank.openapi.user.api</apiPackage>
+                            <modelPackage>ru.sovcombank.openapi.user.model</modelPackage>
+                            <supportingFilesToGenerate>
+                                ApiUtil.java
+                            </supportingFilesToGenerate>
+                            <configOptions>
+                                <groupId>${project.groupId}</groupId>
+                                <artifactId>${project.artifactId}</artifactId>
+                                <artifactVersion>${project.version}</artifactVersion>
+                                <delegatePattern>true</delegatePattern>
+                                <sourceFolder>swagger</sourceFolder>
+                                <library>spring-boot</library>
+                                <interfaceOnly>true</interfaceOnly>
+                                <useBeanValidation>true</useBeanValidation>
+                                <dateLibrary>java8</dateLibrary>
+                                <java8>true</java8>
+                            </configOptions>
+                            <ignoreFileOverride>${project.basedir}/.openapi-generator-ignore</ignoreFileOverride>
                         </configuration>
                     </execution>
                 </executions>
