@@ -18,4 +18,6 @@ public interface FileService {
     void save(String path, MultipartFile multipartFile);
 
     void removeFileByPath(String path);
+
+    String generateFileName(String fileName);
 }

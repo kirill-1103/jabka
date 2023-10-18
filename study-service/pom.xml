@@ -201,7 +201,6 @@
                             </configOptions>
                         </configuration>
                     </execution>
-
                     <execution>
                         <id>user-open-api</id>
                         <phase>compile</phase>
@@ -225,8 +224,6 @@
                                 <library>spring-boot</library>
                                 <interfaceOnly>true</interfaceOnly>
                                 <useBeanValidation>true</useBeanValidation>
-                                <dateLibrary>java8</dateLibrary>
-                                <java8>true</java8>
                                 <useTags>true</useTags>
                             </configOptions>
                             <ignoreFileOverride>${project.basedir}/.openapi-generator-ignore</ignoreFileOverride>

@@ -1,39 +1,43 @@
 package sovcombank.jabka.studyservice.controllers;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.sovcombank.openapi.api.GroupApiDelegate;
 import ru.sovcombank.openapi.model.StudyGroupOpenAPI;
+import sovcombank.jabka.studyservice.services.interfaces.StudyGroupService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/study/group")
+@RequiredArgsConstructor
 public class StudyGroupController implements GroupApiDelegate {
+    private final StudyGroupService studyGroupService;
 
     @PostMapping
     @Override
     public ResponseEntity<Void> createGroup(@RequestBody StudyGroupOpenAPI studyGroupOpenAPI) {
-        return GroupApiDelegate.super.createGroup(studyGroupOpenAPI);
+        return studyGroupService.createGroup(studyGroupOpenAPI);
     }
 
     @DeleteMapping("/{id}")
     @Override
     public ResponseEntity<Void> deleteGroupById(@Valid @PathVariable(name = "id") Long id) {
-        return GroupApiDelegate.super.deleteGroupById(id);
+        return studyGroupService.deleteGroupById(id);
     }
 
     @GetMapping
     @Override
     @ResponseBody
     public ResponseEntity<List<StudyGroupOpenAPI>> getAllGroups() {
-        return GroupApiDelegate.super.getAllGroups();
+        return studyGroupService.getAllGroups();
     }
 
     @GetMapping("/{id}")
     @Override
     public ResponseEntity<StudyGroupOpenAPI> getGroupById(@Valid @PathVariable(name = "id") Long id) {
-        return GroupApiDelegate.super.getGroupById(id);
+        return studyGroupService.getGroupById(id);
     }
 }

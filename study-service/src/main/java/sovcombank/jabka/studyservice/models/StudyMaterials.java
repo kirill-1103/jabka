@@ -22,4 +22,8 @@ public class StudyMaterials {
     @OneToMany
     @JoinColumn(name = "homework_id")
     private Set<Homework> homeworks;
+    private Set<String> attachedFiles;
+    @OneToMany
+    @JoinColumn(name = "files_id")
+    private Set<File> files;
 }
