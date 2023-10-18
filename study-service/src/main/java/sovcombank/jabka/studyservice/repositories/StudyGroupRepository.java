@@ -7,6 +7,6 @@ import sovcombank.jabka.studyservice.models.StudyGroup;
 
 @Repository
 public interface StudyGroupRepository extends JpaRepository<StudyGroup, Long> {
-    boolean existsByGroupName(String name);
+    boolean existsByName(String name);
     boolean existsById(@NonNull Long id);
 }

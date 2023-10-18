@@ -201,29 +201,27 @@
                             </configOptions>
                         </configuration>
                     </execution>
+
                     <execution>
                         <id>user-open-api</id>
-                        <phase>compile</phase>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <generatorName>spring</generatorName>
+                            <generatorName>java</generatorName>
                             <inputSpec>${project.basedir}/src/main/resources/openapi/user-api.openapi.yaml</inputSpec>
                             <apiPackage>ru.sovcombank.openapi.user.api</apiPackage>
                             <modelPackage>ru.sovcombank.openapi.user.model</modelPackage>
-                            <supportingFilesToGenerate>
-                                ApiUtil.java
-                            </supportingFilesToGenerate>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
                             <configOptions>
                                 <groupId>${project.groupId}</groupId>
                                 <artifactId>${project.artifactId}</artifactId>
                                 <artifactVersion>${project.version}</artifactVersion>
-                                <delegatePattern>true</delegatePattern>
                                 <sourceFolder>swagger</sourceFolder>
-                                <library>spring-boot</library>
-                                <useBeanValidation>true</useBeanValidation>
-                                <useTags>true</useTags>
+                                <library>resttemplate</library>
+                                <interfaceOnly>false</interfaceOnly>
+                                <dateLibrary>java8</dateLibrary>
                             </configOptions>
                             <ignoreFileOverride>${project.basedir}/.openapi-generator-ignore</ignoreFileOverride>
                         </configuration>

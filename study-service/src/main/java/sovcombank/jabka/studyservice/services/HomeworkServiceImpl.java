@@ -85,6 +85,9 @@ public class HomeworkServiceImpl implements HomeworkService {
     @Override
     @Transactional
     public Homework getHomeworkByStudentAndMaterials(Long materialsId, Long studentId) {
+        if(userApi.showUserInfo(studentId) == null){
+            throw new BadRequestException(String.format("Student with id %d not found", studentId));
+        }
         StudyMaterials studyMaterials = studyMaterialsRepository.findById(materialsId)
                 .orElseThrow(()->new NotFoundException(String.format("Materials with id %d not found",materialsId)));
         return studyMaterials.getHomeworks().stream().filter(homework -> homework.getStudentId().equals(studentId)).findAny()
@@ -94,7 +97,7 @@ public class HomeworkServiceImpl implements HomeworkService {
     @Override
     @Transactional
     public List<Homework> getHomeworksByStudentId(Long studentId) {
-        if(!userApi.showUserInfo(studentId).getStatusCode().is2xxSuccessful()){
+        if(userApi.showUserInfo(studentId) == null){
             throw new BadRequestException(String.format("Student with id %d not found", studentId));
         }
         return homeworkRepository.findByStudentId(studentId);

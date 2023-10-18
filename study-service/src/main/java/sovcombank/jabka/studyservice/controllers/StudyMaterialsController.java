@@ -18,6 +18,7 @@ import java.util.List;
 public class StudyMaterialsController implements MaterialsApiDelegate {
     private final StudyMaterialsService studyMaterialsService;
 
+    //todo: нужен ендпоинт получения всех материалов, которые есть в предемете
     @PostMapping
     @Override
     public ResponseEntity<Void> createMaterials(@RequestBody StudyMaterialsBody studyMaterialsBody

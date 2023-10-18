@@ -22,5 +22,7 @@ public class AttendanceStatistics {
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
+    @NonNull
+    @Column(nullable = false)
     private AttendanceStatus attendanceStatus;
 }

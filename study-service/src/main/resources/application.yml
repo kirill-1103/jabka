@@ -28,3 +28,6 @@ aws:
   region: ru-central1
   bucketName: jabka
   baseUri: https://storage.yandexcloud.net
+
+user-service:
+  base-url: http://localhost:8082/api/user
