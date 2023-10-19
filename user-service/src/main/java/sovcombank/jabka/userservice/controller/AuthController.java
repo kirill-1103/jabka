@@ -22,6 +22,7 @@ import ru.sovcombank.openapi.model.JwtResponseOpenApi;
 import ru.sovcombank.openapi.model.LoginRequestOpenApi;
 import ru.sovcombank.openapi.model.SignupRequestOpenApi;
 import ru.sovcombank.openapi.model.UserOpenApi;
+import sovcombank.jabka.libs.security.handler.AuthFailureHandler;
 import sovcombank.jabka.userservice.exception.ForbiddenException;
 
 import sovcombank.jabka.userservice.model.UserEntity;

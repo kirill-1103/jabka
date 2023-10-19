@@ -11,7 +11,6 @@ import ru.sovcombank.openapi.user.api.UserApi;
 import sovcombank.jabka.studyservice.services.interfaces.FileService;
 
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/study/test")
