@@ -4,22 +4,29 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sovcombank.openapi.model.ApplicantRequestOpenApi;
+import ru.sovcombank.openapi.model.ERoleOpenApi;
 import sovcombank.jabka.userservice.exception.BadRequestException;
 import sovcombank.jabka.userservice.exception.NotFoundException;
 import sovcombank.jabka.userservice.mapper.ApplicantRequestMapper;
 import sovcombank.jabka.userservice.model.ApplicantRequest;
+import sovcombank.jabka.userservice.model.Role;
+import sovcombank.jabka.userservice.model.UserEntity;
+import sovcombank.jabka.userservice.model.enums.ApplicantRequestStatus;
 import sovcombank.jabka.userservice.repositories.ApplicantRequestRepository;
+import sovcombank.jabka.userservice.repositories.UserRepository;
 import sovcombank.jabka.userservice.service.interfaces.ApplicantRequestService;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class ApplicantRequestServiceImpl implements ApplicantRequestService {
     private final ApplicantRequestRepository applicantRequestRepository;
     private final ApplicantRequestMapper applicantRequestMapper;
+    private final UserRepository userRepository;
 
     @Override
     @Transactional
@@ -55,6 +62,14 @@ public class ApplicantRequestServiceImpl implements ApplicantRequestService {
         ApplicantRequest request = applicantRequestMapper.toApplicantRequest(requestOpenApi);
         if (Objects.isNull(request)) {
             throw new BadRequestException();
+        }
+        if(request.getRequestStatus().equals(ApplicantRequestStatus.APPROVED)) {
+            UserEntity user = request.getUser();
+            Set<Role> roles = user.getRoles();
+            roles.removeIf(role -> role.getName().equals(ERoleOpenApi.ENROLLEE));
+            roles.add(new Role(ERoleOpenApi.STUDENT));
+            user.setRoles(roles);
+            userRepository.save(user);
         }
         request = applicantRequestRepository.save(request);
         return Optional.of(request);
