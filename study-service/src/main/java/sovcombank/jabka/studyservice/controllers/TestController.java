@@ -5,8 +5,8 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.sovcombank.openapi.user.model.UserOpenApi;
 import ru.sovcombank.openapi.user.ApiException;
+import ru.sovcombank.openapi.user.model.UserOpenApi;
 import ru.sovcombank.openapi.user.api.UserApi;
 import sovcombank.jabka.studyservice.services.interfaces.FileService;
 
@@ -45,7 +45,8 @@ public class TestController {
     }
 
     @GetMapping("/user/all")
-    public List<UserOpenApi> userOpenApi() throws ApiException {
-        return userApi.getAllUsers();
+    public void userOpenApi() throws ApiException {
+        var a = userApi.getAllUsersWithHttpInfo();
+        return;
     }
 }

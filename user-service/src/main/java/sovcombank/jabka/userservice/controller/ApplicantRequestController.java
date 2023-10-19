@@ -2,14 +2,11 @@ package sovcombank.jabka.userservice.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.sovcombank.openapi.api.ApplicantRequestApiDelegate;
 import ru.sovcombank.openapi.model.ApplicantRequestOpenApi;
 import sovcombank.jabka.userservice.mapper.ApplicantRequestMapper;
 import sovcombank.jabka.userservice.service.interfaces.ApplicantRequestService;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +18,7 @@ public class ApplicantRequestController implements ApplicantRequestApiDelegate {
     private final ApplicantRequestMapper applicantRequestMapper;
 
     @Override
+    @PostMapping
     public ResponseEntity<ApplicantRequestOpenApi> addApplicantRequest(@RequestBody  ApplicantRequestOpenApi applicantRequestOpenApi) {
         return ResponseEntity.ok(applicantRequestService.add(applicantRequestOpenApi)
                 .map(applicantRequestMapper::toApplicantRequestOpenApi)
@@ -28,19 +26,22 @@ public class ApplicantRequestController implements ApplicantRequestApiDelegate {
     }
 
     @Override
-    public ResponseEntity<ApplicantRequestOpenApi> applicantRequestByUserId(@RequestBody  Long id) {
+    @GetMapping("/user/{id}")
+    public ResponseEntity<ApplicantRequestOpenApi> applicantRequestByUserId(@PathVariable  Long id) {
         return ResponseEntity.ok(applicantRequestService.findByUserId(id)
                 .map(applicantRequestMapper::toApplicantRequestOpenApi)
                 .get());
     }
 
     @Override
+    @DeleteMapping
     public ResponseEntity<Void> deleteApplicantRequest(@RequestBody  Long id) {
         applicantRequestService.delete(id);
         return ResponseEntity.ok().build();
     }
 
     @Override
+    @GetMapping
     public ResponseEntity<List<ApplicantRequestOpenApi>> getAllApplicantRequests() {
         return ResponseEntity.ok(applicantRequestService.getAll()
                 .stream()
@@ -49,12 +50,14 @@ public class ApplicantRequestController implements ApplicantRequestApiDelegate {
     }
 
     @Override
-    public ResponseEntity<ApplicantRequestOpenApi> showApplicantRequestInfo(@RequestBody Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<ApplicantRequestOpenApi> showApplicantRequestInfo(@PathVariable Long id) {
         return ResponseEntity.ok(applicantRequestService.findById(id)
                 .map(applicantRequestMapper::toApplicantRequestOpenApi).get());
     }
 
     @Override
+    @PutMapping
     public ResponseEntity<ApplicantRequestOpenApi> updateApplicantRequest(@RequestBody ApplicantRequestOpenApi applicantRequestOpenApi) {
         return ResponseEntity.ok(applicantRequestService.update(applicantRequestOpenApi)
                 .map(applicantRequestMapper::toApplicantRequestOpenApi).get());

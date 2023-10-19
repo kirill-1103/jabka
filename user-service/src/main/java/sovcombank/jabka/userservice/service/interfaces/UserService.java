@@ -1,6 +1,5 @@
 package sovcombank.jabka.userservice.service.interfaces;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sovcombank.openapi.model.SignupRequestOpenApi;
@@ -13,6 +12,7 @@ import java.util.List;
 public interface UserService extends UserDetailsService {
     List<UserEntity> getAll();
 
+    @Override
     UserEntity loadUserByUsername(String login);
 
     @Transactional

@@ -8,6 +8,7 @@ import ru.sovcombank.openapi.model.LoginRequestOpenApi;
 import ru.sovcombank.openapi.model.UserOpenApi;
 
 import sovcombank.jabka.userservice.model.UserEntity;
+import sovcombank.jabka.libs.security.handler.AuthFailureHandler;
 
 @Service
 public interface AuthService {

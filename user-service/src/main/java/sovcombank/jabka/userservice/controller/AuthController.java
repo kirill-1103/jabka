@@ -7,6 +7,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
+import org.springframework.security.web.session.SessionManagementFilter;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,15 +26,16 @@ import sovcombank.jabka.userservice.exception.ForbiddenException;
 
 import sovcombank.jabka.userservice.model.UserEntity;
 
+
+
 import sovcombank.jabka.userservice.service.interfaces.AuthService;
 import sovcombank.jabka.userservice.service.interfaces.UserService;
-
+import sovcombank.jabka.libs.security.filter.JwtRequestFilter;
 @RestController
 @RequestMapping("/api/user/auth")
 @RequiredArgsConstructor
 public class AuthController implements AuthorizationApiDelegate {
     private final AuthService authService;
-
     private final UserService userService;
     private static final String MAPPING_AUTH = "/signin";
     private static final String MAPPING_UPDATE_TOKEN = "/update-token";

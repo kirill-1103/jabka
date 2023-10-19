@@ -39,22 +39,13 @@ public class ApiClientConfig {
         ApiClient apiClient = ru.sovcombank.openapi.user.Configuration.getDefaultApiClient();
         apiClient.updateBaseUri(baseUserServiceUrl);
 
+
         apiClient.setRequestInterceptor((http) -> {
-            AuthorizationApi authorizationApi = new AuthorizationApi();
-            try {
-                LoginRequestOpenApi loginRequestOpenApi = new LoginRequestOpenApi();
-                loginRequestOpenApi.setLogin("API_ADMIN");
-                loginRequestOpenApi.setPassword("jabka");
-                JwtResponseOpenApi jwtResponseOpenApi = authorizationApi.authenticateUser(loginRequestOpenApi);
-                http.setHeader("Authorization","Bearer "+ jwtResponseOpenApi.getAccessToken());
-            } catch (ApiException e) {
-                throw new RuntimeException(e);
-            }
-//            http.setHeader(
-//                    "Authorization",
-//                    "Bearer "
-//                            + tokenKeeper.getToken(accessApiName, List.of("ROLE_ADMIN"))
-//            );
+            http.setHeader(
+                    "Authorization",
+                    "Bearer "
+                            + tokenKeeper.getToken(accessApiName, List.of("ROLE_ADMIN"))
+            );
         });
 
         return apiClient;

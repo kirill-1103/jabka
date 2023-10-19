@@ -40,7 +40,6 @@ public class UserController implements UserApiDelegate {
     @Override
     @GetMapping
     public ResponseEntity<List<UserOpenApi>> getAllUsers() {
-        log.error(passwordEncoder.encode("123"));
         return ResponseEntity.ok(userService.getAll()
                 .stream()
                 .map(userMapper::toUserOpenApi)
