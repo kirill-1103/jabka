@@ -383,7 +383,7 @@ paths:
         content:
           text/plain:
             schema:
-             type: string
+              type: string
       responses:
         '200':
           description: OK
@@ -422,7 +422,7 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-  
+
   responses:
     UnauthorizedError:
       description: Access token is missing or invalid
@@ -469,7 +469,7 @@ components:
       enum:
         - ACTIVATED
         - WAIT_FOR_EMAIL_VERIFICATION
-    
+
     RoleOpenApi:
       type: object
       required:
