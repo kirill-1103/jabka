@@ -3,10 +3,11 @@ info:
   title: API Title
   version: "1.0"
 servers:
-  - url: http://localhost:8082/api/user
+  - url: http://localhost:8082/api
     description: user server
 paths:
-  /{id}:
+
+  /user/{id}:
     get:
       security:
         - bearerAuth: [ ]
@@ -34,7 +35,7 @@ paths:
         '404':
           description: User not found!
 
-  /auth/signup:
+  /user/auth/signup:
     post:
       summary: Register
       tags:
@@ -54,7 +55,7 @@ paths:
         '409':
           description: Account with such username or email is already in use!
 
-  /auth/signin:
+  /user/auth/signin:
     post:
       summary: Login
       tags:
@@ -80,7 +81,7 @@ paths:
         '401':
           $ref: "#/components/responses/UnauthorizedError"
 
-  /auth/update-token:
+  /user/auth/update-token:
     post:
       security:
         - bearerAuth: [ ]
@@ -111,7 +112,7 @@ paths:
           description: User not found!
 
 
-  /:
+  /user/api/user:
     get:
       security:
         - bearerAuth: [ ]
@@ -194,7 +195,7 @@ paths:
         '404':
           description: User Not Found!
 
-  /request/{id}:
+  /user/request/{id}:
     get:
       security:
         - bearerAuth: [ ]
@@ -223,7 +224,7 @@ paths:
         '404':
           description: Applicant Request not found!
 
-  /request/user/{id}:
+  /user/request/user/{id}:
     get:
       security:
         - bearerAuth: [ ]
@@ -252,7 +253,7 @@ paths:
         '404':
           description: Applicant Request not found!
 
-  /request:
+  /user/request:
     get:
       security:
         - bearerAuth: [ ]
@@ -351,7 +352,7 @@ paths:
         '403':
           description: Forbidden error!
 
-  /auth/activation:
+  /user/auth/activation:
     get:
       summary: Activate User from Email Link
       tags:
@@ -371,7 +372,7 @@ paths:
         '404':
           description: The Link Isn't Valid (Token or User Not Found)
 
-  /auth/forget:
+  /user/auth/forget:
     put:
       summary: Send Recovery Password Email
       tags:
@@ -382,14 +383,14 @@ paths:
         content:
           text/plain:
             schema:
-             type: string
+              type: string
       responses:
         '200':
           description: OK
         '400':
           description: Bad Request
 
-  /auth/recovery:
+  /user/auth/recovery:
     put:
       summary: New Password Input
       tags:
@@ -421,7 +422,7 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-  
+
   responses:
     UnauthorizedError:
       description: Access token is missing or invalid
@@ -468,7 +469,7 @@ components:
       enum:
         - ACTIVATED
         - WAIT_FOR_EMAIL_VERIFICATION
-    
+
     RoleOpenApi:
       type: object
       required:
@@ -546,7 +547,6 @@ components:
         - workExperience
         - personalAchievements
         - motivationMessage
-        - requestStatus
       properties:
         id:
           type: integer
@@ -563,18 +563,8 @@ components:
           type: string
         motivationMessage:
           type: string
-        requestStatus:
-          $ref: "#/components/schemas/ApplicantRequestStatusOpenAPI"
         user:
           $ref: "#/components/schemas/UserOpenApi"
-
-    ApplicantRequestStatusOpenAPI:
-      type: string
-      enum:
-        - ON_MODERATION
-        - IN_RESERVE
-        - APPROVED
-        - DENIED
 
     UpdateUserOpenApi:
       type: object
