@@ -130,7 +130,7 @@ public class HomeworkServiceImpl implements HomeworkService {
     @Transactional
     public List<Homework> getHomeworksByStudentId(Long studentId) {
 
-        Integer statusCode = null;
+        Integer statusCode;
         try {
             statusCode = userApi.showUserInfoWithHttpInfo(studentId).getStatusCode();
         } catch (ApiException e) {

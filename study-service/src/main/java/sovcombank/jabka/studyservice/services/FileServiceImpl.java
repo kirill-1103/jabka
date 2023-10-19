@@ -83,6 +83,25 @@ public class FileServiceImpl implements FileService {
 
 
     @Override
+    public void save(String path, Resource resource) {
+        try {
+            PutObjectRequest putObjectRequest = PutObjectRequest
+                    .builder()
+                    .key(String.format("%s/%s", baseFolder, path))
+                    .bucket(bucketName)
+                    .build();
+
+            s3Client.putObject(
+                    putObjectRequest,
+                    RequestBody.fromBytes(resource.getContentAsByteArray()));
+        } catch (NoSuchBucketException e) {
+            throw new NotFoundException("Folder not found.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new FileException("Failed load file. Error:" + e.getMessage());
+        }
+    }
+    @Override
     public void removeFileByPath(String path) {
         try {
             DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()

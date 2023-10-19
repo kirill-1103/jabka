@@ -956,6 +956,37 @@ paths:
         '404':
           description: Not Found
 
+  /materials/subject/{subjectId}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: Get All Materials by Subject Id
+      tags:
+        - Materials
+      operationId: getMaterialsBySubjectId
+      parameters:
+        - in: path
+          name: subjectId
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StudyMaterialsOpenAPI"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '403':
+          description: Do Not Have Necessary Rights to Execute This Operation
+        '404':
+          description: Not Found
+
 
 components:
 
@@ -1095,6 +1126,15 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/HomeworkOpenAPI"
+        filesId:
+          type: array
+          items:
+            type: integer
+            format: int64
+        filesNames:
+          type: array
+          items:
+            type: string
 
     HomeworkOpenAPI:
       type: object
