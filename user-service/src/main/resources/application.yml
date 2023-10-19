@@ -37,7 +37,7 @@ spring:
 
 mail-service:
   activation:
-    uri: http://localhost:8082/api/auth/activation?token={token}
+    uri: http://localhost:8082/api/user/auth/activation?token={token}
   recovery:
     uri: http://localhost:8082/api/user/auth/recovery?token={token}
 
