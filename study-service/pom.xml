@@ -217,8 +217,8 @@
                             <inputSpec>./src/main/resources/openapi/user-api.openapi.yaml</inputSpec>
                             <generatorName>java</generatorName>
                             <library>native</library>
-                            <apiPackage>ru.sovcombank.openapi.user.api</apiPackage>
-                            <modelPackage>ru.sovcombank.openapi.user.model</modelPackage>
+                            <apiPackage>ru.sovcombank.openapi.api</apiPackage>
+                            <modelPackage>ru.sovcombank.openapi.model</modelPackage>
                             <generateApiDocumentation>false</generateApiDocumentation>
                             <generateModelDocumentation>false</generateModelDocumentation>
                             <generateModelTests>false</generateModelTests>

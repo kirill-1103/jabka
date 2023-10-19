@@ -5,9 +5,9 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.sovcombank.openapi.user.ApiException;
-import ru.sovcombank.openapi.user.model.UserOpenApi;
-import ru.sovcombank.openapi.user.api.UserApi;
+import ru.sovcombank.openapi.ApiException;
+import ru.sovcombank.openapi.model.UserOpenApi;
+import ru.sovcombank.openapi.api.UserApi;
 import sovcombank.jabka.studyservice.services.interfaces.FileService;
 
 import java.io.IOException;

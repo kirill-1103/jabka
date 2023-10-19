@@ -111,6 +111,12 @@ public class HomeworkController implements HomeworkApiDelegate {
                 .collect(Collectors.toList());
     }
 
+    private List<Long> getIdsFileNames(Set<FileName> fileNames){
+        return fileNames.stream()
+                .map(FileName::getId)
+                .collect(Collectors.toList());
+    }
+
     private List<HomeworkOpenAPI> homeworksOpenApiByHomeworks(List<Homework> homeworks) {
         List<HomeworkOpenAPI> homeworksOpenAPI = homeworkMapper.toOpenAPI(homeworks);
         Iterator<Homework> iteratorHomework = homeworks.listIterator();
@@ -119,6 +125,7 @@ public class HomeworkController implements HomeworkApiDelegate {
             Homework homework = iteratorHomework.next();
             HomeworkOpenAPI homeworkOpenAPI = iteratorHomeworkOpenApi.next();
             homeworkOpenAPI.setFilesNames(getStringFileNames(homework.getFileNames()));
+            homeworkOpenAPI.setFileIds(getIdsFileNames(homework.getFileNames()));
         }
         return homeworksOpenAPI;
     }
