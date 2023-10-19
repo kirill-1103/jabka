@@ -112,7 +112,7 @@ paths:
           description: User not found!
 
 
-  /user/api/user:
+  /user:
     get:
       security:
         - bearerAuth: [ ]
