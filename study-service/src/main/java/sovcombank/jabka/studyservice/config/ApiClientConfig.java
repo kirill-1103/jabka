@@ -15,9 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ApiClientConfig {
 
-//    @Value("${user-service.base-url}")
-//    private String baseUserServiceUrl;
-
     @Value("${spring.application.api-name}")
     private String accessApiName;
 
@@ -27,7 +24,6 @@ public class ApiClientConfig {
     @Bean
     public ApiClient userClient() {
         ApiClient apiClient = ru.sovcombank.openapi.Configuration.getDefaultApiClient();
-//        apiClient.updateBaseUri(baseUserServiceUrl);
 
 
         apiClient.setRequestInterceptor((http) -> {

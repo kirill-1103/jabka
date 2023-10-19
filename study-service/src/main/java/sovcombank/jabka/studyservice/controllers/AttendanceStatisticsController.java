@@ -53,7 +53,7 @@ public class AttendanceStatisticsController implements AttendanceStatisticsApiDe
         Long userId = attendanceStatisticsOpenApi.getUserId();
         ApiResponse<UserOpenApi> userOpenApiResponse = null;
         try {
-            userOpenApiResponse = userApi.showUserInfoWithHttpInfo(id);
+            userOpenApiResponse = userApi.showUserInfoWithHttpInfo(userId);
             if(!okResponse(userOpenApiResponse)){
                 if(userOpenApiResponse.getStatusCode() == HttpStatus.NOT_FOUND.value()){
                     throw new NotFoundException("User in AttendanceStatistics with id"+id+" not found.");
@@ -79,7 +79,15 @@ public class AttendanceStatisticsController implements AttendanceStatisticsApiDe
     private List<AttendanceStatisticsOpenApi> getAttendanceOpenApiList(List<AttendanceStatistics> statistics){
         List<AttendanceStatisticsOpenApi> statisticsOpenApi = attendanceMapper.toOpenApiList(statistics);
         List<Long> userIds = statisticsOpenApi.stream().map(s -> s.getUserId()).toList();
-        //todo: получить юзеров оп id
+        try {
+            ApiResponse<List<UserOpenApi>> usersResponse = userApi.getUsersByIdsWithHttpInfo(userIds);
+            if(!okResponse(usersResponse)){
+                throw new BadRequestException();
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+            throw new BadRequestException(e.getMessage());
+        }
         List<UserOpenApi> users = null;
         for(int i = 0;i<userIds.size();i++){
             statisticsOpenApi.get(i).setUser(users.get(i));

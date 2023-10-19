@@ -84,7 +84,7 @@ paths:
       summary: Schedule Information by Id
       tags:
         - Schedule
-      operationId: getScheduleByGroup
+      operationId: getScheduleByGroupId
       parameters:
         - in: path
           name: id
@@ -98,7 +98,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ScheduleOpenAPI"
+                type: array
+                items:
+                  $ref: "#/components/schemas/ScheduleOpenAPI"
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '403':
