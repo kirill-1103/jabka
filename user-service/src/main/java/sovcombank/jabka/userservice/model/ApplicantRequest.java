@@ -3,6 +3,7 @@ package sovcombank.jabka.userservice.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import sovcombank.jabka.userservice.model.enums.ApplicantRequestStatus;
 
 @Entity
 @Getter
@@ -38,6 +39,9 @@ public class ApplicantRequest {
     @Column(nullable = false)
     @NotBlank
     private String motivationMessage;
+
+    @Enumerated(EnumType.STRING)
+    private ApplicantRequestStatus requestStatus;
 
     @ManyToOne
     @NotBlank

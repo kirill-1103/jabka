@@ -15,6 +15,7 @@ import sovcombank.jabka.userservice.exception.StateException;
 import sovcombank.jabka.userservice.mapper.UserMapper;
 import sovcombank.jabka.userservice.model.Role;
 import sovcombank.jabka.userservice.model.UserEntity;
+import sovcombank.jabka.userservice.model.enums.ActivationStatus;
 import sovcombank.jabka.userservice.repositories.RoleRepository;
 import sovcombank.jabka.userservice.repositories.UserRepository;
 import sovcombank.jabka.userservice.service.interfaces.UserService;
@@ -49,6 +50,7 @@ public class UserServiceImpl implements UserService {
 
     public UserEntity saveOrUpdate(SignupRequestOpenApi signupRequestOpenApi) {
         UserEntity user = userMapper.toUser(signupRequestOpenApi);
+        user.setActivationStatus(ActivationStatus.WAIT_FOR_EMAIL_VERIFICATION);
         return saveOrUpdate(user);
     }
 
