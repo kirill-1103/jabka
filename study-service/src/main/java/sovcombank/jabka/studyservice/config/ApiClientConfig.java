@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.sovcombank.openapi.user.ApiClient;
-import ru.sovcombank.openapi.user.api.AuthorizationApi;
-import ru.sovcombank.openapi.user.api.UserApi;
+import ru.sovcombank.openapi.ApiClient;
+import ru.sovcombank.openapi.api.AuthorizationApi;
+import ru.sovcombank.openapi.api.UserApi;
 import sovcombank.jabka.libs.security.state.TokenKeeper;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public class ApiClientConfig {
 
     @Bean
     public ApiClient userClient() {
-        ApiClient apiClient = ru.sovcombank.openapi.user.Configuration.getDefaultApiClient();
+        ApiClient apiClient = ru.sovcombank.openapi.Configuration.getDefaultApiClient();
 //        apiClient.updateBaseUri(baseUserServiceUrl);
 
 

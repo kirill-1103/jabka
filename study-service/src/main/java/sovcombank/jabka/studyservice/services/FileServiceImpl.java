@@ -3,6 +3,7 @@ package sovcombank.jabka.studyservice.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -69,7 +70,6 @@ public class FileServiceImpl implements FileService {
                     .key(String.format("%s/%s", baseFolder, path))
                     .bucket(bucketName)
                     .build();
-
             s3Client.putObject(
                     putObjectRequest,
                     RequestBody.fromBytes(multipartFile.getBytes()));
@@ -80,6 +80,7 @@ public class FileServiceImpl implements FileService {
             throw new FileException("Failed load file. Error:" + e.getMessage());
         }
     }
+
 
     @Override
     public void removeFileByPath(String path) {

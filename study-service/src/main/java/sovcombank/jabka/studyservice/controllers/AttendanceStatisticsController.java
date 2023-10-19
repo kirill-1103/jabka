@@ -1,15 +1,23 @@
 package sovcombank.jabka.studyservice.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import ru.sovcombank.openapi.api.AttendanceStatisticsApiDelegate;
 import ru.sovcombank.openapi.model.AttendanceStatisticsOpenApi;
+import ru.sovcombank.openapi.ApiException;
 import ru.sovcombank.openapi.model.UserOpenApi;
+import ru.sovcombank.openapi.ApiResponse;
+import ru.sovcombank.openapi.api.UserApi;
+import sovcombank.jabka.studyservice.exceptions.BadRequestException;
+import sovcombank.jabka.studyservice.exceptions.NotFoundException;
 import sovcombank.jabka.studyservice.mappers.AttendanceMapper;
 import sovcombank.jabka.studyservice.models.AttendanceStatistics;
 import sovcombank.jabka.studyservice.services.interfaces.AttendanceStatisticService;
+
+import static sovcombank.jabka.studyservice.utils.ResponseApiUtils.okResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +28,8 @@ import java.util.stream.Collectors;
 public class AttendanceStatisticsController implements AttendanceStatisticsApiDelegate {
     private final AttendanceStatisticService attendanceStatisticService;
     private final AttendanceMapper attendanceMapper;
+
+    private final UserApi userApi;
 
     @Override
     @PostMapping
@@ -41,9 +51,20 @@ public class AttendanceStatisticsController implements AttendanceStatisticsApiDe
         AttendanceStatistics attendanceStatistics = attendanceStatisticService.getById(id);
         AttendanceStatisticsOpenApi attendanceStatisticsOpenApi = attendanceMapper.toOpenApi(attendanceStatistics);
         Long userId = attendanceStatisticsOpenApi.getUserId();
-        UserOpenApi userOpenApi = null;
-        //todo: получить юзера по id
-        attendanceStatisticsOpenApi.setUser(userOpenApi);
+        ApiResponse<UserOpenApi> userOpenApiResponse = null;
+        try {
+            userOpenApiResponse = userApi.showUserInfoWithHttpInfo(id);
+            if(!okResponse(userOpenApiResponse)){
+                if(userOpenApiResponse.getStatusCode() == HttpStatus.NOT_FOUND.value()){
+                    throw new NotFoundException("User in AttendanceStatistics with id"+id+" not found.");
+                }
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+            throw new BadRequestException(e.getMessage());
+        }
+
+        attendanceStatisticsOpenApi.setUser(userOpenApiResponse.getData());
         return ResponseEntity.ok(attendanceStatisticsOpenApi);
     }
 

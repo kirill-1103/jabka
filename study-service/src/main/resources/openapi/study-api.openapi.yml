@@ -1122,6 +1122,11 @@ components:
           type: array
           items:
             type: string
+        fileIds:
+          type: array
+          items:
+            type: integer
+            format: int64
 
     SaveHomeworkRequestOpenApi:
       type: object
