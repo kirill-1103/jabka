@@ -1,5 +1,6 @@
 package sovcombank.jabka.userservice.service.interfaces;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sovcombank.openapi.model.SignupRequestOpenApi;
@@ -27,4 +28,6 @@ public interface UserService extends UserDetailsService {
     UserEntity getUserById(Long id);
 
     void update(UpdateUserOpenApi updateUserOpenApi);
+
+    List<UserEntity>getUsersByIds(List<Long> ids);
 }

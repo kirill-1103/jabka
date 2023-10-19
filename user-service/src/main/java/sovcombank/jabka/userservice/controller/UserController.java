@@ -63,4 +63,12 @@ public class UserController implements UserApiDelegate {
         updateUserOpenApi.getNewUser().setPassword(null);
         return ResponseEntity.ok(new JwtResponseOpenApi(token.getAccessToken(),updateUserOpenApi.getNewUser()));
     }
+
+    @Override
+    public ResponseEntity<List<UserOpenApi>> getUsersByIds(List<Long> ids) {
+        return ResponseEntity.ok(
+                userMapper.toListOpenApi(userService.getUsersByIds(ids))
+        );
+    }
+
 }

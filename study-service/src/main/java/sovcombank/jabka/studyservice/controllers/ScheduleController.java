@@ -2,41 +2,53 @@
 package sovcombank.jabka.studyservice.controllers;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.sovcombank.openapi.api.ScheduleApiDelegate;
 import ru.sovcombank.openapi.model.ScheduleOpenAPI;
+import sovcombank.jabka.studyservice.mappers.ScheduleMapper;
+import sovcombank.jabka.studyservice.services.interfaces.ScheduleService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/study/schedule")
+@RequiredArgsConstructor
 public class ScheduleController implements ScheduleApiDelegate {
+
+    private final ScheduleService scheduleService;
+    private final ScheduleMapper scheduleMapper;
 
     @PostMapping
     @Override
     public ResponseEntity<Void> createSchedule(@RequestBody ScheduleOpenAPI scheduleOpenAPI) {
-        return ScheduleApiDelegate.super.createSchedule(scheduleOpenAPI);
+        scheduleService.createSchedule(scheduleOpenAPI);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
     @Override
     public ResponseEntity<Void> deleteSchedule(@Valid @PathVariable(name = "id") Long id) {
-        return ScheduleApiDelegate.super.deleteSchedule(id);
+        scheduleService.deleteScheduleById(id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping
     @Override
     @ResponseBody
     public ResponseEntity<List<ScheduleOpenAPI>> getAllSchedule() {
-        return ScheduleApiDelegate.super.getAllSchedule();
+        return ResponseEntity.ok(
+                scheduleMapper.toOpenAPI(scheduleService.getAll())
+        );
     }
 
-    @GetMapping("/{id}")
     @Override
-    @ResponseBody
-    public ResponseEntity<ScheduleOpenAPI> getScheduleByGroup(@Valid @PathVariable(name = "id") Long id) {
-        return ScheduleApiDelegate.super.getScheduleByGroup(id);
+    @GetMapping("/schedule/{id}")
+    public ResponseEntity<List<ScheduleOpenAPI>> getScheduleByGroupId(@Valid @PathVariable Long id) {
+        return ResponseEntity.ok(
+                scheduleMapper.toOpenAPI(scheduleService.getByGroupId(id))
+        );
     }
 
     @GetMapping("/professor/{professorId}")
@@ -45,12 +57,15 @@ public class ScheduleController implements ScheduleApiDelegate {
     public ResponseEntity<List<ScheduleOpenAPI>> getScheduleByProfessorId(
             @Valid @PathVariable(name = "professorId") Long professorId
     ) {
-        return ScheduleApiDelegate.super.getScheduleByProfessorId(professorId);
+        return ResponseEntity.ok(
+                scheduleMapper.toOpenAPI(scheduleService.getByProfessorId(professorId))
+        );
     }
 
     @PutMapping
     @Override
-    public ResponseEntity<Void> updateSchedule(@RequestBody ScheduleOpenAPI scheduleOpenAPI) {
-        return ScheduleApiDelegate.super.updateSchedule(scheduleOpenAPI);
+    public ResponseEntity<Void> updateSchedule(@Valid @RequestBody ScheduleOpenAPI scheduleOpenAPI) {
+        scheduleService.updateSchedule(scheduleOpenAPI);
+        return ResponseEntity.ok().build();
     }
 }

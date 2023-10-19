@@ -195,6 +195,38 @@ paths:
         '404':
           description: User Not Found!
 
+  /user/ids:
+    post:
+      security:
+        - bearerAuth: [ ]
+      summary: Get users by ids
+      tags:
+        - User
+      operationId: getUsersByIds
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserOpenApi"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '400':
+          description: Bad request!
+
+
   /user/request/{id}:
     get:
       security:
@@ -587,3 +619,7 @@ components:
           $ref: "#/components/schemas/UserOpenApi"
         newUser:
           $ref: "#/components/schemas/UserOpenApi"
+        
+          
+          
+
