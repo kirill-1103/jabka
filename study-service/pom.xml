@@ -201,29 +201,32 @@
                             </configOptions>
                         </configuration>
                     </execution>
-
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>5.3.0</version>
+                <executions>
                     <execution>
-                        <id>user-open-api</id>
+                        <id>generate-client</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
+                            <inputSpec>./src/main/resources/openapi/user-api.openapi.yaml</inputSpec>
                             <generatorName>java</generatorName>
-                            <inputSpec>${project.basedir}/src/main/resources/openapi/user-api.openapi.yaml</inputSpec>
+                            <library>native</library>
                             <apiPackage>ru.sovcombank.openapi.user.api</apiPackage>
                             <modelPackage>ru.sovcombank.openapi.user.model</modelPackage>
-                            <generateApiTests>false</generateApiTests>
+                            <generateApiDocumentation>false</generateApiDocumentation>
+                            <generateModelDocumentation>false</generateModelDocumentation>
                             <generateModelTests>false</generateModelTests>
-                            <configOptions>
-                                <groupId>${project.groupId}</groupId>
-                                <artifactId>${project.artifactId}</artifactId>
-                                <artifactVersion>${project.version}</artifactVersion>
-                                <sourceFolder>swagger</sourceFolder>
-                                <library>resttemplate</library>
-                                <interfaceOnly>false</interfaceOnly>
-                                <dateLibrary>java8</dateLibrary>
-                            </configOptions>
-                            <ignoreFileOverride>${project.basedir}/.openapi-generator-ignore</ignoreFileOverride>
+                            <generateApiTests>false</generateApiTests>
+                            <generateSupportingFiles>true</generateSupportingFiles>
+                            <supportingFilesToGenerate>
+                                ApiCallback.java,ApiClient.java,ApiException.java,ApiResponse.java,Configuration.java,Pair.java,ProgressRequestBody.java,ProgressResponseBody.java,StringUtil.java,ApiKeyAuth.java,Authentication.java,HttpBasicAuth.java,JSON.java,OAuth.java,EncodingUtils.java,RFC3339DateFormat.java
+                            </supportingFilesToGenerate>
                         </configuration>
                     </execution>
                 </executions>

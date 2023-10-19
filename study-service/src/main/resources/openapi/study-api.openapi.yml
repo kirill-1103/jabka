@@ -977,12 +977,12 @@ components:
       properties:
         studyMaterials:
           $ref: "#/components/schemas/StudyMaterialsOpenAPI"
-        file:
+        files:
           type: array
           items:
             type: string
             format: binary
-            description: File with homework
+            description: Files with Materials
 
     ScheduleOpenAPI:
       type: object
