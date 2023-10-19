@@ -24,7 +24,7 @@ public class StudyGroupServiceImpl implements StudyGroupService {
     @Transactional
     @Override
     public ResponseEntity<Void> createGroup(StudyGroupOpenAPI studyGroupOpenAPI) {
-        if (groupRepository.existsByGroupName(studyGroupOpenAPI.getName())) {
+        if (groupRepository.existsByName(studyGroupOpenAPI.getName())) {
             return ResponseEntity
                     .badRequest()
                     .build();

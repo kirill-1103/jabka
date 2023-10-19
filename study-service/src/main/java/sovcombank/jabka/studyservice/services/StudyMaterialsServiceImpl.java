@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
+//todo: не забудь что тут с файлами еще дофига работы (сохранять, удалять из бд FileName и в S3)
+//todo: мб при сохранении надоп проверять, что Subject, для которого добавляется материалс существует
 @Service
 @RequiredArgsConstructor
 public class StudyMaterialsServiceImpl implements StudyMaterialsService {
@@ -28,6 +31,7 @@ public class StudyMaterialsServiceImpl implements StudyMaterialsService {
     public ResponseEntity<Void> createMaterials(StudyMaterialsBody studyMaterialsBody) {
         StudyMaterialsOpenAPI studyMaterialsOpenAPI = studyMaterialsBody.getStudyMaterials();
         StudyMaterials studyMaterials = materialsMapper.toStudyMaterials(studyMaterialsOpenAPI);
+        //todo: проверь, что тут норм будет мапиться
         materialsRepository.save(studyMaterials);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
