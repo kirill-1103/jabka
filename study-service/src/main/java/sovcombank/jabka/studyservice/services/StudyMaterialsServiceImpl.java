@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import ru.sovcombank.openapi.model.StudyMaterialsBody;
 import ru.sovcombank.openapi.model.StudyMaterialsOpenAPI;
 import sovcombank.jabka.studyservice.mappers.StudyMaterialsMapper;
@@ -90,7 +89,7 @@ public class StudyMaterialsServiceImpl implements StudyMaterialsService {
         }
         StudyMaterials updatedMaterials = materialsMapper.toStudyMaterials(studyMaterialsOpenAPI);
         materialsRepository.save(updatedMaterials);
-        List<Resource> files = studyMaterialsBody.getFile();
+        List<Resource> files = studyMaterialsBody.getFiles();
         if (!files.isEmpty()) {
 
         }

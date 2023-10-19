@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.sovcombank.openapi.model.HomeworkOpenAPI;
+import ru.sovcombank.openapi.user.ApiException;
 import ru.sovcombank.openapi.user.api.UserApi;
 import sovcombank.jabka.studyservice.exceptions.BadRequestException;
 import sovcombank.jabka.studyservice.exceptions.NotFoundException;
@@ -94,8 +95,14 @@ public class HomeworkServiceImpl implements HomeworkService {
     @Override
     @Transactional
     public List<Homework> getHomeworksByStudentId(Long studentId) {
-        if(!userApi.showUserInfo(studentId).getStatusCode().is2xxSuccessful()){
-            throw new BadRequestException(String.format("Student with id %d not found", studentId));
+
+        try {
+            Integer statusCode = userApi.showUserInfoWithHttpInfo(studentId).getStatusCode();
+            if(statusCode < 200 || statusCode > 300){
+                throw new BadRequestException(String.format("Student with id %d not found", studentId));
+            }
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
         }
         return homeworkRepository.findByStudentId(studentId);
     }
