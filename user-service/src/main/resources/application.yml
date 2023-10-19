@@ -22,7 +22,6 @@ spring:
       format_sql: true
       database: postgresql
       database-platform: org.hibernate.dialect.PostgreSQL95Dialect
-#      TODO: создать почту
   mail:
     host: smtp.yandex.ru
     port: 465
