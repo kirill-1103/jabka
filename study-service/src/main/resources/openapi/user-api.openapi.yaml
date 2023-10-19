@@ -547,6 +547,7 @@ components:
         - workExperience
         - personalAchievements
         - motivationMessage
+        - requestStatus
       properties:
         id:
           type: integer
@@ -563,8 +564,18 @@ components:
           type: string
         motivationMessage:
           type: string
+        requestStatus:
+          $ref: "#/components/schemas/ApplicantRequestStatusOpenAPI"
         user:
           $ref: "#/components/schemas/UserOpenApi"
+
+    ApplicantRequestStatusOpenAPI:
+      type: string
+      enum:
+        - ON_MODERATION
+        - IN_RESERVE
+        - APPROVED
+        - DENIED
 
     UpdateUserOpenApi:
       type: object
