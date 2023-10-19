@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.session.SessionManagementFilter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sovcombank.openapi.model.JwtResponseOpenApi;
@@ -29,6 +30,7 @@ import sovcombank.jabka.userservice.service.interfaces.AuthService;
 import sovcombank.jabka.userservice.service.interfaces.UserService;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -73,6 +75,7 @@ public class AuthServiceImpl implements AuthService {
 
     private JwtResponseOpenApi createAuthTokenByLogin(String login) {
         UserEntity user = userService.loadUserByUsername(login);
+        List<String> debug = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
         String token = jwtUtils.generateToken(user.getUsername(),
                 user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
         return new JwtResponseOpenApi(token, userMapper.toUserOpenApi(user));

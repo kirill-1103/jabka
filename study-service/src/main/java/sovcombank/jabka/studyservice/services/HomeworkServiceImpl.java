@@ -86,9 +86,12 @@ public class HomeworkServiceImpl implements HomeworkService {
     @Override
     @Transactional
     public Homework getHomeworkByStudentAndMaterials(Long materialsId, Long studentId) {
-        if(userApi.showUserInfo(studentId) == null){
-            throw new BadRequestException(String.format("Student with id %d not found", studentId));
+        try {
+            userApi.showUserInfoWithHttpInfo(studentId);
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
         }
+
         StudyMaterials studyMaterials = studyMaterialsRepository.findById(materialsId)
                 .orElseThrow(()->new NotFoundException(String.format("Materials with id %d not found",materialsId)));
         return studyMaterials.getHomeworks().stream().filter(homework -> homework.getStudentId().equals(studentId)).findAny()
@@ -99,15 +102,15 @@ public class HomeworkServiceImpl implements HomeworkService {
     @Transactional
     public List<Homework> getHomeworksByStudentId(Long studentId) {
 
+        Integer statusCode = null;
         try {
-            Integer statusCode = userApi.showUserInfoWithHttpInfo(studentId).getStatusCode();
-            if(statusCode < 200 || statusCode > 300){
-                throw new BadRequestException(String.format("Student with id %d not found", studentId));
-            }
+            statusCode = userApi.showUserInfoWithHttpInfo(studentId).getStatusCode();
         } catch (ApiException e) {
             throw new RuntimeException(e);
-
         }
+        if(statusCode < 200 || statusCode > 300){
+                throw new BadRequestException(String.format("Student with id %d not found", studentId));
+            }
         return homeworkRepository.findByStudentId(studentId);
     }
 

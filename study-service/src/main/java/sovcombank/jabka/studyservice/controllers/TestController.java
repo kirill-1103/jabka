@@ -5,9 +5,13 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.sovcombank.openapi.user.ApiException;
+import ru.sovcombank.openapi.user.model.UserOpenApi;
+import ru.sovcombank.openapi.user.api.UserApi;
 import sovcombank.jabka.studyservice.services.interfaces.FileService;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/study/test")
@@ -15,6 +19,8 @@ import java.io.IOException;
 public class TestController {
 
     private final FileService fileService;
+
+    private final UserApi userApi;
 
     @PostMapping
     public void post(MultipartFile file) throws IOException {
@@ -25,7 +31,7 @@ public class TestController {
     }
 
     @GetMapping("/{name}")
-    public ResponseEntity<ByteArrayResource> getFile(@PathVariable String name){
+    public ResponseEntity<ByteArrayResource> getFile(@PathVariable String name) throws Exception {
         return fileService.getFileByPath(
                 String.format("%s%s",FileService.TEST_PREFIX,name)
         );
@@ -36,5 +42,11 @@ public class TestController {
         fileService.removeFileByPath(
                 String.format("%s%s",FileService.TEST_PREFIX,name)
         );
+    }
+
+    @GetMapping("/user/all")
+    public void userOpenApi() throws ApiException {
+        var a = userApi.getAllUsersWithHttpInfo();
+        return;
     }
 }

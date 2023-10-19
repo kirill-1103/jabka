@@ -7,6 +7,7 @@ server:
 spring:
   application:
     name: study-service
+    api-name: API_ADMIN
 
   datasource:
     username: jabka
@@ -31,3 +32,7 @@ aws:
 
 user-service:
   base-url: http://localhost:8082/api/user
+
+jwt:
+  secret: 984hg493gh0439rthr0429uruj2309yh937gc763fe87t3f89723gf
+  lifetime: 2h
