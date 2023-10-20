@@ -9,4 +9,9 @@ import java.util.List;
 @Repository
 public interface SubjectRepository extends JpaRepository<Subject, Long> {
     List<Subject> findByStudyGroupId(Long groupId);
+
+    List<Subject> findByCreatorId(Long creatorId);
+
+    List<Subject> findByEditorsIds_ProfessorId(Long editorId);
+
 }

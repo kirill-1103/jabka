@@ -989,7 +989,100 @@ paths:
         '404':
           description: Not Found
 
-  /materials/subject/{subjectId}:
+  /subject/group/{group_id}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: Subjects Information By Group Id
+      tags:
+        - Subject
+      operationId: getSubjectsByGroupId
+      parameters:
+        - in: path
+          name: group_id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SubjectOpenAPI"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '403':
+          description: Do Not Have Necessary Rights to Execute This Operation
+        '404':
+          description: Not Found
+
+  /subject/creator/{creator_id}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: Subjects Information By Creator Id
+      tags:
+        - Subject
+      operationId: getSubjectsByCreatorId
+      parameters:
+        - in: path
+          name: creator_id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SubjectOpenAPI"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '403':
+          description: Do Not Have Necessary Rights to Execute This Operation
+        '404':
+          description: Not Found
+
+  /subject/editor/{editor_id}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: Subjects Information By Editor Id
+      tags:
+        - Subject
+      operationId: getSubjectsByEditor
+      parameters:
+        - in: path
+          name: editor_id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SubjectOpenAPI"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '403':
+          description: Do Not Have Necessary Rights to Execute This Operation
+        '404':
+          description: Not Found
+
+  /materials/subject/{subject_id}:
     get:
       security:
         - bearerAuth: [ ]
@@ -999,7 +1092,7 @@ paths:
       operationId: getMaterialsBySubjectId
       parameters:
         - in: path
-          name: subjectId
+          name: subject_id
           schema:
             type: integer
             format: int64
@@ -1146,10 +1239,11 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/StudyMaterialsOpenAPI"
-        schedule:
+        scheduleIds:
           type: array
           items:
-            $ref: "#/components/schemas/ScheduleOpenAPI"
+            type: integer
+            format: int64
         creatorId:
           type: integer
           format: int64

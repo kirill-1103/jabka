@@ -36,8 +36,10 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional
     public void createSchedule(ScheduleOpenAPI openAPI) {
         openAPI.setId(null);
+        checkForUpdate(openAPI);
         try {
-            scheduleRepository.save(scheduleMapper.toSchedule(openAPI));
+            Schedule schedule = scheduleMapper.toSchedule(openAPI);
+            scheduleRepository.save(schedule);
         } catch (Exception e) {
             e.printStackTrace();
             throw new BadRequestException(e.getMessage());
@@ -55,7 +57,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     @Transactional
     public List<Schedule> getAll() {
-        return scheduleRepository.findAll();
+        List<Schedule> schedules = scheduleRepository.findAll();
+        return schedules;
     }
 
     @Override
@@ -93,12 +96,28 @@ public class ScheduleServiceImpl implements ScheduleService {
         if (scheduleOpenAPI.getId() == null) {
             throw new BadRequestException("Id is null");
         }
+        checkForUpdate(scheduleOpenAPI);
         scheduleRepository.findById(scheduleOpenAPI.getId())
                 .orElseThrow(() -> new NotFoundException("Schedule with such id is not exists"));
         try {
             scheduleRepository.save(scheduleMapper.toSchedule(scheduleOpenAPI));
         } catch (Exception e) {
             throw new BadRequestException("Cannot update Schedule. Exception: " + e.getMessage());
+        }
+    }
+
+    private void checkForUpdate(ScheduleOpenAPI scheduleOpenAPI){
+        if(scheduleOpenAPI.getSubject() == null || scheduleOpenAPI.getSubject().getId() == null){
+            throw new BadRequestException("Subject or Subject id is null!");
+        }
+        if(!subjectRepository.existsById(scheduleOpenAPI.getSubject().getId())){
+            throw new NotFoundException("Subject not found");
+        }
+        if(scheduleOpenAPI.getStudyGroup() == null || scheduleOpenAPI.getStudyGroup().getId() == null){
+            throw new BadRequestException("Group or Group id is null!");
+        }
+        if(!groupRepository.existsById(scheduleOpenAPI.getStudyGroup().getId())){
+            throw new BadRequestException("Group not found");
         }
     }
 }

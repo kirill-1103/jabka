@@ -9,6 +9,7 @@ import ru.sovcombank.openapi.model.SubjectOpenAPI;
 import sovcombank.jabka.studyservice.exceptions.NotFoundException;
 import sovcombank.jabka.studyservice.mappers.SubjectMapper;
 import sovcombank.jabka.studyservice.models.ProfessorIdTable;
+import sovcombank.jabka.studyservice.models.Schedule;
 import sovcombank.jabka.studyservice.models.Subject;
 import sovcombank.jabka.studyservice.repositories.ProfessorIdRepository;
 import sovcombank.jabka.studyservice.repositories.StudyGroupRepository;
@@ -17,6 +18,7 @@ import sovcombank.jabka.studyservice.services.interfaces.SubjectService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,11 +71,6 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public ResponseEntity<List<SubjectOpenAPI>> getAllSubjects() {
         List<Subject> subjects = subjectRepository.findAll();
-        if (subjects.isEmpty()) {
-            return ResponseEntity
-                    .notFound()
-                    .build();
-        }
         return ResponseEntity.ok(subjects
                 .stream()
                 .map(subjectMapper::toOpenAPI)
@@ -117,5 +114,33 @@ public class SubjectServiceImpl implements SubjectService {
         return ResponseEntity
                 .ok()
                 .build();
+    }
+
+    @Override
+    public ResponseEntity<List<SubjectOpenAPI>> getSubjectsByCreatorId(Long creatorId) {
+        List<Subject> subjects = subjectRepository.findByCreatorId(creatorId);
+        return ResponseEntity.ok(subjects
+                .stream()
+                .map(subjectMapper::toOpenAPI)
+                .collect(Collectors.toList())
+        );
+    }
+
+    @Override
+    public ResponseEntity<List<SubjectOpenAPI>> getSubjectsByEditorId(Long editorId) {
+        List<Subject> subjects = subjectRepository.findByEditorsIds_ProfessorId(editorId);
+        return ResponseEntity.ok(subjects
+                .stream()
+                .map(subjectMapper::toOpenAPI)
+                .collect(Collectors.toList()));
+    }
+
+    @Override
+    public ResponseEntity<List<SubjectOpenAPI>> getSubjectsByGroupId(Long groupId) {
+        List<Subject> subjects = subjectRepository.findByStudyGroupId(groupId);
+        return ResponseEntity.ok(subjects
+                .stream()
+                .map(subjectMapper::toOpenAPI)
+                .collect(Collectors.toList()));
     }
 }

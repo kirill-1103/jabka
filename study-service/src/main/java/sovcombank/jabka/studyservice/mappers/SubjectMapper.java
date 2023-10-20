@@ -5,6 +5,7 @@ import org.mapstruct.Mapping;
 import org.springframework.context.ApplicationContext;
 import ru.sovcombank.openapi.model.SubjectOpenAPI;
 import sovcombank.jabka.studyservice.models.ProfessorIdTable;
+import sovcombank.jabka.studyservice.models.Schedule;
 import sovcombank.jabka.studyservice.models.StudyGroup;
 import sovcombank.jabka.studyservice.models.Subject;
 
@@ -16,21 +17,19 @@ import java.util.stream.Collectors;
 public interface SubjectMapper {
 
     @Mapping(target = "editorsIds", expression = "java(idsToProfessorIds(subjectOpenAPI.getEditorsIds()))")
-//    @Mapping(target = "editorsIds", source = "editorsIds")
     Subject toSubject(SubjectOpenAPI subjectOpenAPI);
 
-//    @Mapping(target = "editorsIds", source = "editorsIds")
     @Mapping(target = "editorsIds", expression = "java(idsToProfessorIds(subjectOpenAPI.getEditorsIds()))")
     List<Subject> toSubject(List<SubjectOpenAPI> subjectOpenAPI);
 
-//    @Mapping(target = "editorsIds", source = "editorsIds")
     @Mapping(target = "editorsIds", expression = "java(professorsToEditorsIds(subject.getEditorsIds()))")
     @Mapping(target = "studyGroupsIds", expression = "java(groupsToIds(subject.getStudyGroup()))")
+    @Mapping(target = "scheduleIds", expression = "java(schedulesToIds(subject.getSchedule()))")
     SubjectOpenAPI toOpenAPI(Subject subject);
 
-//    @Mapping(target = "editorsIds", source = "editorsIds")
     @Mapping(target = "editorsIds", expression = "java(professorsToEditorsIds(subject.getEditorsIds()))")
     @Mapping(target = "studyGroupsIds", expression = "java(groupsToIds(subject.getStudyGroup()))")
+    @Mapping(target = "scheduleIds", expression = "java(schedulesToIds(subject.getSchedule()))")
     List<SubjectOpenAPI> toOpenAPI(List<Subject> subject);
 
     default List<Long> groupsToIds(Set<StudyGroup> studyGroups){
@@ -47,5 +46,9 @@ public interface SubjectMapper {
             professorIdTable.setProfessorId(id);
             return professorIdTable;
         }).collect(Collectors.toSet());
+    }
+
+    default List<Long> schedulesToIds(Set<Schedule> schedules){
+        return schedules.stream().map(Schedule::getId).toList();
     }
 }

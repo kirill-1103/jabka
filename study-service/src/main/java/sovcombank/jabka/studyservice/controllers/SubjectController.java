@@ -4,21 +4,19 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.NativeWebRequest;
 import ru.sovcombank.openapi.api.SubjectApiDelegate;
 import ru.sovcombank.openapi.model.SubjectOpenAPI;
+import sovcombank.jabka.studyservice.models.Subject;
 import sovcombank.jabka.studyservice.services.interfaces.SubjectService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/study/subject")
 @RequiredArgsConstructor
 public class SubjectController implements SubjectApiDelegate {
-
-    //todo: getSubjectsByGroup
-    //todo: getSubjectsByCreatorId
-    //todo: getSubjectsByEditorId
-
     private final SubjectService subjectService;
     @PostMapping
     @Override
@@ -50,5 +48,24 @@ public class SubjectController implements SubjectApiDelegate {
     @Override
     public ResponseEntity<Void> updateSubject(@RequestBody SubjectOpenAPI subjectOpenAPI) {
         return subjectService.updateSubject(subjectOpenAPI);
+    }
+
+
+    @Override
+    @GetMapping("/creator/{creator_id}")
+    public ResponseEntity<List<SubjectOpenAPI>> getSubjectsByCreatorId(@PathVariable(value = "creator_id")  Long creatorId) {
+        return subjectService.getSubjectsByCreatorId(creatorId);
+    }
+
+    @Override
+    @GetMapping("/editor/{editor_id}")
+    public ResponseEntity<List<SubjectOpenAPI>> getSubjectsByEditor(@PathVariable(value = "editor_id") Long editorId) {
+        return subjectService.getSubjectsByEditorId(editorId);
+    }
+
+    @Override
+    @GetMapping("/group/{group_id}")
+    public ResponseEntity<List<SubjectOpenAPI>> getSubjectsByGroupId(@PathVariable(value = "group_id") Long groupId) {
+        return subjectService.getSubjectsByGroupId(groupId);
     }
 }

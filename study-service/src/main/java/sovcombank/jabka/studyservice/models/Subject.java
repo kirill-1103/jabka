@@ -24,10 +24,11 @@ public class Subject {
             )
     )
     private Set<StudyGroup> studyGroup;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<StudyMaterials> studyMaterials;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "subject")
     private Set<Schedule> schedule;
 
     @Column(nullable = false)
