@@ -23,6 +23,7 @@ import sovcombank.jabka.studyservice.repositories.StudyGroupRepository;
 import sovcombank.jabka.studyservice.repositories.SubjectRepository;
 import sovcombank.jabka.studyservice.services.interfaces.AttendanceStatisticService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -93,10 +94,15 @@ public class AttendanceStatisticServiceImpl implements AttendanceStatisticServic
 
     private boolean allStudentsExists(List<AttendanceStatistics> attendanceStatisticsList) {
         boolean foundNonExistentUser = false;
+        List<Long> userIds = new ArrayList<>();
         for (AttendanceStatistics attendanceStatistics : attendanceStatisticsList) {
             Long studentId = attendanceStatistics.getStudentId();
-            try {
-                UserOpenApi user = userApi.showUserInfo(studentId);
+            userIds.add(studentId);
+        }
+        List<UserOpenApi> userList;
+        try {
+            userList = userApi.getUsersByIds(userIds);
+            for(UserOpenApi user : userList) {
                 boolean userExistsByStudentId = user.getRoles() != null &&
                         user.getRoles()
                                 .stream()
@@ -104,15 +110,12 @@ public class AttendanceStatisticServiceImpl implements AttendanceStatisticServic
                 if (!userExistsByStudentId) {
                     foundNonExistentUser = true;
                     throw new NotFoundException(
-                            String.format("User with id %d wasn't found", studentId));
+                            String.format("User with id %d wasn't found", user.getId()));
                 }
-            } catch (ApiException e) {
-                log.debug("An error occurred while fetching user information", e);
-                foundNonExistentUser = true;
             }
-        }
-        if (foundNonExistentUser) {
-            log.error("One or more users were not found");
+        } catch (ApiException e) {
+            log.debug("An error occurred while fetching user information", e);
+            foundNonExistentUser = true;
         }
         return !foundNonExistentUser;
     }
