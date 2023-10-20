@@ -98,7 +98,6 @@ public class AttendanceStatisticServiceImpl implements AttendanceStatisticServic
     }
 
     private void checkAllStudentsExists(List<AttendanceStatistics> attendanceStatisticsList) {
-        boolean foundNonExistentUser = false;
         List<Long> userIds = attendanceStatisticsList.stream()
                 .map(AttendanceStatistics::getStudentId).toList();
         List<UserOpenApi> userList;

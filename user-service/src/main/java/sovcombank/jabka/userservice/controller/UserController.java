@@ -3,7 +3,6 @@ package sovcombank.jabka.userservice.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import ru.sovcombank.openapi.api.UserApiDelegate;
 import ru.sovcombank.openapi.model.JwtResponseOpenApi;
@@ -45,7 +44,7 @@ public class UserController implements UserApiDelegate {
     public ResponseEntity<List<UserOpenApi>> getAllUsers() {
         return ResponseEntity.ok(userService.getAll()
                 .stream()
-                .map(u->userMapper.toUserOpenApi(u))
+                .map(userMapper::toUserOpenApi)
                 .peek((userOpenApi -> userOpenApi.setPassword(null)))
                 .collect(Collectors.toList()));
     }
@@ -73,6 +72,7 @@ public class UserController implements UserApiDelegate {
         return ResponseEntity.ok(new JwtResponseOpenApi(token.getAccessToken(),updateUserOpenApi.getNewUser()));
     }
 
+    @GetMapping("/ids")
     @Override
     @PostMapping("/users/update")
     public ResponseEntity<Void> updateUsers(@RequestBody  List<UserOpenApi> usersOpenApi) {
@@ -83,6 +83,7 @@ public class UserController implements UserApiDelegate {
 
     @Override
     public ResponseEntity<List<UserOpenApi>> getUsersByIds(List<Long> ids) {
+
         return ResponseEntity.ok(
                 userMapper.toListOpenApi(userService.getUsersByIds(ids))
         );

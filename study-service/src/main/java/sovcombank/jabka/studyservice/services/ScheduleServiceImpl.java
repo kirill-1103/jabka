@@ -2,7 +2,6 @@ package sovcombank.jabka.studyservice.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sovcombank.openapi.ApiException;
@@ -14,7 +13,6 @@ import sovcombank.jabka.studyservice.exceptions.BadRequestException;
 import sovcombank.jabka.studyservice.exceptions.NotFoundException;
 import sovcombank.jabka.studyservice.mappers.ScheduleMapper;
 import sovcombank.jabka.studyservice.models.Schedule;
-import sovcombank.jabka.studyservice.models.StudyGroup;
 import sovcombank.jabka.studyservice.models.Subject;
 import sovcombank.jabka.studyservice.repositories.ScheduleRepository;
 import sovcombank.jabka.studyservice.repositories.StudyGroupRepository;
@@ -24,18 +22,14 @@ import sovcombank.jabka.studyservice.services.interfaces.ScheduleService;
 import static sovcombank.jabka.studyservice.utils.ResponseApiUtils.okResponse;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final ScheduleMapper scheduleMapper;
-
     private final StudyGroupRepository groupRepository;
-
     private final SubjectRepository subjectRepository;
-
     private final UserApi userApi;
 
     @Override
@@ -68,7 +62,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional
     public List<Schedule> getByGroupId(Long id) {
         groupRepository.findById(id)
-                .orElseThrow(()->new NotFoundException(String.format("Group with id %d not found",id)));
+                .orElseThrow(() -> new NotFoundException(String.format("Group with id %d not found", id)));
         List<Subject> subjects = subjectRepository.findByStudyGroupId(id);
         return subjects.stream()
                 .flatMap(subject -> subject.getSchedule().stream())
@@ -80,9 +74,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     public List<Schedule> getByProfessorId(Long professorId) {
         try {
             ApiResponse<UserOpenApi> usersResponse = userApi.showUserInfoWithHttpInfo(professorId);
-            if(!okResponse(usersResponse)){
-                if(usersResponse.getStatusCode() == HttpStatus.NOT_FOUND.value()){
-                    throw new NotFoundException(String.format("Professor with id %d not found",professorId));
+            if (!okResponse(usersResponse)) {
+                if (usersResponse.getStatusCode() == HttpStatus.NOT_FOUND.value()) {
+                    throw new NotFoundException(String.format("Professor with id %d not found", professorId));
                 }
                 throw new BadRequestException("Get Schedule by professor failed");
             }
@@ -90,21 +84,21 @@ public class ScheduleServiceImpl implements ScheduleService {
             e.printStackTrace();
             throw new BadRequestException(e.getMessage());
         }
-        return scheduleRepository.findByProfessorProfessorId(professorId);
+        return scheduleRepository.findByProfessorId(professorId);
     }
 
     @Override
     @Transactional
     public void updateSchedule(ScheduleOpenAPI scheduleOpenAPI) {
-        if(scheduleOpenAPI.getId() == null){
+        if (scheduleOpenAPI.getId() == null) {
             throw new BadRequestException("Id is null");
         }
         scheduleRepository.findById(scheduleOpenAPI.getId())
-                .orElseThrow(()->new NotFoundException("Schedule with such id is not exists"));
-        try{
+                .orElseThrow(() -> new NotFoundException("Schedule with such id is not exists"));
+        try {
             scheduleRepository.save(scheduleMapper.toSchedule(scheduleOpenAPI));
-        }catch (Exception e){
-            throw new BadRequestException("Cannot update Schedule. Exception:"+e.getMessage());
+        } catch (Exception e) {
+            throw new BadRequestException("Cannot update Schedule. Exception: " + e.getMessage());
         }
     }
 }
