@@ -226,6 +226,36 @@ paths:
         '400':
           description: Bad request!
 
+  /user/group/{group_number}:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Find students by group number
+      operationId: getUsersByGroupNumber
+      tags:
+        - User
+      parameters:
+        - in: path
+          name: group_number
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserOpenApi"
+        '400':
+          description: Bad request!
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: Applicant Request not found!
 
   /user/request/{id}:
     get:

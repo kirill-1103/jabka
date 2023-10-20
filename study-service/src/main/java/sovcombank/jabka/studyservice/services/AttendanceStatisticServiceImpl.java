@@ -39,7 +39,6 @@ public class AttendanceStatisticServiceImpl implements AttendanceStatisticServic
     private final SubjectRepository subjectRepository;
     private final UserApi userApi;
 
-    //todo: добавить ендпоинт - статистика по расписанию - в контроллер
 
     @Override
     @Transactional
@@ -49,11 +48,7 @@ public class AttendanceStatisticServiceImpl implements AttendanceStatisticServic
         }
         //todo: проверить что юзеры существуют
         List<AttendanceStatistics> attendanceStatisticsList = attendanceMapper.toListAttendanceStatistics(attendanceStatisticsOpenApi);
-        if (!allStudentsExists(attendanceStatisticsList)) {
-            return ResponseEntity
-                    .notFound()
-                    .build();
-        }
+        checkAllStudentsExists(attendanceStatisticsList);
         attendanceRepository.saveAll(attendanceStatisticsList);
         return ResponseEntity
                 .ok()
@@ -73,18 +68,17 @@ public class AttendanceStatisticServiceImpl implements AttendanceStatisticServic
     public List<AttendanceStatistics> getStatisticsByGroupId(Long groupId) {
         StudyGroup group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new NotFoundException(String.format("Group with id %d not found", groupId)));
-        List<Long> usersIds = new ArrayList<>(); //todo: получить юзеров этой группы, проверить статус код
         try {
-            List<UserOpenApi> users = userApi.getAllUsers();
-            String groupName = group.getName();
-            usersIds = users.stream()
-                    .filter(user -> user.getGroup().equals(groupName))
-                    .map(UserOpenApi::getId)
-                    .collect(Collectors.toList());
+            List<UserOpenApi> users = userApi.getUsersByGroupNumber(group.getName());
+            return attendanceRepository.findByStudentIdIn(
+                    users.stream()
+                            .map(UserOpenApi::getId)
+                            .toList()
+            );
         } catch (ApiException e) {
             log.debug("An error occurred while fetching user information", e);
+            throw new BadRequestException("An error occurred while fetching user information");
         }
-        return attendanceRepository.findByStudentIdIn(usersIds);
     }
 
     @Override
@@ -103,31 +97,29 @@ public class AttendanceStatisticServiceImpl implements AttendanceStatisticServic
 
     }
 
-    private boolean allStudentsExists(List<AttendanceStatistics> attendanceStatisticsList) {
+    private void checkAllStudentsExists(List<AttendanceStatistics> attendanceStatisticsList) {
         boolean foundNonExistentUser = false;
-        List<Long> userIds = new ArrayList<>();
-        for (AttendanceStatistics attendanceStatistics : attendanceStatisticsList) {
-            Long studentId = attendanceStatistics.getStudentId();
-            userIds.add(studentId);
-        }
+        List<Long> userIds = attendanceStatisticsList.stream()
+                .map(AttendanceStatistics::getStudentId).toList();
         List<UserOpenApi> userList;
+        if (userIds.size() != attendanceStatisticsList.size()) {
+            throw new NotFoundException("Not all users found");
+        }
         try {
             userList = userApi.getUsersByIds(userIds);
-            for(UserOpenApi user : userList) {
+            for (UserOpenApi user : userList) {
                 boolean userExistsByStudentId = user.getRoles() != null &&
                         user.getRoles()
                                 .stream()
                                 .anyMatch(role -> ERoleOpenApi.STUDENT.equals(role.getName()));
                 if (!userExistsByStudentId) {
-                    foundNonExistentUser = true;
                     throw new NotFoundException(
                             String.format("User with id %d wasn't found", user.getId()));
                 }
             }
         } catch (ApiException e) {
             log.debug("An error occurred while fetching user information", e);
-            foundNonExistentUser = true;
+            throw new BadRequestException("An error occurred while fetching user information");
         }
-        return !foundNonExistentUser;
     }
 }

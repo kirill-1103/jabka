@@ -1,7 +1,6 @@
 package sovcombank.jabka.userservice.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -128,6 +127,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserEntity> getUsersByIds(List<Long> ids) {
         return userRepository.findByIdIn(ids);
+    }
+
+    @Override
+    public List<UserEntity> getUsersByGroupNumber(String groupNumber) {
+        return userRepository.findByGroupNumber(groupNumber);
     }
 
     private void loginOrEmailExistsCheck(UserEntity user) {
