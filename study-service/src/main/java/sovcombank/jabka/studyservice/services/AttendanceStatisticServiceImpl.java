@@ -2,7 +2,6 @@ package sovcombank.jabka.studyservice.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,7 +47,7 @@ public class AttendanceStatisticServiceImpl implements AttendanceStatisticServic
         }
         //todo: проверить что юзеры существуют
         List<AttendanceStatistics> attendanceStatisticsList = attendanceMapper.toListAttendanceStatistics(attendanceStatisticsOpenApi);
-        if(!allStudentsExists(attendanceStatisticsList)){
+        if (!allStudentsExists(attendanceStatisticsList)) {
             return ResponseEntity
                     .notFound()
                     .build();
@@ -61,7 +60,7 @@ public class AttendanceStatisticServiceImpl implements AttendanceStatisticServic
 
     @Override
     @Transactional
-    public List<AttendanceStatistics> getStatisticsBySchedule(Long scheduleId){
+    public List<AttendanceStatistics> getStatisticsBySchedule(Long scheduleId) {
         Schedule schedule = scheduleRepository.findById(scheduleId)
                 .orElseThrow(() -> new NotFoundException(String.format("Schedule with id %d not found", scheduleId)));
         return schedule.getAttendanceStatistics().stream().toList();
@@ -93,29 +92,28 @@ public class AttendanceStatisticServiceImpl implements AttendanceStatisticServic
     }
 
     private boolean allStudentsExists(List<AttendanceStatistics> attendanceStatisticsList) {
-        try {
-            for (AttendanceStatistics attendanceStatistics : attendanceStatisticsList) {
-                Long studentId = attendanceStatistics.getStudentId();
-                try {
-                    UserOpenApi user = userApi.showUserInfo(studentId);
-                    boolean userExistsByStudentId = user.getRoles() != null &&
-                            user.getRoles()
-                                    .stream()
-                                    .anyMatch(role -> ERoleOpenApi.STUDENT.equals(role.getName()));
-
-                    if (!userExistsByStudentId) {
-                        throw new NotFoundException(
-                                String.format("User with id %d wasn't found", studentId));
-                    }
-                } catch (ApiException e) {
-                    log.debug("An error occurred while fetching user information", e);
-                    return false;
+        boolean foundNonExistentUser = false;
+        for (AttendanceStatistics attendanceStatistics : attendanceStatisticsList) {
+            Long studentId = attendanceStatistics.getStudentId();
+            try {
+                UserOpenApi user = userApi.showUserInfo(studentId);
+                boolean userExistsByStudentId = user.getRoles() != null &&
+                        user.getRoles()
+                                .stream()
+                                .anyMatch(role -> ERoleOpenApi.STUDENT.equals(role.getName()));
+                if (!userExistsByStudentId) {
+                    foundNonExistentUser = true;
+                    throw new NotFoundException(
+                            String.format("User with id %d wasn't found", studentId));
                 }
+            } catch (ApiException e) {
+                log.debug("An error occurred while fetching user information", e);
+                foundNonExistentUser = true;
             }
-            return true;
-        } catch (NotFoundException e){
-            log.error("User wasn't found");
-            return false;
         }
+        if (foundNonExistentUser) {
+            log.error("One or more users were not found");
+        }
+        return !foundNonExistentUser;
     }
 }
