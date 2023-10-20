@@ -1118,10 +1118,12 @@ components:
           format: int64
         name:
           type: string
-        students:
+        studentsIds:
           type: array
+          description: studentsIDs
           items:
-            $ref: "#/components/schemas/UserOpenApi"
+            type: integer
+            format: int64
 
     SubjectOpenAPI:
       type: object

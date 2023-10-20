@@ -32,4 +32,6 @@ public interface UserService extends UserDetailsService {
 
 
     List<UserEntity> getUsersByGroupNumber(String groupNumber);
+
+    void updateUsers(List<UserOpenApi> usersOpenApi);
 }

@@ -25,13 +25,16 @@ public class UserController implements UserApiDelegate {
 
     private final static String MAPPING_GET_ONE = "/{id}";
 
+    private final static String MAPPING_DELETE_ONE = "/{id}";
+
+
     private final static String MAPPING_GET_BY_GROUP = "/group/{group_number}";
 
     private final AuthService authService;
 
     @Override
-    @DeleteMapping
-    public ResponseEntity<Void> deleteUser(Long id) {
+    @DeleteMapping(MAPPING_DELETE_ONE)
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.ok().build();
     }
@@ -71,7 +74,16 @@ public class UserController implements UserApiDelegate {
 
     @GetMapping("/ids")
     @Override
-    public ResponseEntity<List<UserOpenApi>> getUsersByIds(@RequestBody List<Long> ids) {
+    @PostMapping("/users/update")
+    public ResponseEntity<Void> updateUsers(@RequestBody  List<UserOpenApi> usersOpenApi) {
+        userService.updateUsers(usersOpenApi);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @Override
+    public ResponseEntity<List<UserOpenApi>> getUsersByIds(List<Long> ids) {
+
         return ResponseEntity.ok(
                 userMapper.toListOpenApi(userService.getUsersByIds(ids))
         );

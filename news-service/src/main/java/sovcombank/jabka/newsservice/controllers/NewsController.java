@@ -19,21 +19,18 @@ public class NewsController implements NewsApi {
 
     @Override
     @PostMapping
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Void> createNewsPost(@RequestBody NewsOpenAPI newsOpenAPI) {
         return newsService.createNewsPost(newsOpenAPI);
     }
 
     @Override
     @GetMapping
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<List<NewsOpenAPI>> showAllNewsInfo() {
         return newsService.showAllNewsInfo();
     }
 
     @Override
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Void> deleteNewsById(@Valid @PathVariable Long id) {
         return newsService.deleteNewsById(id);
     }

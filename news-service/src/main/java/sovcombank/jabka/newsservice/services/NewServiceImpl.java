@@ -38,19 +38,14 @@ public class NewServiceImpl implements NewsService {
     @Override
     public ResponseEntity<List<NewsOpenAPI>> showAllNewsInfo() {
         List<News> news = newsRepository.findAll();
-        if (!news.isEmpty()) {
-            return ResponseEntity
-                    .ok()
-                    .body(
-                            news
-                                    .stream()
-                                    .map(newsMapper::toOpenApi)
-                                    .collect(Collectors.toList())
-                    );
-        }
         return ResponseEntity
-                .notFound()
-                .build();
+                .ok()
+                .body(
+                        news
+                                .stream()
+                                .map(newsMapper::toOpenApi)
+                                .collect(Collectors.toList())
+                );
     }
 
     @Override

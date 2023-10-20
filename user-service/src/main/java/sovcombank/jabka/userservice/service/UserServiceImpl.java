@@ -134,6 +134,24 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByGroupNumber(groupNumber);
     }
 
+    @Override
+    public void updateUsers(List<UserOpenApi> usersOpenApi) {
+        usersOpenApi.forEach(user->{
+            if(user.getId() == null){
+                throw new BadRequestException();
+            }
+        });
+        List<UserEntity> usersFromDb = userRepository.findByIdIn(usersOpenApi.stream().
+                map(UserOpenApi::getId)
+                .toList()
+        ).stream().toList();
+        if(usersFromDb.size() != usersOpenApi.size()){
+            throw new NotFoundException("Some users not found");
+        }
+        List<UserEntity> usersForSave = userMapper.toListUserEntity(usersOpenApi);
+        userRepository.saveAll(usersForSave);
+    }
+
     private void loginOrEmailExistsCheck(UserEntity user) {
         loginExistsCheck(user.getLogin());
         emailExistsCheck(user.getEmail());
