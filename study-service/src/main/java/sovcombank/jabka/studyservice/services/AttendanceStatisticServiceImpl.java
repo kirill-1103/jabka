@@ -25,6 +25,7 @@ import sovcombank.jabka.studyservice.services.interfaces.AttendanceStatisticServ
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -72,7 +73,17 @@ public class AttendanceStatisticServiceImpl implements AttendanceStatisticServic
     public List<AttendanceStatistics> getStatisticsByGroupId(Long groupId) {
         StudyGroup group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new NotFoundException(String.format("Group with id %d not found", groupId)));
-        List<Long> usersIds = null; //todo: получить юзеров этой группы, проверить статус код
+        List<Long> usersIds = new ArrayList<>(); //todo: получить юзеров этой группы, проверить статус код
+        try {
+            List<UserOpenApi> users = userApi.getAllUsers();
+            String groupName = group.getName();
+            usersIds = users.stream()
+                    .filter(user -> user.getGroup().equals(groupName))
+                    .map(UserOpenApi::getId)
+                    .collect(Collectors.toList());
+        } catch (ApiException e) {
+            log.debug("An error occurred while fetching user information", e);
+        }
         return attendanceRepository.findByStudentIdIn(usersIds);
     }
 
