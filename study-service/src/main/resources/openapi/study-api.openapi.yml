@@ -989,6 +989,35 @@ paths:
         '404':
           description: Not Found
 
+  /download/{fileId}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: Download File by It's Id
+      tags:
+        - File Download
+      operationId: downloadFileById
+      parameters:
+        - in: path
+          name: fileId
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '403':
+          description: Do Not Have Necessary Rights to Execute This Operation
+        '404':
+          description: Not Found
 
 components:
 

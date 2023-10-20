@@ -24,7 +24,6 @@ public class StudyMaterialsController implements MaterialsApiDelegate {
     private final StudyMaterialsService studyMaterialsService;
     private final StudyMaterialsMapper materialsMapper;
 
-    //todo: нужен ендпоинт получения всех материалов, которые есть в предемете
     @PostMapping
     @Override
     public ResponseEntity<Void> createMaterials(@RequestBody StudyMaterialsBody studyMaterialsBody
@@ -40,7 +39,6 @@ public class StudyMaterialsController implements MaterialsApiDelegate {
 
     @GetMapping
     @Override
-    @ResponseBody
     public ResponseEntity<List<StudyMaterialsOpenAPI>> getAllMaterials() {
         List<StudyMaterials> studyMaterials = studyMaterialsService.getAllMaterials();
         return ResponseEntity
@@ -49,7 +47,6 @@ public class StudyMaterialsController implements MaterialsApiDelegate {
 
     @GetMapping("/{id}")
     @Override
-    @ResponseBody
     public ResponseEntity<StudyMaterialsOpenAPI> getMaterialsById(
             @Valid @PathVariable(name = "id") Long id
     ) {
@@ -65,7 +62,6 @@ public class StudyMaterialsController implements MaterialsApiDelegate {
 
     @GetMapping("/subject/{subjectId}")
     @Override
-    @ResponseBody
     public ResponseEntity<List<StudyMaterialsOpenAPI>> getMaterialsBySubjectId(
             @Valid @PathVariable(name = "id") Long subjectId
     ) {

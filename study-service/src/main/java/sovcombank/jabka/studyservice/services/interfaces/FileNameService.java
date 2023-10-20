@@ -6,4 +6,5 @@ import sovcombank.jabka.studyservice.models.FileName;
 @Service
 public interface FileNameService {
     FileName saveFileName(FileName fileName);
+    String getPathByFileId(Long id);
 }

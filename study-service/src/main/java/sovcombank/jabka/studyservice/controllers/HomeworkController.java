@@ -50,7 +50,6 @@ public class HomeworkController implements HomeworkApiDelegate {
 
     @GetMapping("/materials/{materialsId}/homework/all")
     @Override
-    @ResponseBody
     public ResponseEntity<List<HomeworkOpenAPI>> getAllHomeworksByMaterials(
             @Valid @PathVariable(name = "materialsId") Long materialsId
     ) {
@@ -60,7 +59,6 @@ public class HomeworkController implements HomeworkApiDelegate {
 
     @GetMapping("/materials/{materialsId}/homework/{homeworkId}")
     @Override
-    @ResponseBody
     public ResponseEntity<HomeworkOpenAPI> getHomeworkById(
             @Valid @PathVariable(name = "materialsId") Long materialsId,
             @Valid @PathVariable(name = "homeworkId") Long homeworkId
@@ -73,7 +71,6 @@ public class HomeworkController implements HomeworkApiDelegate {
 
     @GetMapping("/materials/{materialsId}/homework/student/{studentId}")
     @Override
-    @ResponseBody
     public ResponseEntity<HomeworkOpenAPI> getHomeworkByStudentAndMaterials(
             @Valid @PathVariable(name = "materialsId") Long materialsId,
             @Valid @PathVariable(name = "studentId") Long studentId
@@ -86,7 +83,6 @@ public class HomeworkController implements HomeworkApiDelegate {
 
     @GetMapping("/homework/student/{studentId}")
     @Override
-    @ResponseBody
     public ResponseEntity<List<HomeworkOpenAPI>> getHomeworkByStudentId(
             @Valid @PathVariable(name = "studentId") Long studentId
     ) {
