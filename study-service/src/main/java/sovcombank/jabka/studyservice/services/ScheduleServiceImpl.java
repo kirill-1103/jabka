@@ -84,7 +84,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             e.printStackTrace();
             throw new BadRequestException(e.getMessage());
         }
-        return scheduleRepository.findByProfessorId(professorId);
+        return scheduleRepository.findByProfessorProfessorId(professorId);
     }
 
     @Override

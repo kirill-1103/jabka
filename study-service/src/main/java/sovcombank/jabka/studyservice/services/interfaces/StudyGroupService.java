@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public interface StudyGroupService {
     ResponseEntity<Void> createGroup(StudyGroupOpenAPI studyGroupOpenAPI);
-    ResponseEntity<Void> deleteGroupById(Long id) throws ApiException;
+    ResponseEntity<Void> deleteGroupById(Long id) ;
     ResponseEntity<List<StudyGroupOpenAPI>> getAllGroups();
     ResponseEntity<StudyGroupOpenAPI> getGroupById(Long id);
 }
