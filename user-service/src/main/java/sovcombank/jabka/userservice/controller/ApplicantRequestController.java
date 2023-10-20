@@ -34,8 +34,8 @@ public class ApplicantRequestController implements ApplicantRequestApiDelegate {
     }
 
     @Override
-    @DeleteMapping
-    public ResponseEntity<Void> deleteApplicantRequest(@RequestBody  Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteApplicantRequest(@PathVariable  Long id) {
         applicantRequestService.delete(id);
         return ResponseEntity.ok().build();
     }
