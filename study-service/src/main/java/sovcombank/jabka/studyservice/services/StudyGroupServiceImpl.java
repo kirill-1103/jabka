@@ -53,7 +53,6 @@ public class StudyGroupServiceImpl implements StudyGroupService {
         try {
             List<UserOpenApi> groupUsers = userApi.getUsersByGroupNumber(group.getName());
             groupUsers.forEach(user->user.setGroup(null));
-
         } catch (ApiException e) {
             log.error(e.getMessage());
             throw new BadRequestException("Cannot get/update group's users");
@@ -66,6 +65,7 @@ public class StudyGroupServiceImpl implements StudyGroupService {
     @Override
     public ResponseEntity<List<StudyGroupOpenAPI>> getAllGroups() {
         List<StudyGroup> studyGroups = groupRepository.findAll();
+        //todo: в группы вручную добавить id-шники студентов, которые в ней находятся
         if (studyGroups.isEmpty()) {
             return ResponseEntity
                     .notFound()
@@ -82,6 +82,7 @@ public class StudyGroupServiceImpl implements StudyGroupService {
     @Override
     public ResponseEntity<StudyGroupOpenAPI> getGroupById(Long id) {
         Optional<StudyGroup> studyGroupOpt = groupRepository.findById(id);
+        //todo: в группу вручную добавить id-шники студентов, которые в ней находятся
         return studyGroupOpt
                 .map(studyGroup -> ResponseEntity.ok(groupMapper.toOpenAPI(studyGroup)))
                 .orElseGet
