@@ -3,24 +3,22 @@ package sovcombank.jabka.studyservice.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
-import ru.sovcombank.openapi.api.AttendanceStatisticsApiDelegate;
-import ru.sovcombank.openapi.model.AttendanceStatisticsOpenApi;
 import ru.sovcombank.openapi.ApiException;
-import ru.sovcombank.openapi.model.UserOpenApi;
 import ru.sovcombank.openapi.ApiResponse;
+import ru.sovcombank.openapi.api.AttendanceStatisticsApiDelegate;
 import ru.sovcombank.openapi.api.UserApi;
+import ru.sovcombank.openapi.model.AttendanceStatisticsOpenApi;
+import ru.sovcombank.openapi.model.UserOpenApi;
 import sovcombank.jabka.studyservice.exceptions.BadRequestException;
 import sovcombank.jabka.studyservice.exceptions.NotFoundException;
 import sovcombank.jabka.studyservice.mappers.AttendanceMapper;
 import sovcombank.jabka.studyservice.models.AttendanceStatistics;
 import sovcombank.jabka.studyservice.services.interfaces.AttendanceStatisticService;
 
-import static sovcombank.jabka.studyservice.utils.ResponseApiUtils.okResponse;
-
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static sovcombank.jabka.studyservice.utils.ResponseApiUtils.okResponse;
 
 @RestController
 @RequestMapping("/api/study/attendance-statistics")
@@ -34,8 +32,7 @@ public class AttendanceStatisticsController implements AttendanceStatisticsApiDe
     @Override
     @PostMapping
     public ResponseEntity<Void> addStatistics(@RequestBody List<AttendanceStatisticsOpenApi> attendanceStatisticsOpenApi) {
-        attendanceStatisticService.saveStatistics(attendanceStatisticsOpenApi);
-        return ResponseEntity.ok().build();
+        return attendanceStatisticService.saveStatistics(attendanceStatisticsOpenApi);
     }
 
     @Override
@@ -70,9 +67,21 @@ public class AttendanceStatisticsController implements AttendanceStatisticsApiDe
 
     @Override
     @GetMapping("/subject/{subject_id}")
-    public ResponseEntity<List<AttendanceStatisticsOpenApi>> getStatisticsBySubjectId(@PathVariable("subject_id") Long subjectId) {
+    public ResponseEntity<List<AttendanceStatisticsOpenApi>> getStatisticsBySubjectId(
+            @PathVariable("subject_id") Long subjectId
+    ) {
         List<AttendanceStatistics> statistics = attendanceStatisticService.getStatisticsBySubjectId(subjectId);
 
+        return ResponseEntity.ok(getAttendanceOpenApiList(statistics));
+    }
+
+    @GetMapping("/schedule/{scheduleId}")
+    @Override
+    public ResponseEntity<List<AttendanceStatisticsOpenApi>> getStatisticsBySchedule(
+            @PathVariable("scheduleId") Long scheduleId
+    ){
+        List<AttendanceStatistics> statistics =
+                attendanceStatisticService.getStatisticsBySchedule(scheduleId);
         return ResponseEntity.ok(getAttendanceOpenApiList(statistics));
     }
 
