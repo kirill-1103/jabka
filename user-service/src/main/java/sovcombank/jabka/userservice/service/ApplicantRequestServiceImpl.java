@@ -45,6 +45,8 @@ public class ApplicantRequestServiceImpl implements ApplicantRequestService {
             throw new BadRequestException("Applicant Request with such User Id is already exists");
         }
 
+        request.setRequestStatus(ApplicantRequestStatus.ON_MODERATION);
+
         ApplicantRequest requestFromDb = applicantRequestRepository.save(request);
         return Optional.of(requestFromDb);
     }
@@ -71,6 +73,9 @@ public class ApplicantRequestServiceImpl implements ApplicantRequestService {
         ApplicantRequest request = applicantRequestMapper.toApplicantRequest(requestOpenApi);
         if (Objects.isNull(request)) {
             throw new BadRequestException();
+        }
+        if(request.getRequestStatus() == null){
+            request.setRequestStatus(ApplicantRequestStatus.ON_MODERATION);
         }
         if(request.getRequestStatus().equals(ApplicantRequestStatus.APPROVED)) {
             UserEntity user = request.getUser();
