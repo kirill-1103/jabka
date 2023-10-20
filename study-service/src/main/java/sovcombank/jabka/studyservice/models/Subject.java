@@ -26,9 +26,22 @@ public class Subject {
     private Set<StudyGroup> studyGroup;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<StudyMaterials> studyMaterials;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Schedule> schedule;
 
     @Column(nullable = false)
     private Long creatorId;
+
+    @ManyToMany
+    @JoinTable(
+            name = "editor_subject",
+            joinColumns = @JoinColumn(
+                    name = "subject_id", referencedColumnName = "id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "editor_id", referencedColumnName = "professorId"
+            )
+    )
+    private Set<ProfessorIdTable> editorsIds;
 }

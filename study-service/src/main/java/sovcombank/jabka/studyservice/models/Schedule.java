@@ -25,7 +25,7 @@ public class Schedule {
     private String auditorium;
     private String linkForTheClass;
     @ManyToOne
-    private ProfessorSubject professor;
+    private ProfessorIdTable professor;
     @OneToMany
     @JoinColumn(name = "attendance_id")
     private Set<AttendanceStatistics> attendanceStatistics;

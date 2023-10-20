@@ -14,6 +14,11 @@ import java.util.List;
 @RequestMapping("/api/study/subject")
 @RequiredArgsConstructor
 public class SubjectController implements SubjectApiDelegate {
+
+    //todo: getSubjectsByGroup
+    //todo: getSubjectsByCreatorId
+    //todo: getSubjectsByEditorId
+
     private final SubjectService subjectService;
     @PostMapping
     @Override

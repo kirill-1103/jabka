@@ -1129,7 +1129,7 @@ components:
       type: object
       required:
         - name
-        - studyGroup
+        - studyGroupsIds
         - creatorId
       properties:
         id:
@@ -1137,10 +1137,11 @@ components:
           format: int64
         name:
           type: string
-        studyGroup:
+        studyGroupsIds:
           type: array
           items:
-            $ref: "#/components/schemas/StudyGroupOpenAPI"
+            type: integer
+            format: int64
         studyMaterials:
           type: array
           items:

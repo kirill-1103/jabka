@@ -35,9 +35,7 @@ public class StudyGroupServiceImpl implements StudyGroupService {
     @Override
     public ResponseEntity<Void> createGroup(StudyGroupOpenAPI studyGroupOpenAPI) {
         if (groupRepository.existsByName(studyGroupOpenAPI.getName())) {
-            return ResponseEntity
-                    .badRequest()
-                    .build();
+            throw new BadRequestException("Group with such name is already exists");
         }
         StudyGroup studyGroup = groupMapper.toStudyGroup(studyGroupOpenAPI);
         groupRepository.save(studyGroup);
