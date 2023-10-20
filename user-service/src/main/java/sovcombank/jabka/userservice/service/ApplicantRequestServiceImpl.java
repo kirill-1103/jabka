@@ -41,7 +41,7 @@ public class ApplicantRequestServiceImpl implements ApplicantRequestService {
             throw new BadRequestException("User or User's Id is null");
         }
 
-        if(applicantRequestRepository.findByUserId(requestOpenApi.getId()).isPresent()){
+        if(applicantRequestRepository.findByUserId(requestOpenApi.getUser().getId()).isPresent()){
             throw new BadRequestException("Applicant Request with such User Id is already exists");
         }
 

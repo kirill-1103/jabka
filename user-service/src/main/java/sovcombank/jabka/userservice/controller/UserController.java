@@ -26,13 +26,16 @@ public class UserController implements UserApiDelegate {
 
     private final static String MAPPING_GET_ONE = "/{id}";
 
+    private final static String MAPPING_DELETE_ONE = "/{id}";
+
+
     private final static String MAPPING_GET_BY_GROUP = "/group/{group_number}";
 
     private final AuthService authService;
 
     @Override
-    @DeleteMapping
-    public ResponseEntity<Void> deleteUser(Long id) {
+    @DeleteMapping(MAPPING_DELETE_ONE)
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.ok().build();
     }
@@ -68,6 +71,13 @@ public class UserController implements UserApiDelegate {
         JwtResponseOpenApi token = authService.createAuthToken(updateUserOpenApi.getNewUser());
         updateUserOpenApi.getNewUser().setPassword(null);
         return ResponseEntity.ok(new JwtResponseOpenApi(token.getAccessToken(),updateUserOpenApi.getNewUser()));
+    }
+
+    @Override
+    public ResponseEntity<Void> updateUsers(List<UserOpenApi> usersOpenApi) {
+        userService.updateUsers(usersOpenApi);
+
+        return ResponseEntity.ok().build();
     }
 
     @Override

@@ -1,11 +1,17 @@
 package sovcombank.jabka.studyservice.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.sovcombank.openapi.ApiException;
+import ru.sovcombank.openapi.api.UserApi;
 import ru.sovcombank.openapi.model.StudyGroupOpenAPI;
+import ru.sovcombank.openapi.model.UserOpenApi;
+import sovcombank.jabka.studyservice.exceptions.BadRequestException;
+import sovcombank.jabka.studyservice.exceptions.NotFoundException;
 import sovcombank.jabka.studyservice.mappers.StudyGroupMapper;
 import sovcombank.jabka.studyservice.models.StudyGroup;
 import sovcombank.jabka.studyservice.repositories.StudyGroupRepository;
@@ -17,9 +23,12 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class StudyGroupServiceImpl implements StudyGroupService {
     private final StudyGroupRepository groupRepository;
     private final StudyGroupMapper groupMapper;
+
+    private final UserApi userApi;
 
     @Transactional
     @Override
@@ -39,11 +48,15 @@ public class StudyGroupServiceImpl implements StudyGroupService {
     @Transactional
     @Override
     public ResponseEntity<Void> deleteGroupById(Long id) {
-        Optional<StudyGroup> studyGroupOpt = groupRepository.findById(id);
-        if (studyGroupOpt.isEmpty()) {
-            return ResponseEntity
-                    .notFound()
-                    .build();
+        StudyGroup group = groupRepository.findById(id)
+                .orElseThrow(()->new NotFoundException(String.format("Group with such id %d not found",id)));
+        try {
+            List<UserOpenApi> groupUsers = userApi.getUsersByGroupNumber(group.getName());
+            groupUsers.forEach(user->user.setGroup(null));
+
+        } catch (ApiException e) {
+            log.error(e.getMessage());
+            throw new BadRequestException("Cannot get/update group's users");
         }
         groupRepository.deleteById(id);
         return null;
