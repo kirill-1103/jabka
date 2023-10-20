@@ -18,5 +18,4 @@ public interface UserMapper {
     List<UserEntity> toListUserEntity(List<UserOpenApi> userOpenApiList);
 
     List<UserOpenApi> toListOpenApi(List<UserEntity> userEntityList);
-
 }
