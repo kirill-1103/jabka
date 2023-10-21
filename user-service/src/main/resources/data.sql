@@ -8,7 +8,7 @@ values
     (3, 'CURATOR'),
     (4, 'ENROLLEE'),
     (5, 'MODERATOR'),
-    (6, 'COMMITTE');
+    (6, 'COMMITTE')
 ON CONFLICT DO NOTHING;
 
 insert into users(id,login,name,surname,email,password)
@@ -21,20 +21,20 @@ values
     (5, 'STUDENT_5', 'STUDENT_5', 'STUDENT_5', 'STUDENT_5@student.student', '$2a$12$LmxAlgfG9z/cuvLo8ZohHOjHNrSI8h5CjiZ8sZ4wKHuTihxCcKwcO'),
     (6, 'TEACHER_1', 'TEACHER_1', 'TEACHER_1', 'TEACHER_1@teacher.teacher', '$2a$12$LmxAlgfG9z/cuvLo8ZohHOjHNrSI8h5CjiZ8sZ4wKHuTihxCcKwcO'),
     (7, 'TEACHER_2', 'TEACHER_2', 'TEACHER_2', 'TEACHER_2@teacher.teacher', '$2a$12$LmxAlgfG9z/cuvLo8ZohHOjHNrSI8h5CjiZ8sZ4wKHuTihxCcKwcO'),
-    (8, 'TEACHER_3', 'TEACHER_3', 'TEACHER_3', 'TEACHER_3@teacher.teacher', '$2a$12$LmxAlgfG9z/cuvLo8ZohHOjHNrSI8h5CjiZ8sZ4wKHuTihxCcKwcO');
+    (8, 'TEACHER_3', 'TEACHER_3', 'TEACHER_3', 'TEACHER_3@teacher.teacher', '$2a$12$LmxAlgfG9z/cuvLo8ZohHOjHNrSI8h5CjiZ8sZ4wKHuTihxCcKwcO')
 ON CONFLICT DO NOTHING;
 
 insert into users_roles (user_id, role_id)
     values
        (100000,100),
-       (1, 1),
-       (2, 1),
-       (3, 1),
+       (1, 2),
+       (2, 2),
+       (3, 2),
        (4, 1),
        (5, 1),
-       (6, 2),
-       (7, 2),
-       (8, 2);
+       (6, 1),
+       (7, 1),
+       (8, 3)
 ON CONFLICT DO NOTHING;
 
 commit;
