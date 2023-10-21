@@ -76,16 +76,16 @@ public class StudyMaterialsController implements MaterialsApiDelegate {
         while (iteratorMaterials.hasNext()) {
             StudyMaterials studyMaterials = iteratorMaterials.next();
             StudyMaterialsOpenAPI studyMaterialsOpenAPI = iteratorMaterialsOpenApi.next();
-            studyMaterialsOpenAPI.setFilesId(getIdsFileNames(studyMaterials.getFileNames()));
-            studyMaterialsOpenAPI.setFilesNames(getStringFileNames(studyMaterials.getFileNames()));
+            studyMaterialsOpenAPI.setFilesId(getIdsFileNames(studyMaterials.getAttachedFiles()));
+            studyMaterialsOpenAPI.setFilesNames(getStringFileNames(studyMaterials.getAttachedFiles()));
         }
         return materialsOpenAPI;
     }
 
     private StudyMaterialsOpenAPI toMaterialsOpenApi(StudyMaterials materials) {
         StudyMaterialsOpenAPI materialsOpenAPI = materialsMapper.toOpenAPI(materials);
-        materialsOpenAPI.setFilesId(getIdsFileNames(materials.getFileNames()));
-        materialsOpenAPI.setFilesNames(getStringFileNames(materials.getFileNames()));
+        materialsOpenAPI.setFilesId(getIdsFileNames(materials.getAttachedFiles()));
+        materialsOpenAPI.setFilesNames(getStringFileNames(materials.getAttachedFiles()));
         return materialsOpenAPI;
     }
 

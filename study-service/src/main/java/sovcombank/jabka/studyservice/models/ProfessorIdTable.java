@@ -1,16 +1,16 @@
 package sovcombank.jabka.studyservice.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
 @Entity
 @Table(name = "professor_id")
-@AllArgsConstructor
 @NoArgsConstructor
 public class ProfessorIdTable {
     @Id
+    @Column(name="professor_id")
     private Long professorId;
 }

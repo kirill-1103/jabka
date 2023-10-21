@@ -10,15 +10,12 @@ import java.util.List;
 @Mapper(componentModel = "spring", uses = SubjectMapper.class)
 public interface StudyMaterialsMapper {
 
-//    @Mapping(target = "subject", source = "subject")
+
     StudyMaterials toStudyMaterials(StudyMaterialsOpenAPI studyMaterialsOpenAPI);
 
-//    @Mapping(target = "subject", source = "subject")
     List<StudyMaterials> toStudyMaterials(List<StudyMaterialsOpenAPI> studyMaterialsOpenAPI);
 
-//    @Mapping(target = "subject", source = "subject")
     StudyMaterialsOpenAPI toOpenAPI(StudyMaterials studyMaterials);
 
-//    @Mapping(target = "subject", source = "subject")
     List<StudyMaterialsOpenAPI> toOpenAPI(List<StudyMaterials> studyMaterials);
 }

@@ -4,6 +4,7 @@ server:
     include-message: always
     include-binding-errors: always
 
+
 spring:
   application:
     name: study-service
@@ -19,13 +20,14 @@ spring:
   jpa:
     defer-datasource-initialization: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show_sql: true
     properties:
       hibernate:
       format_sql: true
       database: postgresql
-      database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
+
 
 aws:
   accessKeyId: YCAJE7I2o8E0LXtPZM7wL8QKu

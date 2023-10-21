@@ -1,21 +1,25 @@
 package sovcombank.jabka.studyservice.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NonNull;
+import lombok.*;
 
 import java.util.Date;
 import java.util.Set;
 
-@Data
+
 @Entity
 @Table(name = "homework")
+@NoArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
 public class Homework {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "homework_seq_generator")
+    @SequenceGenerator(name = "homework_seq_generator", sequenceName = "homework_seq", allocationSize = 1)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name="student_id",nullable = false)
     @NonNull
     private Long studentId;
 
@@ -27,11 +31,10 @@ public class Homework {
 
     private String comment;
 
-    @OneToMany
-    @JoinColumn(name = "homework_id")
+    @OneToMany(mappedBy = "homework")
     private Set<FileName> fileNames;
 
     @ManyToOne
-    @JoinColumn(name = "study_materials_id")
     private StudyMaterials task;
+
 }

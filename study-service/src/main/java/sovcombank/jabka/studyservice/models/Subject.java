@@ -1,16 +1,20 @@
 package sovcombank.jabka.studyservice.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.Set;
 
 @Entity
-@Data
 @Table(name = "subject")
+@NoArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
 public class Subject {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "subject_seq_generator")
+    @SequenceGenerator(name = "subject_seq_generator", sequenceName = "subject_seq", allocationSize = 1)
     private Long id;
     @Column(nullable = false)
     private String name;
@@ -20,18 +24,18 @@ public class Subject {
             joinColumns = @JoinColumn(
                     name = "subject_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(
-                    name = "study_groups_name", referencedColumnName = "name"
+                    name = "study_group_name", referencedColumnName = "name"
             )
     )
     private Set<StudyGroup> studyGroup;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "subject")
     private Set<StudyMaterials> studyMaterials;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "subject")
     private Set<Schedule> schedule;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name="creator_id")
     private Long creatorId;
 
     @ManyToMany
@@ -41,8 +45,10 @@ public class Subject {
                     name = "subject_id", referencedColumnName = "id"
             ),
             inverseJoinColumns = @JoinColumn(
-                    name = "editor_id", referencedColumnName = "professorId"
+                    name = "editor_id", referencedColumnName = "professor_id"
             )
     )
     private Set<ProfessorIdTable> editorsIds;
+
+
 }
