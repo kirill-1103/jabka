@@ -23,9 +23,7 @@ import sovcombank.jabka.studyservice.repositories.StudyGroupRepository;
 import sovcombank.jabka.studyservice.repositories.SubjectRepository;
 import sovcombank.jabka.studyservice.services.interfaces.AttendanceStatisticService;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +44,6 @@ public class AttendanceStatisticServiceImpl implements AttendanceStatisticServic
         if (attendanceStatisticsOpenApi == null || attendanceStatisticsOpenApi.isEmpty()) {
             throw new BadRequestException("Attendance Statistics List is Empty");
         }
-        //todo: проверить что юзеры существуют
         List<AttendanceStatistics> attendanceStatisticsList = attendanceMapper.toListAttendanceStatistics(attendanceStatisticsOpenApi);
         checkAllStudentsExists(attendanceStatisticsList);
         attendanceRepository.saveAll(attendanceStatisticsList);

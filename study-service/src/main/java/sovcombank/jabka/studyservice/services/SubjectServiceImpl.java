@@ -9,7 +9,6 @@ import ru.sovcombank.openapi.model.SubjectOpenAPI;
 import sovcombank.jabka.studyservice.exceptions.NotFoundException;
 import sovcombank.jabka.studyservice.mappers.SubjectMapper;
 import sovcombank.jabka.studyservice.models.ProfessorIdTable;
-import sovcombank.jabka.studyservice.models.Schedule;
 import sovcombank.jabka.studyservice.models.Subject;
 import sovcombank.jabka.studyservice.repositories.ProfessorIdRepository;
 import sovcombank.jabka.studyservice.repositories.StudyGroupRepository;
@@ -18,7 +17,6 @@ import sovcombank.jabka.studyservice.services.interfaces.SubjectService;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service

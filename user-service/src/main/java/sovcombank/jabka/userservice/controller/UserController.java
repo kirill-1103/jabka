@@ -76,7 +76,6 @@ public class UserController implements UserApiDelegate {
     @PostMapping("/users/update")
     public ResponseEntity<Void> updateUsers(@RequestBody  List<UserOpenApi> usersOpenApi) {
         userService.updateUsers(usersOpenApi);
-
         return ResponseEntity.ok().build();
     }
 
