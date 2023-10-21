@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.sovcombank.openapi.api.GroupApiDelegate;
 import ru.sovcombank.openapi.model.StudyGroupOpenAPI;
+import ru.sovcombank.openapi.model.UserInGroupRequestOpenApi;
 import sovcombank.jabka.studyservice.services.interfaces.StudyGroupService;
 
 import java.util.List;
@@ -39,5 +40,25 @@ public class StudyGroupController implements GroupApiDelegate {
     @Override
     public ResponseEntity<StudyGroupOpenAPI> getGroupById(@Valid @PathVariable(name = "id") Long id) {
         return studyGroupService.getGroupById(id);
+    }
+
+    @Override
+    public ResponseEntity<Void> addUserInGroup(UserInGroupRequestOpenApi userInGroupRequestOpenApi) {
+        return studyGroupService.addUserInGroup(userInGroupRequestOpenApi);
+    }
+
+    @Override
+    public ResponseEntity<Void> addUsersInGroup(List<UserInGroupRequestOpenApi> userInGroupRequestOpenApi) {
+        return GroupApiDelegate.super.addUsersInGroup(userInGroupRequestOpenApi);
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteUserFromGroup(UserInGroupRequestOpenApi userInGroupRequestOpenApi) {
+        return GroupApiDelegate.super.deleteUserFromGroup(userInGroupRequestOpenApi);
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteUsersFromGroup(List<UserInGroupRequestOpenApi> userInGroupRequestOpenApi) {
+        return GroupApiDelegate.super.deleteUsersFromGroup(userInGroupRequestOpenApi);
     }
 }

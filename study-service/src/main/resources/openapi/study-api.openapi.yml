@@ -1350,10 +1350,10 @@ components:
       properties:
         userId:
           type: integer
-          format: base64
+          format: int64
         groupId:
           type: integer
-          format: base64
+          format: int64
 
     UserOpenApi:
       type: object
