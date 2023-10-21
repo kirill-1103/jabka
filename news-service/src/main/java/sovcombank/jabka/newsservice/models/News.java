@@ -16,6 +16,7 @@ public class News {
     private Long id;
     private Date creationDate;
     private String header;
+    @Column(columnDefinition = "TEXT")
     private String text;
     private List<String> hashtags;
     private List<String> imgs;
