@@ -13,22 +13,29 @@ DROP TABLE IF EXISTS professor_subject CASCADE;
 DROP TABLE IF EXISTS group_subject CASCADE;
 DROP TABLE IF EXISTS attendance CASCADE;
 
+CREATE SEQUENCE IF NOT EXISTS group_seq START 1;
+CREATE SEQUENCE IF NOT EXISTS subject_seq START 1;
+CREATE SEQUENCE IF NOT EXISTS materials_seq START 1;
+CREATE SEQUENCE IF NOT EXISTS homework_seq START 1;
+CREATE SEQUENCE IF NOT EXISTS file_seq START 1;
+CREATE SEQUENCE IF NOT EXISTS SCHEDULE_SEQ START 1;
+CREATE SEQUENCE IF NOT EXISTS attendance_seq START 1;
 
 CREATE TABLE IF NOT EXISTS professor_id
 (
-    professor_id SERIAL PRIMARY KEY
+    professor_id INTEGER  PRIMARY KEY
 );
 
 CREATE TABLE IF NOT EXISTS subject
 (
-    id         SERIAL PRIMARY KEY,
+    id          INTEGER DEFAULT nextval('subject_seq') PRIMARY KEY,
     name       VARCHAR(1024),
     creator_id BIGINT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS study_groups
 (
-    id   SERIAL PRIMARY KEY,
+    id    INTEGER DEFAULT nextval('group_seq') PRIMARY KEY,
     name VARCHAR(255) UNIQUE NOT NULL,
     CONSTRAINT unq_name
         UNIQUE (name)
@@ -36,7 +43,7 @@ CREATE TABLE IF NOT EXISTS study_groups
 
 CREATE TABLE IF NOT EXISTS schedule
 (
-    id                     SERIAL PRIMARY KEY,
+    id                      INTEGER DEFAULT nextval('SCHEDULE_SEQ') PRIMARY KEY,
     date_time              TIMESTAMP(6) NOT NULL,
     group_id               INTEGER      NOT NULL,
     professor_professor_id INTEGER      NOT NULL,
@@ -60,7 +67,7 @@ CREATE TABLE IF NOT EXISTS schedule
 
 CREATE TABLE IF NOT EXISTS study_materials
 (
-    id             SERIAL PRIMARY KEY,
+    id              INTEGER DEFAULT nextval('materials_seq') PRIMARY KEY,
     subject_id     INTEGER NOT NULL,
     type           VARCHAR(255),
     materials_text TEXT,
@@ -72,7 +79,7 @@ CREATE TABLE IF NOT EXISTS study_materials
 
 CREATE TABLE IF NOT EXISTS homework
 (
-    id         SERIAL PRIMARY KEY,
+    id          INTEGER DEFAULT nextval('homework_seq') PRIMARY KEY,
     date       TIMESTAMP(6) NOT NULL,
     grade      BIGINT,
     student_id BIGINT       NOT NULL,
@@ -82,7 +89,7 @@ CREATE TABLE IF NOT EXISTS homework
 
 CREATE TABLE IF NOT EXISTS files
 (
-    id           SERIAL PRIMARY KEY,
+    id            INTEGER DEFAULT nextval('file_seq') PRIMARY KEY,
     initial_name VARCHAR(1024)        NOT NULL,
     name_s3      VARCHAR(1024) UNIQUE NOT NULL,
     homework_id  INTEGER REFERENCES homework (id) ON DELETE CASCADE
@@ -123,7 +130,7 @@ CREATE TABLE IF NOT EXISTS editor_subject
 
 CREATE TABLE IF NOT EXISTS attendance
 (
-    id                SERIAL PRIMARY KEY,
+    id                 INTEGER DEFAULT nextval('attendance_seq') PRIMARY KEY,
     attendance_status VARCHAR(255) NOT NULL,
     student_id        BIGINT       NOT NULL,
     schedule_id       INTEGER REFERENCES schedule (id) ON DELETE CASCADE

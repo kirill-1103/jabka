@@ -10,6 +10,7 @@ import java.util.List;
 @Mapper(componentModel = "spring", uses = SubjectMapper.class)
 public interface StudyMaterialsMapper {
 
+
     StudyMaterials toStudyMaterials(StudyMaterialsOpenAPI studyMaterialsOpenAPI);
 
     List<StudyMaterials> toStudyMaterials(List<StudyMaterialsOpenAPI> studyMaterialsOpenAPI);

@@ -1,20 +1,22 @@
 package sovcombank.jabka.studyservice.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import sovcombank.jabka.studyservice.models.enums.ClassFormat;
 
 import java.util.Date;
 import java.util.Set;
 
 @Entity
-@Data
-@EqualsAndHashCode
+@Getter
+@Setter
+@AllArgsConstructor
 @Table(name = "schedule")
+@NoArgsConstructor
 public class Schedule {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "schedule_seq_generator")
+    @SequenceGenerator(name = "schedule_seq_generator", sequenceName = "schedule_seq", allocationSize = 1)
     private Long id;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="date_time")
@@ -31,6 +33,8 @@ public class Schedule {
     private String linkForTheClass;
     @ManyToOne
     private ProfessorIdTable professor;
-    @OneToMany(mappedBy = "schedule")
+    @OneToMany(mappedBy = "schedule", fetch = FetchType.EAGER)
     private Set<AttendanceStatistics> attendanceStatistics;
+
+
 }

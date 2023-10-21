@@ -1,24 +1,28 @@
 package sovcombank.jabka.studyservice.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import sovcombank.jabka.studyservice.models.enums.StudyMaterialsType;
 
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
 @Entity
 @Table(name = "study_materials")
+@NoArgsConstructor
 public class StudyMaterials {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "materials_seq_generator")
+    @SequenceGenerator(name = "materials_seq_generator", sequenceName = "materials_seq", allocationSize = 1)
     private Long id;
     @Enumerated(EnumType.STRING)
     private StudyMaterialsType type;
     @ManyToOne
     private Subject subject;
     private String materialsText;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "task")
+    @OneToMany(  mappedBy = "task")
     private Set<Homework> homeworks;
 
     @ManyToMany
@@ -31,4 +35,6 @@ public class StudyMaterials {
             )
     )
     private Set<FileName> attachedFiles;
+
+
 }

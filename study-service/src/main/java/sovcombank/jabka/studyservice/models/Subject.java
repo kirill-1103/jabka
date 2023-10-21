@@ -1,16 +1,20 @@
 package sovcombank.jabka.studyservice.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.Set;
 
 @Entity
-@Data
 @Table(name = "subject")
+@NoArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
 public class Subject {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "subject_seq_generator")
+    @SequenceGenerator(name = "subject_seq_generator", sequenceName = "subject_seq", allocationSize = 1)
     private Long id;
     @Column(nullable = false)
     private String name;
@@ -25,10 +29,10 @@ public class Subject {
     )
     private Set<StudyGroup> studyGroup;
 
-    @OneToMany(mappedBy = "subject", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "subject")
     private Set<StudyMaterials> studyMaterials;
 
-    @OneToMany(mappedBy = "subject", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "subject")
     private Set<Schedule> schedule;
 
     @Column(nullable = false, name="creator_id")
@@ -45,4 +49,6 @@ public class Subject {
             )
     )
     private Set<ProfessorIdTable> editorsIds;
+
+
 }
