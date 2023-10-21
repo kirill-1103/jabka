@@ -54,7 +54,7 @@ VALUES
     (3,'MATERIAL', 3, 'Study materials for subject C')
 ON CONFLICT DO NOTHING;
 
-INSERT INTO homework (id, student_id, date, grade, comment, study_materials_id)
+INSERT INTO homework (id, student_id, date, grade, comment, task_id)
 VALUES
     (1,1, '2023-10-21 08:00:00', 90, 'Good work!', 1),
     (2,1, '2023-10-23 08:00:00', 92, 'Excellent!', 2),

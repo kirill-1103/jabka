@@ -65,7 +65,7 @@ public class StudyMaterialsServiceImpl implements StudyMaterialsService {
                     .build();
         }
         StudyMaterials studyMaterials = studyMaterialsOpt.get();
-        studyMaterials.getFileNames()
+        studyMaterials.getAttachedFiles()
                 .forEach((fileName) -> fileService.removeFileByPath(getMaterialsFilePath(fileName, studyMaterials)));
         materialsRepository.deleteById(id);
         return ResponseEntity
@@ -143,7 +143,7 @@ public class StudyMaterialsServiceImpl implements StudyMaterialsService {
                 )
                 .map(fileNameService::saveFileName)
                 .collect(Collectors.toSet());
-        studyMaterials.setFileNames(fileNames);
+        studyMaterials.setAttachedFiles(fileNames);
     }
 
     private String getMaterialsFilePath(FileName fileName, StudyMaterials studyMaterials) {

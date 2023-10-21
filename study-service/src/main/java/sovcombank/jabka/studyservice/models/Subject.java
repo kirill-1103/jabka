@@ -20,18 +20,18 @@ public class Subject {
             joinColumns = @JoinColumn(
                     name = "subject_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(
-                    name = "study_groups_name", referencedColumnName = "name"
+                    name = "study_group_name", referencedColumnName = "name"
             )
     )
     private Set<StudyGroup> studyGroup;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "subject" )
     private Set<StudyMaterials> studyMaterials;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "subject")
     private Set<Schedule> schedule;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name="creator_id")
     private Long creatorId;
 
     @ManyToMany
@@ -41,7 +41,7 @@ public class Subject {
                     name = "subject_id", referencedColumnName = "id"
             ),
             inverseJoinColumns = @JoinColumn(
-                    name = "editor_id", referencedColumnName = "professorId"
+                    name = "editor_id", referencedColumnName = "professor_id"
             )
     )
     private Set<ProfessorIdTable> editorsIds;

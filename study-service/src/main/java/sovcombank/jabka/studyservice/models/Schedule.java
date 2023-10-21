@@ -17,19 +17,20 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="date_time")
     private Date dateTime;
     @ManyToOne
     private StudyGroup group;
     @ManyToOne
-    @JoinColumn(name="subject_id",nullable = false)
     private Subject subject;
     @Enumerated(EnumType.STRING)
+    @Column(name="class_format")
     private ClassFormat classFormat;
     private String auditorium;
+    @Column(name="link_for_the_class")
     private String linkForTheClass;
     @ManyToOne
     private ProfessorIdTable professor;
-    @OneToMany
-    @JoinColumn(name = "schedule_id")
+    @OneToMany(mappedBy = "schedule")
     private Set<AttendanceStatistics> attendanceStatistics;
 }

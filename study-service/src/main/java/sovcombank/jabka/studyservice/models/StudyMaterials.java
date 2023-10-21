@@ -16,14 +16,19 @@ public class StudyMaterials {
     @Enumerated(EnumType.STRING)
     private StudyMaterialsType type;
     @ManyToOne
-    @JoinColumn(name = "subject_id")
     private Subject subject;
     private String materialsText;
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "study_materials_id")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "task")
     private Set<Homework> homeworks;
-    private Set<String> attachedFiles;
-    @OneToMany
-    @JoinColumn(name = "study_materials_id")
-    private Set<FileName> fileNames;
+
+    @ManyToMany
+    @JoinTable(
+            name = "materials_files",
+            joinColumns = @JoinColumn(
+                    name = "materials_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "file_id", referencedColumnName = "id"
+            )
+    )
+    private Set<FileName> attachedFiles;
 }

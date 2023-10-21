@@ -2,6 +2,7 @@ package sovcombank.jabka.studyservice.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.util.Date;
@@ -10,12 +11,13 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "homework")
+@NoArgsConstructor
 public class Homework {
     @Id
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name="student_id",nullable = false)
     @NonNull
     private Long studentId;
 
@@ -27,11 +29,9 @@ public class Homework {
 
     private String comment;
 
-    @OneToMany
-    @JoinColumn(name = "homework_id")
+    @OneToMany(mappedBy = "homework")
     private Set<FileName> fileNames;
 
     @ManyToOne
-    @JoinColumn(name = "study_materials_id")
     private StudyMaterials task;
 }

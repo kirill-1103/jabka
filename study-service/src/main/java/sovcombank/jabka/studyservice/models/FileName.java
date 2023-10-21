@@ -11,8 +11,10 @@ public class FileName {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true)
+    @Column(name="initial_name")
     private String initialName;
-    @Column(unique = true)
+    @Column(name="name_s3",unique = true)
     private String nameS3;
+    @ManyToOne
+    private Homework homework;
 }

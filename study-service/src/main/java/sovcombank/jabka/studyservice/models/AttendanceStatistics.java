@@ -7,23 +7,22 @@ import sovcombank.jabka.studyservice.models.enums.AttendanceStatus;
 
 @Data
 @Entity
-@Table (name = "attendance")
+@Table(name = "attendance")
 public class AttendanceStatistics {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "student_id")
     @NonNull
     private Long studentId;
 
     @ManyToOne
-    @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
     @NonNull
-    @Column(nullable = false)
+    @Column(nullable = false, name = "attendance_status")
     @Enumerated(EnumType.STRING)
     private AttendanceStatus attendanceStatus;
 }

@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProfessorIdTable {
     @Id
+    @Column(name="professor_id")
     private Long professorId;
 }
