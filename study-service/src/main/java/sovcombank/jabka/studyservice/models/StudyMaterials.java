@@ -20,10 +20,10 @@ public class StudyMaterials {
     private Subject subject;
     private String materialsText;
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "homework_id")
+    @JoinColumn(name = "study_materials_id")
     private Set<Homework> homeworks;
     private Set<String> attachedFiles;
     @OneToMany
-    @JoinColumn(name = "files_id")
+    @JoinColumn(name = "study_materials_id")
     private Set<FileName> fileNames;
 }

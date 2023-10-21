@@ -28,7 +28,7 @@ public class Homework {
     private String comment;
 
     @OneToMany
-    @JoinColumn(name = "files_id")
+    @JoinColumn(name = "homework_id")
     private Set<FileName> fileNames;
 
     @ManyToOne

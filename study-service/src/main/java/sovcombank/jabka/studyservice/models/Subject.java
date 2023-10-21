@@ -25,10 +25,10 @@ public class Subject {
     )
     private Set<StudyGroup> studyGroup;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<StudyMaterials> studyMaterials;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "subject")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Schedule> schedule;
 
     @Column(nullable = false)
