@@ -45,7 +45,7 @@ public class NewsController implements NewsApiDelegate {
 
     @Override
     @GetMapping("/{id}")
-    public ResponseEntity<NewsOpenAPI> showNewsIdInfo(@Valid @RequestParam("id") Long id) {
+    public ResponseEntity<NewsOpenAPI> showNewsIdInfo(@Valid @PathVariable("id") Long id) {
         return newsService.showNewsIdInfo(id);
     }
 }
