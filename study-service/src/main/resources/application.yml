@@ -9,6 +9,9 @@ spring:
     name: study-service
     api-name: API_ADMIN
 
+  sql:
+    init:
+      mode: always
   datasource:
     username: jabka
     password: 123
@@ -16,7 +19,7 @@ spring:
   jpa:
     defer-datasource-initialization: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     show_sql: true
     properties:
       hibernate:

@@ -24,5 +24,6 @@ public class AttendanceStatistics {
 
     @NonNull
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private AttendanceStatus attendanceStatus;
 }
