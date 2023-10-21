@@ -132,8 +132,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public String generateHomeworkFileName(String fileName, Long studentId){
         String formattedDate = getDateString();
-        String newFileName = "HOMEWORK_"+studentId+"_"+formattedDate+"_"+UUID.randomUUID()+"_"+fileName;
-        return newFileName;
+        return "HOMEWORK_"+studentId+"_"+formattedDate+"_"+UUID.randomUUID()+"_"+fileName;
     }
 
     private String getDateString(){

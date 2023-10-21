@@ -49,16 +49,16 @@ public class StudyGroupController implements GroupApiDelegate {
 
     @Override
     public ResponseEntity<Void> addUsersInGroup(List<UserInGroupRequestOpenApi> userInGroupRequestOpenApi) {
-        return GroupApiDelegate.super.addUsersInGroup(userInGroupRequestOpenApi);
+        return studyGroupService.addUsersInGroup(userInGroupRequestOpenApi);
     }
 
     @Override
     public ResponseEntity<Void> deleteUserFromGroup(UserInGroupRequestOpenApi userInGroupRequestOpenApi) {
-        return GroupApiDelegate.super.deleteUserFromGroup(userInGroupRequestOpenApi);
+        return studyGroupService.deleteUserFromGroup(userInGroupRequestOpenApi);
     }
 
     @Override
     public ResponseEntity<Void> deleteUsersFromGroup(List<UserInGroupRequestOpenApi> userInGroupRequestOpenApi) {
-        return GroupApiDelegate.super.deleteUsersFromGroup(userInGroupRequestOpenApi);
+        return studyGroupService.deleteUsersFromGroup(userInGroupRequestOpenApi);
     }
 }
