@@ -5,13 +5,17 @@ server:
     include-binding-errors: always
 
 spring:
+  sql:
+    init:
+      mode: always
   datasource:
     username: jabka
     password: 123
     url: jdbc:postgresql://localhost:5434/jabka_news
   jpa:
+    defer-datasource-initialization: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show_sql: true
     properties:
       hibernate:
