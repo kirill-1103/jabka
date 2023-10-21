@@ -6,24 +6,46 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sovcombank.openapi.model.SubjectOpenAPI;
+import sovcombank.jabka.studyservice.exceptions.NotFoundException;
 import sovcombank.jabka.studyservice.mappers.SubjectMapper;
+import sovcombank.jabka.studyservice.models.ProfessorIdTable;
+import sovcombank.jabka.studyservice.models.Schedule;
 import sovcombank.jabka.studyservice.models.Subject;
+import sovcombank.jabka.studyservice.repositories.ProfessorIdRepository;
+import sovcombank.jabka.studyservice.repositories.StudyGroupRepository;
 import sovcombank.jabka.studyservice.repositories.SubjectRepository;
 import sovcombank.jabka.studyservice.services.interfaces.SubjectService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class SubjectServiceImpl implements SubjectService {
+    //todo: проверять везде, что создатель и едиторы существуют через UserAPI
     private final SubjectRepository subjectRepository;
     private final SubjectMapper subjectMapper;
+
+    private final ProfessorIdRepository professorIdRepository;
+
+    private final StudyGroupRepository studyGroupRepository;
+
     @Transactional
     @Override
     public ResponseEntity<Void> createSubject(SubjectOpenAPI subjectOpenAPI) {
         Subject subject = subjectMapper.toSubject(subjectOpenAPI);
+        subjectOpenAPI.getEditorsIds().forEach(editorId -> {
+            if (professorIdRepository.findById(editorId).isEmpty()) {
+                professorIdRepository.save(new ProfessorIdTable(editorId));
+            }
+        });
+        subject.setStudyGroup(subjectOpenAPI.getStudyGroupsIds().stream().map(groupId -> studyGroupRepository.findById(groupId)
+                .orElseThrow(()
+                        -> new NotFoundException(String.format("Group with such id not found. Id:%d", groupId))
+                )).collect(Collectors.toSet()));
+
         subjectRepository.save(subject);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -49,11 +71,6 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public ResponseEntity<List<SubjectOpenAPI>> getAllSubjects() {
         List<Subject> subjects = subjectRepository.findAll();
-        if (subjects.isEmpty()) {
-            return ResponseEntity
-                    .notFound()
-                    .build();
-        }
         return ResponseEntity.ok(subjects
                 .stream()
                 .map(subjectMapper::toOpenAPI)
@@ -82,10 +99,48 @@ public class SubjectServiceImpl implements SubjectService {
                     .notFound()
                     .build();
         }
+        subjectOpenAPI.getEditorsIds().forEach(editorId -> {
+            if (professorIdRepository.findById(editorId).isEmpty()) {
+                professorIdRepository.save(new ProfessorIdTable(editorId));
+            }
+        });
+
         Subject updatedSubject = subjectMapper.toSubject(subjectOpenAPI);
+        updatedSubject.setStudyGroup(subjectOpenAPI.getStudyGroupsIds().stream().map(groupId -> studyGroupRepository.findById(groupId)
+                .orElseThrow(()
+                        -> new NotFoundException(String.format("Group with such id not found. Id:%d", groupId))
+                )).collect(Collectors.toSet()));
         subjectRepository.save(updatedSubject);
         return ResponseEntity
                 .ok()
                 .build();
+    }
+
+    @Override
+    public ResponseEntity<List<SubjectOpenAPI>> getSubjectsByCreatorId(Long creatorId) {
+        List<Subject> subjects = subjectRepository.findByCreatorId(creatorId);
+        return ResponseEntity.ok(subjects
+                .stream()
+                .map(subjectMapper::toOpenAPI)
+                .collect(Collectors.toList())
+        );
+    }
+
+    @Override
+    public ResponseEntity<List<SubjectOpenAPI>> getSubjectsByEditorId(Long editorId) {
+        List<Subject> subjects = subjectRepository.findByEditorsIds_ProfessorId(editorId);
+        return ResponseEntity.ok(subjects
+                .stream()
+                .map(subjectMapper::toOpenAPI)
+                .collect(Collectors.toList()));
+    }
+
+    @Override
+    public ResponseEntity<List<SubjectOpenAPI>> getSubjectsByGroupId(Long groupId) {
+        List<Subject> subjects = subjectRepository.findByStudyGroupId(groupId);
+        return ResponseEntity.ok(subjects
+                .stream()
+                .map(subjectMapper::toOpenAPI)
+                .collect(Collectors.toList()));
     }
 }

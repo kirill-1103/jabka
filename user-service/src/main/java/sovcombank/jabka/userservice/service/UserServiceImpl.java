@@ -58,7 +58,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-
     public UserEntity saveOrUpdate(UserOpenApi userOpenApi) {
         UserEntity user = userMapper.toUser(userOpenApi);
         return saveOrUpdate(user);
@@ -110,7 +109,7 @@ public class UserServiceImpl implements UserService {
         newUser.setId(oldUser.getId());
 
 
-        userRepository.findById(newUser.getId())
+        UserEntity userFromDb = userRepository.findById(newUser.getId())
                 .orElseThrow(() -> new BadRequestException(String.format("User with such id is not exists. Id: %d", newUser.getId())));
 
         if (!newUser.getEmail().equals(oldUser.getEmail())) {
@@ -120,7 +119,10 @@ public class UserServiceImpl implements UserService {
             loginExistsCheck(newUser.getLogin());
         }
         UserEntity userEntity = userMapper.toUser(newUser);
-        setRole(userEntity);
+        newUser.setPassword(null);
+        if(userEntity.getPassword() != null && !userFromDb.getPassword().equals(userEntity.getPassword())){
+            userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
+        }
         userRepository.save(userEntity);
     }
 
@@ -131,7 +133,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserEntity> getUsersByGroupNumber(String groupNumber) {
-        return userRepository.findByGroupNumber(groupNumber);
+        List<UserEntity> users  = userRepository.findByGroup(groupNumber);
+        return users;
     }
 
     @Override

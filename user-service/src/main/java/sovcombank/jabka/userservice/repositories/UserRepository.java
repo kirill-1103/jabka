@@ -18,5 +18,5 @@ public interface UserRepository extends JpaRepository<UserEntity,Long> {
 
     List<UserEntity> findByIdIn(List<Long> ids);
 
-    List<UserEntity> findByGroupNumber(String groupNumber);
+    List<UserEntity> findByGroup(String groupNumber);
 }

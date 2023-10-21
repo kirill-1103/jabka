@@ -72,7 +72,6 @@ public class UserController implements UserApiDelegate {
         return ResponseEntity.ok(new JwtResponseOpenApi(token.getAccessToken(),updateUserOpenApi.getNewUser()));
     }
 
-    @GetMapping("/ids")
     @Override
     @PostMapping("/users/update")
     public ResponseEntity<Void> updateUsers(@RequestBody  List<UserOpenApi> usersOpenApi) {
@@ -82,6 +81,7 @@ public class UserController implements UserApiDelegate {
     }
 
     @Override
+    @PostMapping("/ids")
     public ResponseEntity<List<UserOpenApi>> getUsersByIds(List<Long> ids) {
 
         return ResponseEntity.ok(

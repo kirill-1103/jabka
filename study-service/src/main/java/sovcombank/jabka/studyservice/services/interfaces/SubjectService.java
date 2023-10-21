@@ -16,4 +16,10 @@ public interface SubjectService {
     ResponseEntity<List<SubjectOpenAPI>> getAllSubjects();
     ResponseEntity<SubjectOpenAPI> getSubjectById(Long id);
     ResponseEntity<Void> updateSubject(SubjectOpenAPI subjectOpenAPI);
+
+    ResponseEntity<List<SubjectOpenAPI>> getSubjectsByCreatorId(Long creatorId);
+
+    ResponseEntity<List<SubjectOpenAPI>> getSubjectsByEditorId(Long editorId);
+
+    ResponseEntity<List<SubjectOpenAPI>> getSubjectsByGroupId(Long groupId);
 }
