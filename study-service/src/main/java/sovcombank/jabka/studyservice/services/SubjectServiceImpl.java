@@ -80,6 +80,7 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public ResponseEntity<SubjectOpenAPI> getSubjectById(Long id) {
         Optional<Subject> subjectOpt = subjectRepository.findById(id);
+//        subjectOpt.get().getSchedule().stream().findFirst().get();
         return subjectOpt
                 .map(subject -> ResponseEntity.ok(subjectMapper.toOpenAPI(subject)))
                 .orElseGet

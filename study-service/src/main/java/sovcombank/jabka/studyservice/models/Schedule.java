@@ -30,6 +30,6 @@ public class Schedule {
     @ManyToOne
     private ProfessorIdTable professor;
     @OneToMany
-    @JoinColumn(name = "attendance_id")
+    @JoinColumn(name = "id")
     private Set<AttendanceStatistics> attendanceStatistics;
 }
