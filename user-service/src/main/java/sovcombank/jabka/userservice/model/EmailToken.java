@@ -14,7 +14,8 @@ import java.util.UUID;
 @Table(name="activation_token")
 public class EmailToken {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "token_seq_generator")
+    @SequenceGenerator(name = "token_seq_generator", sequenceName = "token_seq", allocationSize = 1)
     private Long id;
     private String token;
     @Temporal(TemporalType.TIMESTAMP)

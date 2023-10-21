@@ -13,12 +13,11 @@ spring:
     init:
       mode: always
   jpa:
-    defer-datasource-initialization: true
-    hibernate:
-      ddl-auto: update
+#    defer-datasource-initialization: true
+#    hibernate:
+#      ddl-auto: drop
     show_sql: true
     properties:
-      hibernate:
       format_sql: true
       database: postgresql
       database-platform: org.hibernate.dialect.PostgreSQL95Dialect

@@ -6,6 +6,7 @@ import lombok.*;
 import sovcombank.jabka.userservice.model.enums.ApplicantRequestStatus;
 
 @Entity
+@Table(name = "applicant_request")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -13,7 +14,8 @@ import sovcombank.jabka.userservice.model.enums.ApplicantRequestStatus;
 @Builder
 public class ApplicantRequest {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "applicant_request_seq_generator")
+    @SequenceGenerator(name = "applicant_request_seq_generator", sequenceName = "applicant_request_seq", allocationSize = 1)
     private Long id;
 
     @Column(nullable = false)
