@@ -23,11 +23,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class HomeworkController implements HomeworkApiDelegate {
 
-
     private final HomeworkService homeworkService;
     private final HomeworkMapper homeworkMapper;
 
-    @PostMapping("/materials/{materialsId}/homework")
+    @PostMapping("/materials/{materialsId}")
     @Override
     public ResponseEntity<Void> createHomework(
             @Valid @PathVariable(name = "materialsId") Long materialsId,
@@ -38,17 +37,16 @@ public class HomeworkController implements HomeworkApiDelegate {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/materials/{materialsId}/homework/{homeworkId}")
+    @DeleteMapping("/{homeworkId}")
     @Override
     public ResponseEntity<Void> deleteHomework(
-            @Valid @PathVariable(name = "materialsId") Long materialsId,
             @Valid @PathVariable(name = "homeworkId") Long homeworkId
     ) {
-        homeworkService.deleteHomework(materialsId, homeworkId);
+        homeworkService.deleteHomework(homeworkId);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/materials/{materialsId}/homework/all")
+    @GetMapping("/materials/{materialsId}/all")
     @Override
     public ResponseEntity<List<HomeworkOpenAPI>> getAllHomeworksByMaterials(
             @Valid @PathVariable(name = "materialsId") Long materialsId
@@ -57,10 +55,9 @@ public class HomeworkController implements HomeworkApiDelegate {
         return ResponseEntity.ok(this.homeworksOpenApiByHomeworks(homeworks));
     }
 
-    @GetMapping("/materials/{materialsId}/homework/{homeworkId}")
+    @GetMapping("/{homework_id}")
     @Override
     public ResponseEntity<HomeworkOpenAPI> getHomeworkById(
-            @Valid @PathVariable(name = "materialsId") Long materialsId,
             @Valid @PathVariable(name = "homeworkId") Long homeworkId
     ) {
         Homework homework = homeworkService.getHomeworkById(homeworkId);
@@ -69,7 +66,7 @@ public class HomeworkController implements HomeworkApiDelegate {
         return ResponseEntity.ok(homeworkOpenAPI);
     }
 
-    @GetMapping("/materials/{materialsId}/homework/student/{studentId}")
+    @GetMapping("/materials/{materialsId}/student/{studentId}")
     @Override
     public ResponseEntity<HomeworkOpenAPI> getHomeworkByStudentAndMaterials(
             @Valid @PathVariable(name = "materialsId") Long materialsId,
@@ -81,7 +78,7 @@ public class HomeworkController implements HomeworkApiDelegate {
         return ResponseEntity.ok(homeworkOpenAPI);
     }
 
-    @GetMapping("/homework/student/{studentId}")
+    @GetMapping("/student/{studentId}")
     @Override
     public ResponseEntity<List<HomeworkOpenAPI>> getHomeworkByStudentId(
             @Valid @PathVariable(name = "studentId") Long studentId
@@ -90,10 +87,10 @@ public class HomeworkController implements HomeworkApiDelegate {
         return ResponseEntity.ok(this.homeworksOpenApiByHomeworks(homeworks));
     }
 
-    @PutMapping("/materials/{materialsId}/homework")
+    @PutMapping("/homework/{homework_id}")
     @Override
     public ResponseEntity<Void> updateHomework(
-            @Valid @PathVariable(name = "materialsId") Long materialsId,
+            @Valid @PathVariable(name = "homeworkId") Long homeworkId,
             @RequestBody HomeworkOpenAPI homework,
             @RequestBody List<MultipartFile> file
     ) {

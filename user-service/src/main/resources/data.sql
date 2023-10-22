@@ -26,14 +26,17 @@ ON CONFLICT DO NOTHING;
 
 insert into user_roles (user_id, role_id)
     select u.id, r.id from users u, roles r
-    where u.login = 'API_ADMIN' and r.name in ('ADMIN');
+    where u.login = 'API_ADMIN' and r.name in ('ADMIN')
+ON CONFLICT DO NOTHING ;
 
 insert into user_roles (user_id, role_id)
     select u.id, r.id from users u, roles r
-    where u.login like 'STUDENT_%' and r.name in ('STUDENT');
+    where u.login like 'STUDENT_%' and r.name in ('STUDENT')
+ON CONFLICT DO NOTHING ;
 
 insert into user_roles (user_id, role_id)
     select u.id, r.id from users u, roles r
-    where u.login like 'TEACHER_%' and r.name in ('TEACHER');
+    where u.login like 'TEACHER_%' and r.name in ('TEACHER')
+ON CONFLICT DO NOTHING ;
 
 commit;

@@ -640,7 +640,7 @@ paths:
         '404':
           description: Not Found
 
-  /materials/{materialsId}/homework/all:
+  /homework/materials/{materialsId}/all:
     get:
       security:
         - bearerAuth: [ ]
@@ -671,7 +671,7 @@ paths:
         '404':
           description: Not Found
 
-  /materials/{materialsId}/homework:
+  /homework/materials/{materialsId}:
     post:
       security:
         - bearerAuth: [ ]
@@ -703,6 +703,9 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           description: Do Not Have Necessary Rights to Execute This Operation
+
+
+  /homeork/{homeworkId}:
     put:
       security:
         - bearerAuth: [ ]
@@ -712,7 +715,7 @@ paths:
       operationId: updateHomework
       parameters:
         - in: path
-          name: materialsId
+          name: homeworkId
           schema:
             type: integer
             format: int64
@@ -734,7 +737,7 @@ paths:
         '403':
           description: Do Not Have Necessary Rights to Execute This Operation
 
-  /materials/{materialsId}/homework/{homeworkId}:
+  /homework/{homeworkId}:
     get:
       security:
         - bearerAuth: [ ]
@@ -743,12 +746,7 @@ paths:
         - Homework
       operationId: getHomeworkById
       parameters:
-        - in: path
-          name: materialsId
-          required: true
-          schema:
-            type: integer
-            format: int64
+
         - in: path
           name: homeworkId
           required: true
@@ -776,12 +774,6 @@ paths:
         - Homework
       operationId: deleteHomework
       parameters:
-        - in: path
-          name: materialsId
-          required: true
-          schema:
-            type: integer
-            format: int64
         - in: path
           name: homeworkId
           required: true
@@ -829,7 +821,7 @@ paths:
         '404':
           description: Student Not Found
 
-  /materials/{materialsId}/homework/student/{studentId}:
+  /homework/materials/{materialsId}/student/{studentId}:
     get:
       security:
         - bearerAuth: [ ]
@@ -1236,10 +1228,11 @@ components:
           items:
             type: integer
             format: int64
-        studyMaterials:
+        studyMaterialsIds:
           type: array
           items:
-            $ref: "#/components/schemas/StudyMaterialsOpenAPI"
+            type: integer
+            format: int64
         scheduleIds:
           type: array
           items:

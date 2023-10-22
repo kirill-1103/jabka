@@ -82,7 +82,6 @@ public class UserController implements UserApiDelegate {
     @Override
     @PostMapping("/ids")
     public ResponseEntity<List<UserOpenApi>> getUsersByIds(List<Long> ids) {
-
         return ResponseEntity.ok(
                 userMapper.toListOpenApi(userService.getUsersByIds(ids))
         );

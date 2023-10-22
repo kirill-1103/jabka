@@ -9,6 +9,7 @@ import ru.sovcombank.openapi.model.SubjectOpenAPI;
 import sovcombank.jabka.studyservice.exceptions.NotFoundException;
 import sovcombank.jabka.studyservice.mappers.SubjectMapper;
 import sovcombank.jabka.studyservice.models.ProfessorIdTable;
+import sovcombank.jabka.studyservice.models.StudyMaterials;
 import sovcombank.jabka.studyservice.models.Subject;
 import sovcombank.jabka.studyservice.repositories.ProfessorIdRepository;
 import sovcombank.jabka.studyservice.repositories.StudyGroupRepository;
@@ -71,7 +72,7 @@ public class SubjectServiceImpl implements SubjectService {
         List<Subject> subjects = subjectRepository.findAll();
         return ResponseEntity.ok(subjects
                 .stream()
-                .map(subjectMapper::toOpenAPI)
+                .map(this::fromSubject)
                 .collect(Collectors.toList())
         );
     }
@@ -82,7 +83,7 @@ public class SubjectServiceImpl implements SubjectService {
         Optional<Subject> subjectOpt = subjectRepository.findById(id);
 //        subjectOpt.get().getSchedule().stream().findFirst().get();
         return subjectOpt
-                .map(subject -> ResponseEntity.ok(subjectMapper.toOpenAPI(subject)))
+                .map(subject -> ResponseEntity.ok(this.fromSubject(subject)))
                 .orElseGet
                         (
                                 () -> ResponseEntity.notFound().build()
@@ -120,7 +121,7 @@ public class SubjectServiceImpl implements SubjectService {
         List<Subject> subjects = subjectRepository.findByCreatorId(creatorId);
         return ResponseEntity.ok(subjects
                 .stream()
-                .map(subjectMapper::toOpenAPI)
+                .map(this::fromSubject)
                 .collect(Collectors.toList())
         );
     }
@@ -130,7 +131,7 @@ public class SubjectServiceImpl implements SubjectService {
         List<Subject> subjects = subjectRepository.findByEditorsIds_ProfessorId(editorId);
         return ResponseEntity.ok(subjects
                 .stream()
-                .map(subjectMapper::toOpenAPI)
+                .map(this::fromSubject)
                 .collect(Collectors.toList()));
     }
 
@@ -139,7 +140,15 @@ public class SubjectServiceImpl implements SubjectService {
         List<Subject> subjects = subjectRepository.findByStudyGroupId(groupId);
         return ResponseEntity.ok(subjects
                 .stream()
-                .map(subjectMapper::toOpenAPI)
+                .map(this::fromSubject)
                 .collect(Collectors.toList()));
+    }
+
+    private SubjectOpenAPI fromSubject(Subject subject) {
+        SubjectOpenAPI subjectOpenAPI = subjectMapper.toOpenAPI(subject);
+        subjectOpenAPI.setStudyMaterialsIds(
+                subject.getStudyMaterials().stream().map(StudyMaterials::getId).toList()
+        );
+        return subjectOpenAPI;
     }
 }
