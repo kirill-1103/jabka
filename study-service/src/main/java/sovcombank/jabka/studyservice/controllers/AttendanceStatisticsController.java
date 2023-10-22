@@ -61,7 +61,7 @@ public class AttendanceStatisticsController implements AttendanceStatisticsApiDe
             throw new BadRequestException(e.getMessage());
         }
 
-        attendanceStatisticsOpenApi.setUser(userOpenApiResponse.getData());
+        attendanceStatisticsOpenApi.setStudentId(userOpenApiResponse.getData().getId());
         return ResponseEntity.ok(attendanceStatisticsOpenApi);
     }
 
@@ -97,6 +97,7 @@ public class AttendanceStatisticsController implements AttendanceStatisticsApiDe
             e.printStackTrace();
             throw new BadRequestException(e.getMessage());
         }
+
         try {
             List<UserOpenApi> users = userApi.getUsersByIds(statistics.stream().map(AttendanceStatistics::getStudentId).toList());
             Map<Long, UserOpenApi> idUserMap = new HashMap<>();

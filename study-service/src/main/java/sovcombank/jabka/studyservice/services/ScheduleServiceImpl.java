@@ -113,10 +113,10 @@ public class ScheduleServiceImpl implements ScheduleService {
         if(!subjectRepository.existsById(scheduleOpenAPI.getSubjectId())){
             throw new NotFoundException("Subject not found");
         }
-        if(scheduleOpenAPI.getStudyGroup() == null || scheduleOpenAPI.getStudyGroup().getId() == null){
+        if(scheduleOpenAPI.getStudyGroupId() == null){
             throw new BadRequestException("Group or Group id is null!");
         }
-        if(!groupRepository.existsById(scheduleOpenAPI.getStudyGroup().getId())){
+        if(!groupRepository.existsById(scheduleOpenAPI.getStudyGroupId())){
             throw new BadRequestException("Group not found");
         }
     }

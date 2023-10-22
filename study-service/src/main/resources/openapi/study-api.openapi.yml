@@ -1166,7 +1166,7 @@ components:
       type: object
       required:
         - dateTime
-        - studyGroup
+        - studyGroupId
         - subjectId
         - classFormat
         - professorId
@@ -1177,8 +1177,9 @@ components:
         date:
           type: string
           format: date-time
-        studyGroup:
-          $ref: "#/components/schemas/StudyGroupOpenAPI"
+        studyGroupId:
+          type: integer
+          format: int64
         subjectId:
           type: integer
           format: int64
@@ -1191,8 +1192,6 @@ components:
         professorId:
           type: integer
           format: int64
-        professor:
-          $ref: "#/components/schemas/UserOpenApi"
 
     StudyGroupOpenAPI:
       type: object
@@ -1263,7 +1262,7 @@ components:
       type: object
       required:
         - studyMaterialsType
-        - subject
+        - subjectId
         - materialsText
       properties:
         id:
@@ -1274,11 +1273,13 @@ components:
         materialsText:
           type: string
         subject:
-          $ref: "#/components/schemas/SubjectOpenAPI"
-        homework:
+          type: integer
+          format: int64
+        homeworkIds:
           type: array
           items:
-            $ref: "#/components/schemas/HomeworkOpenAPI"
+            type: integer
+            format: int64
         filesId:
           type: array
           items:
@@ -1292,15 +1293,16 @@ components:
     HomeworkOpenAPI:
       type: object
       required:
-        - task
+        - taskId
         - studentId
         - date
       properties:
         id:
           type: integer
           format: int64
-        task:
-          $ref: "#/components/schemas/StudyMaterialsOpenAPI"
+        taskId:
+          type: integer
+          format: int64
         studentId:
           type: integer
           format: int64
@@ -1415,19 +1417,18 @@ components:
     AttendanceStatisticsOpenApi:
       type: object
       required:
-        - schedule
+        - scheduleId
         - userId
         - status
       properties:
-        schedule:
-          $ref: "#/components/schemas/ScheduleOpenAPI"
+        scheduleId:
+           type: integer
+           format: int64
         status:
           $ref: "#/components/schemas/AttendanceStatusOpenApi"
         studentId:
           type: integer
           format: int64
-        user:
-          $ref: "#/components/schemas/UserOpenApi"
 
     AttendanceStatusOpenApi:
       type: string
