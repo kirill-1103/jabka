@@ -13,9 +13,9 @@ spring:
     init:
       mode: always
   jpa:
-#    defer-datasource-initialization: true
-#    hibernate:
-#      ddl-auto: drop
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: none
     show_sql: true
     properties:
       format_sql: true

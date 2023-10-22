@@ -77,7 +77,7 @@ public class HomeworkServiceImpl implements HomeworkService {
 
     @Override
     @Transactional
-    public void deleteHomework(Long materialsId, Long homeworkId) {
+    public void deleteHomework(Long homeworkId) {
         Homework homework = homeworkRepository.findById(homeworkId)
                 .orElseThrow(() -> new NotFoundException(String.format("Homework with id %d not found", homeworkId)));
         homework.getFileNames()

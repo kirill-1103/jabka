@@ -14,7 +14,7 @@ public interface HomeworkService {
                         List<MultipartFile> files);
 
 
-    void deleteHomework(Long materialsId, Long homeworkId);
+    void deleteHomework(Long homeworkId);
 
     List<Homework> getAllHomeworkByMaterialsId(Long materialsId);
 
