@@ -2,14 +2,15 @@ package sovcombank.jabka.studyservice.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import ru.sovcombank.openapi.model.ScheduleOpenAPI;
-import ru.sovcombank.openapi.model.UserOpenApi;
 import sovcombank.jabka.studyservice.models.ProfessorIdTable;
 import sovcombank.jabka.studyservice.models.Schedule;
+import sovcombank.jabka.studyservice.models.Subject;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {SubjectMapper.class, DateMapper.class})
+@Mapper(componentModel = "spring", uses = {SubjectMapper.class, DateMapper.class, SubjectIdMapperImpl.class})
 public interface ScheduleMapper {
 
     @Mapping(target = "professor", expression = "java(professorFromId(scheduleOpenAPI.getProfessorId()))")
@@ -26,6 +27,7 @@ public interface ScheduleMapper {
     @Mapping(target = "professorId", expression = "java(professorToId(schedule.getProfessor()))")
     @Mapping(target = "date", source = "dateTime", dateFormat = "yyyy-MM-dd'T'HH:mm:ssXXX")
     @Mapping(target = "studyGroup", source = "group")
+    @Mapping(target = "subjectId", source = "subject")
     ScheduleOpenAPI toOpenAPI(Schedule schedule);
 
     @Mapping(target = "professorId", expression = "java(professorToId(schedule.getProfessor()))")

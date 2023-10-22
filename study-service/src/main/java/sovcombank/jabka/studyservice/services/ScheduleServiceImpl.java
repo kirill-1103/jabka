@@ -107,10 +107,10 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     private void checkForUpdate(ScheduleOpenAPI scheduleOpenAPI){
-        if(scheduleOpenAPI.getSubject() == null || scheduleOpenAPI.getSubject().getId() == null){
+        if(scheduleOpenAPI.getSubjectId() == null){
             throw new BadRequestException("Subject or Subject id is null!");
         }
-        if(!subjectRepository.existsById(scheduleOpenAPI.getSubject().getId())){
+        if(!subjectRepository.existsById(scheduleOpenAPI.getSubjectId())){
             throw new NotFoundException("Subject not found");
         }
         if(scheduleOpenAPI.getStudyGroup() == null || scheduleOpenAPI.getStudyGroup().getId() == null){
