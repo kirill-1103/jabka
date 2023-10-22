@@ -1235,10 +1235,11 @@ components:
           items:
             type: integer
             format: int64
-        studyMaterials:
+        studyMaterialsIds:
           type: array
           items:
-            $ref: "#/components/schemas/StudyMaterialsOpenAPI"
+            type: integer
+            format: int64
         scheduleIds:
           type: array
           items:

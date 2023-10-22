@@ -25,13 +25,11 @@ public interface SubjectMapper {
     @Mapping(target = "editorsIds", expression = "java(professorsToEditorsIds(subject.getEditorsIds()))")
     @Mapping(target = "studyGroupsIds", expression = "java(groupsToIds(subject.getStudyGroup()))")
     @Mapping(target = "scheduleIds", expression = "java(schedulesToIds(subject.getSchedule()))")
-    @Mapping(target = "studyMaterials",ignore = true)
     SubjectOpenAPI toOpenAPI(Subject subject);
 
     @Mapping(target = "editorsIds", expression = "java(professorsToEditorsIds(subject.getEditorsIds()))")
     @Mapping(target = "studyGroupsIds", expression = "java(groupsToIds(subject.getStudyGroup()))")
     @Mapping(target = "scheduleIds", expression = "java(schedulesToIds(subject.getSchedule()))")
-    @Mapping(target = "studyMaterials",ignore = true)
     List<SubjectOpenAPI> toOpenAPI(List<Subject> subject);
 
     default List<Long> groupsToIds(Set<StudyGroup> studyGroups){
