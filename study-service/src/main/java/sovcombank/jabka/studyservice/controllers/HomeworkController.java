@@ -58,7 +58,7 @@ public class HomeworkController implements HomeworkApiDelegate {
     @GetMapping("/{homework_id}")
     @Override
     public ResponseEntity<HomeworkOpenAPI> getHomeworkById(
-            @Valid @PathVariable(name = "homeworkId") Long homeworkId
+            @Valid @PathVariable("homework_id") Long homeworkId
     ) {
         Homework homework = homeworkService.getHomeworkById(homeworkId);
         HomeworkOpenAPI homeworkOpenAPI = homeworkMapper.toOpenAPI(homework);

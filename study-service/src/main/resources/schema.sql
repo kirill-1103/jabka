@@ -1,17 +1,17 @@
 begin;
-DROP TABLE IF EXISTS professor_id CASCADE;
-DROP TABLE IF EXISTS subject CASCADE;
-DROP TABLE IF EXISTS study_groups CASCADE;
-DROP TABLE IF EXISTS schedule CASCADE;
-DROP TABLE IF EXISTS study_materials CASCADE;
-DROP TABLE IF EXISTS homework CASCADE;
-DROP TABLE IF EXISTS files CASCADE;
-DROP TABLE IF EXISTS materials_files CASCADE;
-DROP TABLE IF EXISTS group_subject CASCADE;
-DROP TABLE IF EXISTS editor_subject CASCADE;
-DROP TABLE IF EXISTS professor_subject CASCADE;
-DROP TABLE IF EXISTS group_subject CASCADE;
-DROP TABLE IF EXISTS attendance CASCADE;
+--DROP TABLE IF EXISTS professor_id CASCADE;
+--DROP TABLE IF EXISTS subject CASCADE;
+--DROP TABLE IF EXISTS study_groups CASCADE;
+--DROP TABLE IF EXISTS schedule CASCADE;
+--DROP TABLE IF EXISTS study_materials CASCADE;
+--DROP TABLE IF EXISTS homework CASCADE;
+--DROP TABLE IF EXISTS files CASCADE;
+--DROP TABLE IF EXISTS materials_files CASCADE;
+--DROP TABLE IF EXISTS group_subject CASCADE;
+--DROP TABLE IF EXISTS editor_subject CASCADE;
+--DROP TABLE IF EXISTS professor_subject CASCADE;
+--DROP TABLE IF EXISTS group_subject CASCADE;
+--DROP TABLE IF EXISTS attendance CASCADE;
 
 CREATE SEQUENCE IF NOT EXISTS group_seq START 1;
 CREATE SEQUENCE IF NOT EXISTS subject_seq START 1;
@@ -23,19 +23,19 @@ CREATE SEQUENCE IF NOT EXISTS attendance_seq START 1;
 
 CREATE TABLE IF NOT EXISTS professor_id
 (
-    professor_id INTEGER  PRIMARY KEY
+    professor_id BIGINT  PRIMARY KEY
 );
 
 CREATE TABLE IF NOT EXISTS subject
 (
-    id          INTEGER DEFAULT nextval('subject_seq') PRIMARY KEY,
+    id          BIGINT DEFAULT nextval('subject_seq') PRIMARY KEY,
     name       VARCHAR(1024),
     creator_id BIGINT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS study_groups
 (
-    id    INTEGER DEFAULT nextval('group_seq') PRIMARY KEY,
+    id    BIGINT DEFAULT nextval('group_seq') PRIMARY KEY,
     name VARCHAR(255) UNIQUE NOT NULL,
     CONSTRAINT unq_name
         UNIQUE (name)
@@ -43,11 +43,11 @@ CREATE TABLE IF NOT EXISTS study_groups
 
 CREATE TABLE IF NOT EXISTS schedule
 (
-    id                      INTEGER DEFAULT nextval('SCHEDULE_SEQ') PRIMARY KEY,
+    id                      BIGINT DEFAULT nextval('SCHEDULE_SEQ') PRIMARY KEY,
     date_time              TIMESTAMP(6) NOT NULL,
-    group_id               INTEGER      NOT NULL,
-    professor_professor_id INTEGER      NOT NULL,
-    subject_id             INTEGER      NOT NULL,
+    group_id               BIGINT      NOT NULL,
+    professor_professor_id BIGINT      NOT NULL,
+    subject_id             BIGINT      NOT NULL,
     auditorium             VARCHAR(255),
     class_format           VARCHAR(255) NOT NULL,
     link_for_the_class     VARCHAR(1024),
@@ -67,8 +67,8 @@ CREATE TABLE IF NOT EXISTS schedule
 
 CREATE TABLE IF NOT EXISTS study_materials
 (
-    id              INTEGER DEFAULT nextval('materials_seq') PRIMARY KEY,
-    subject_id     INTEGER NOT NULL,
+    id              BIGINT DEFAULT nextval('materials_seq') PRIMARY KEY,
+    subject_id     BIGINT NOT NULL,
     type           VARCHAR(255),
     materials_text TEXT,
     CONSTRAINT fk_subject
@@ -79,17 +79,17 @@ CREATE TABLE IF NOT EXISTS study_materials
 
 CREATE TABLE IF NOT EXISTS homework
 (
-    id          INTEGER DEFAULT nextval('homework_seq') PRIMARY KEY,
+    id          BIGINT DEFAULT nextval('homework_seq') PRIMARY KEY,
     date       TIMESTAMP(6) NOT NULL,
     grade      BIGINT,
     student_id BIGINT       NOT NULL,
-    task_id    INTEGER REFERENCES study_materials (id) ON DELETE CASCADE,
+    task_id    BIGINT REFERENCES study_materials (id) ON DELETE CASCADE,
     comment    TEXT
 );
 
 CREATE TABLE IF NOT EXISTS files
 (
-    id            INTEGER DEFAULT nextval('file_seq') PRIMARY KEY,
+    id            BIGINT DEFAULT nextval('file_seq') PRIMARY KEY,
     initial_name VARCHAR(1024)        NOT NULL,
     name_s3      VARCHAR(1024) UNIQUE NOT NULL,
     homework_id  INTEGER REFERENCES homework (id) ON DELETE CASCADE
@@ -97,15 +97,15 @@ CREATE TABLE IF NOT EXISTS files
 
 CREATE TABLE IF NOT EXISTS materials_files
 (
-    materials_id INTEGER REFERENCES study_materials (id) ON UPDATE CASCADE ON DELETE CASCADE,
-    file_id      INTEGER REFERENCES files (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    materials_id BIGINT REFERENCES study_materials (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    file_id      BIGINT REFERENCES files (id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT materials_files_pkey
         PRIMARY KEY (materials_id, file_id)
 );
 
 CREATE TABLE IF NOT EXISTS group_subject
 (
-    subject_id       INTEGER REFERENCES subject (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    subject_id       BIGINT REFERENCES subject (id) ON UPDATE CASCADE ON DELETE CASCADE,
     study_group_name VARCHAR(255) UNIQUE REFERENCES study_groups (name) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT group_subject_pkey
         PRIMARY KEY (subject_id, study_group_name)
@@ -113,16 +113,16 @@ CREATE TABLE IF NOT EXISTS group_subject
 
 CREATE TABLE IF NOT EXISTS professor_subject
 (
-    subject_id   INTEGER REFERENCES subject (id) ON UPDATE CASCADE ON DELETE CASCADE,
-    professor_id INTEGER REFERENCES professor_id (professor_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    subject_id   BIGINT REFERENCES subject (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    professor_id BIGINT REFERENCES professor_id (professor_id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT professor_subject_pkey
         PRIMARY KEY (subject_id, professor_id)
 );
 
 CREATE TABLE IF NOT EXISTS editor_subject
 (
-    subject_id INTEGER REFERENCES subject (id) ON UPDATE CASCADE ON DELETE CASCADE,
-    editor_id  INTEGER REFERENCES professor_id (professor_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    subject_id BIGINT REFERENCES subject (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    editor_id  BIGINT REFERENCES professor_id (professor_id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT subject_editor_pkey
         PRIMARY KEY (subject_id, editor_id)
 );
@@ -130,10 +130,10 @@ CREATE TABLE IF NOT EXISTS editor_subject
 
 CREATE TABLE IF NOT EXISTS attendance
 (
-    id                 INTEGER DEFAULT nextval('attendance_seq') PRIMARY KEY,
+    id                 BIGINT DEFAULT nextval('attendance_seq') PRIMARY KEY,
     attendance_status VARCHAR(255) NOT NULL,
     student_id        BIGINT       NOT NULL,
-    schedule_id       INTEGER REFERENCES schedule (id) ON DELETE CASCADE
+    schedule_id       BIGINT REFERENCES schedule (id) ON DELETE CASCADE
 );
 
 
