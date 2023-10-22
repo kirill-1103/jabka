@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import ru.sovcombank.openapi.model.GradeHomeworkRequestOpenApi;
 import ru.sovcombank.openapi.model.HomeworkOpenAPI;
 import ru.sovcombank.openapi.model.UserOpenApi;
 import ru.sovcombank.openapi.ApiException;
@@ -54,7 +55,7 @@ public class HomeworkServiceImpl implements HomeworkService {
                 studyMaterialsRepository.findById(materialsId).orElseThrow(() ->
                         new BadRequestException(String.format("Materials with id %d not found", materialsId)));
         try {
-            ApiResponse<UserOpenApi> userOpenApiApiResponse = userApi.showUserInfoWithHttpInfo(homeworkOpenApi.getId());
+            ApiResponse<UserOpenApi> userOpenApiApiResponse = userApi.showUserInfoWithHttpInfo(homeworkOpenApi.getStudentId());
             if (!okResponse(userOpenApiApiResponse)){
                 if(userOpenApiApiResponse.getStatusCode() == HttpStatus.NOT_FOUND.value()){
                     throw new NotFoundException("User with such id not found");
@@ -68,11 +69,11 @@ public class HomeworkServiceImpl implements HomeworkService {
         }
 
         Homework homework = homeworkMapper.toHomework(homeworkOpenApi);
+        homework.setTask(studyMaterials);
+
 
         setHomeworkFileNamesAndSaveFiles(files, homework);
-
-        studyMaterials.getHomeworks().add(homework);
-        studyMaterialsRepository.save(studyMaterials);
+        homeworkRepository.save(homework);
     }
 
     @Override
@@ -157,6 +158,14 @@ public class HomeworkServiceImpl implements HomeworkService {
         homeworkRepository.save(homework);
     }
 
+    @Override
+    public void grade(Long homeworkId, GradeHomeworkRequestOpenApi gradeHomeworkRequestOpenApi) {
+        Homework homework = this.getHomeworkById(homeworkId);
+        homework.setGrade(gradeHomeworkRequestOpenApi.getGrade().longValue());
+        homework.setComment(gradeHomeworkRequestOpenApi.getComment());
+        homeworkRepository.save(homework);
+    }
+
     private String getFilePath(FileName fileName) {
         return String.format("%s%s", FileService.HOMEWORK_PREFIX, fileName.getNameS3());
     }
@@ -168,8 +177,9 @@ public class HomeworkServiceImpl implements HomeworkService {
         Set<FileName> fileNames = files.stream()
                 .map((file) -> {
                             FileName fileName = FileName.builder()
-                                    .initialName(file.getName())
-                                    .nameS3(fileService.generateHomeworkFileName(file.getName(), homework.getStudentId()))
+                                    .initialName(file.getOriginalFilename())
+                                    .nameS3(fileService.generateHomeworkFileName(file.getOriginalFilename(), homework.getStudentId()))
+                                    .homework(homework)
                                     .build();
                             fileService.save(getFilePath(fileName), file);
                             return fileName;

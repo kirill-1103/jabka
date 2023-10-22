@@ -704,6 +704,37 @@ paths:
         '403':
           description: Do Not Have Necessary Rights to Execute This Operation
 
+  /homework/grade/{homeworkId}:
+    put:
+      security:
+        - bearerAuth: [ ]
+      summary: Grade a Homework
+      tags:
+        - Homework
+      operationId: gradeHomework
+      parameters:
+        - in: path
+          name: homeworkId
+          schema:
+            type: integer
+            format: int64
+          required: true
+      requestBody:
+        description: Grade and comment
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref:  '#/components/schemas/GradeHomeworkRequestOpenApi'
+      responses:
+        '200':
+          description: Updated
+        '400':
+          description: Bad Request
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          description: Do Not Have Necessary Rights to Execute This Operation
 
   /homework/{homeworkId}:
     put:
@@ -1103,14 +1134,14 @@ paths:
         '404':
           description: Not Found
 
-  /download/{fileId}:
+  /download/homework/{fileId}:
     get:
       security:
         - bearerAuth: [ ]
       summary: Download File by It's Id
       tags:
         - File Download
-      operationId: downloadFileById
+      operationId: downloadHomeworkFileById
       parameters:
         - in: path
           name: fileId
@@ -1133,6 +1164,35 @@ paths:
         '404':
           description: Not Found
 
+  /download/materials/{fileId}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: Download File by It's Id
+      tags:
+        - File Download
+      operationId: downloadMaterialsFileById
+      parameters:
+        - in: path
+          name: fileId
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '403':
+          description: Do Not Have Necessary Rights to Execute This Operation
+        '404':
+          description: Not Found
 components:
 
   responses:
@@ -1433,3 +1493,13 @@ components:
       enum:
         - ATTENDED
         - MISSED
+
+    GradeHomeworkRequestOpenApi:
+      type: object
+      required:
+        - grade
+      properties:
+        grade:
+          type: integer
+        comment:
+          type: string

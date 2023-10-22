@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.sovcombank.openapi.api.FileDownloadApiDelegate;
 import sovcombank.jabka.studyservice.exceptions.NotFoundException;
+import sovcombank.jabka.studyservice.models.FileName;
+import sovcombank.jabka.studyservice.models.StudyMaterials;
 import sovcombank.jabka.studyservice.repositories.StudyMaterialsRepository;
 import sovcombank.jabka.studyservice.services.interfaces.FileNameService;
 import sovcombank.jabka.studyservice.services.interfaces.FileService;
@@ -25,21 +27,45 @@ public class FileDownloadController implements FileDownloadApiDelegate {
     private final FileNameService fileNameService;
     private final StudyMaterialsRepository materialsRepository;
 
-    @GetMapping("/download/{fileId}")
     @Override
-    public ResponseEntity<Resource> downloadFileById(
-            @Valid @PathVariable(name = "fileId") Long fileId
-    ) {
-        String path;
-        try {
-            path = fileNameService.getPathByFileId(fileId);
-        } catch (NotFoundException e) {
-            return ResponseEntity
-                    .notFound()
-                    .build();
-        }
+    @GetMapping("/download/homework/{fileId}")
+    public ResponseEntity<Resource> downloadHomeworkFileById(@PathVariable Long fileId) {
+        String name = fileNameService.getNameByFileId(fileId);
+        ResponseEntity<ByteArrayResource> responseEntity =
+                fileService.getFileByPath(getHomeworkFilePath(name));
 
-        ResponseEntity<ByteArrayResource> responseEntity = fileService.getFileByPath(path);
+        return getFile(responseEntity);
+    }
+
+    @Override
+    @GetMapping("/download/materials/{fileId}")
+    public ResponseEntity<Resource> downloadMaterialsFileById(@PathVariable Long fileId) {
+        String name = fileNameService.getNameByFileId(fileId);
+        ResponseEntity<ByteArrayResource> responseEntity =
+                fileService.getFileByPath(getMaterialsFilePath(name));
+
+        return getFile(responseEntity);
+    }
+
+    private String getHomeworkFilePath(String fileName) {
+        return String.format("%s%s", FileService.HOMEWORK_PREFIX, fileName);
+    }
+
+    private String getMaterialsFilePath(String fileName) {
+        return String.format("%s%s",
+                FileService.MATERIALS_PREFIX,
+                fileName);
+    }
+
+    private String getMaterialsFilePath(FileName fileName, StudyMaterials studyMaterials) {
+        return String.format("%s%s/%s/%s",
+                studyMaterials.getSubject().getId(),
+                FileService.MATERIALS_PREFIX,
+                studyMaterials.getId(),
+                fileName.getNameS3());
+    }
+
+    private ResponseEntity<Resource> getFile(ResponseEntity<ByteArrayResource> responseEntity){
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             ByteArrayResource byteArrayResource = responseEntity.getBody();
             HttpHeaders headers = new HttpHeaders();

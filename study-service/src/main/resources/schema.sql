@@ -111,6 +111,7 @@ CREATE TABLE IF NOT EXISTS materials_files
         PRIMARY KEY (materials_id, file_id)
 );
 
+
 CREATE TABLE IF NOT EXISTS group_subject
 (
     subject_id       BIGINT REFERENCES subject (id) ON UPDATE CASCADE ON DELETE CASCADE,

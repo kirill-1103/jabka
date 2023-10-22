@@ -25,7 +25,7 @@ public class FileNameServiceImpl implements FileNameService {
     }
 
     @Override
-    public String getPathByFileId(Long id) {
+    public String getNameByFileId(Long id) {
         Optional<FileName> fileNameOpt =fileNameRepository.findById(id);
         if(fileNameOpt.isEmpty()) {
             throw new NotFoundException(String.format("File with id %d wasn't found", id));

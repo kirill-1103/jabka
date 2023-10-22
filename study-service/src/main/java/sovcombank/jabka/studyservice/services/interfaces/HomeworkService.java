@@ -2,6 +2,7 @@ package sovcombank.jabka.studyservice.services.interfaces;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.sovcombank.openapi.model.GradeHomeworkRequestOpenApi;
 import ru.sovcombank.openapi.model.HomeworkOpenAPI;
 import sovcombank.jabka.studyservice.models.Homework;
 
@@ -25,4 +26,6 @@ public interface HomeworkService {
     List<Homework> getHomeworksByStudentId(Long studentId);
 
     void updateHomework(HomeworkOpenAPI homework, List<MultipartFile> file);
+
+    void grade(Long homeworkId, GradeHomeworkRequestOpenApi gradeHomeworkRequestOpenApi);
 }

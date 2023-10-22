@@ -66,7 +66,7 @@ public class StudyMaterialsServiceImpl implements StudyMaterialsService {
         }
         StudyMaterials studyMaterials = studyMaterialsOpt.get();
         studyMaterials.getAttachedFiles()
-                .forEach((fileName) -> fileService.removeFileByPath(getMaterialsFilePath(fileName, studyMaterials)));
+                .forEach((fileName) -> fileService.removeFileByPath(getMaterialsFilePath(fileName)));
         materialsRepository.deleteById(id);
         return ResponseEntity
                 .ok()
@@ -137,7 +137,7 @@ public class StudyMaterialsServiceImpl implements StudyMaterialsService {
                                     .initialName(file.getFilename())
                                     .nameS3(fileService.generateMaterialsFileName(file.getFilename(), studyMaterials.getType()))
                                     .build();
-                            fileService.save(getMaterialsFilePath(fileName, studyMaterials), file);
+                            fileService.save(getMaterialsFilePath(fileName), file);
                             return fileName;
                         }
                 )
@@ -146,11 +146,18 @@ public class StudyMaterialsServiceImpl implements StudyMaterialsService {
         studyMaterials.setAttachedFiles(fileNames);
     }
 
-    private String getMaterialsFilePath(FileName fileName, StudyMaterials studyMaterials) {
-        return String.format("%s%s/%s/%s",
-                studyMaterials.getSubject().getId(),
+//    private String getMaterialsFilePath(FileName fileName, StudyMaterials studyMaterials) {
+//        return String.format("%s%s/%s/%s",
+//                studyMaterials.getSubject().getId(),
+//                FileService.MATERIALS_PREFIX,
+//                studyMaterials.getId(),
+//                fileName.getNameS3());
+//    }
+
+    private String getMaterialsFilePath(FileName fileName) {
+        return String.format("%s%s",
                 FileService.MATERIALS_PREFIX,
-                studyMaterials.getId(),
                 fileName.getNameS3());
     }
+
 }

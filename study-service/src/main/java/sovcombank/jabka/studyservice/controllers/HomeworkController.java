@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.sovcombank.openapi.api.HomeworkApiDelegate;
+import ru.sovcombank.openapi.model.GradeHomeworkRequestOpenApi;
 import ru.sovcombank.openapi.model.HomeworkOpenAPI;
 import sovcombank.jabka.studyservice.mappers.HomeworkMapper;
 import sovcombank.jabka.studyservice.models.FileName;
@@ -31,7 +32,7 @@ public class HomeworkController implements HomeworkApiDelegate {
     public ResponseEntity<Void> createHomework(
             @Valid @PathVariable(name = "materialsId") Long materialsId,
             @RequestPart("homework") HomeworkOpenAPI homework,
-            @RequestPart("files") List<MultipartFile> files
+           List<MultipartFile> files
     ) {
         homeworkService.createHomework(materialsId, homework, files);
         return ResponseEntity.ok().build();
@@ -53,6 +54,13 @@ public class HomeworkController implements HomeworkApiDelegate {
     ) {
         List<Homework> homeworks = homeworkService.getAllHomeworkByMaterialsId(materialsId);
         return ResponseEntity.ok(this.homeworksOpenApiByHomeworks(homeworks));
+    }
+
+    @Override
+    @PutMapping("/grade/{homeworkId}")
+    public ResponseEntity<Void> gradeHomework(@PathVariable Long homeworkId,@RequestBody GradeHomeworkRequestOpenApi gradeHomeworkRequestOpenApi) {
+        homeworkService.grade(homeworkId, gradeHomeworkRequestOpenApi);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{homework_id}")
@@ -87,20 +95,20 @@ public class HomeworkController implements HomeworkApiDelegate {
         return ResponseEntity.ok(this.homeworksOpenApiByHomeworks(homeworks));
     }
 
-    @PutMapping("/homework/{homework_id}")
+    @PutMapping("/{homework_id}")
     @Override
     public ResponseEntity<Void> updateHomework(
-            @Valid @PathVariable(name = "homeworkId") Long homeworkId,
-            @RequestBody HomeworkOpenAPI homework,
-            @RequestBody List<MultipartFile> file
+            @Valid @PathVariable(name = "homework_id") Long homeworkId,
+            @RequestPart("homework") HomeworkOpenAPI homework,
+            List<MultipartFile> files
     ) {
-        homeworkService.updateHomework(homework, file);
+        homeworkService.updateHomework(homework, files);
         return ResponseEntity.ok().build();
     }
 
     private List<String> getStringFileNames(Set<FileName> fileNames) {
         return fileNames.stream()
-                .map(FileName::getNameS3)
+                .map(FileName::getInitialName)
                 .collect(Collectors.toList());
     }
 
