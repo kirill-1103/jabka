@@ -1175,7 +1175,7 @@ components:
       required:
         - dateTime
         - studyGroup
-        - subject
+        - subjectId
         - classFormat
         - professorId
       properties:
@@ -1187,8 +1187,9 @@ components:
           format: date-time
         studyGroup:
           $ref: "#/components/schemas/StudyGroupOpenAPI"
-        subject:
-          $ref: "#/components/schemas/SubjectOpenAPI"
+        subjectId:
+          type: integer
+          format: int64
         classFormat:
           $ref: "#/components/schemas/ClassFormat"
         auditorium:
@@ -1429,7 +1430,7 @@ components:
           $ref: "#/components/schemas/ScheduleOpenAPI"
         status:
           $ref: "#/components/schemas/AttendanceStatusOpenApi"
-        userId:
+        studentId:
           type: integer
           format: int64
         user:

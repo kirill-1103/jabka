@@ -25,7 +25,9 @@ import sovcombank.jabka.studyservice.repositories.StudyGroupRepository;
 import sovcombank.jabka.studyservice.repositories.SubjectRepository;
 import sovcombank.jabka.studyservice.services.interfaces.AttendanceStatisticService;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +50,7 @@ public class AttendanceStatisticServiceImpl implements AttendanceStatisticServic
         }
         List<AttendanceStatistics> attendanceStatisticsList = attendanceMapper.toListAttendanceStatistics(attendanceStatisticsOpenApi);
         checkAllStudentsExists(attendanceStatisticsList);
+        checkAllSubjectExists(attendanceStatisticsList);
         attendanceRepository.saveAll(attendanceStatisticsList);
         return ResponseEntity
                 .ok()
@@ -120,4 +123,14 @@ public class AttendanceStatisticServiceImpl implements AttendanceStatisticServic
             throw new BadRequestException("An error occurred while fetching user information");
         }
     }
+
+    private void checkAllSubjectExists(List<AttendanceStatistics> attendanceStatisticsList) {
+        Set<Long> subjectIds = new HashSet<>();
+        attendanceStatisticsList.forEach(a->subjectIds.add(a.getSchedule().getSubject().getId()));
+        List<Subject> subjectList = subjectRepository.findAllById(subjectIds);
+        if(subjectList.size() < subjectIds.size()) {
+            throw new NotFoundException("One or more subjects weren't found in DB");
+        }
+    }
+
 }
