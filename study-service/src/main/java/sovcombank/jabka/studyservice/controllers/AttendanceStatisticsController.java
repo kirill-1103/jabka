@@ -16,7 +16,7 @@ import sovcombank.jabka.studyservice.mappers.AttendanceMapper;
 import sovcombank.jabka.studyservice.models.AttendanceStatistics;
 import sovcombank.jabka.studyservice.services.interfaces.AttendanceStatisticService;
 
-import java.util.List;
+import java.util.*;
 
 import static sovcombank.jabka.studyservice.utils.ResponseApiUtils.okResponse;
 
@@ -97,10 +97,17 @@ public class AttendanceStatisticsController implements AttendanceStatisticsApiDe
             e.printStackTrace();
             throw new BadRequestException(e.getMessage());
         }
-        List<UserOpenApi> users = null;
-        for(int i = 0;i<userIds.size();i++){
-            statisticsOpenApi.get(i).setStudentId(users.get(i).getId());
+
+        try {
+            List<UserOpenApi> users = userApi.getUsersByIds(statistics.stream().map(AttendanceStatistics::getStudentId).toList());
+            Map<Long, UserOpenApi> idUserMap = new HashMap<>();
+            users.forEach(user->idUserMap.put(user.getId(),user));
+            for(int i = 0;i<userIds.size();i++){
+                statisticsOpenApi.get(i).setUser(idUserMap.get(statisticsOpenApi.get(i).getStudentId()));
+            }
+            return statisticsOpenApi;
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
         }
-        return statisticsOpenApi;
     }
 }

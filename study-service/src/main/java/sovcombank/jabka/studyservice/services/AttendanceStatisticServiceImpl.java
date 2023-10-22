@@ -50,7 +50,7 @@ public class AttendanceStatisticServiceImpl implements AttendanceStatisticServic
         }
         List<AttendanceStatistics> attendanceStatisticsList = attendanceMapper.toListAttendanceStatistics(attendanceStatisticsOpenApi);
         checkAllStudentsExists(attendanceStatisticsList);
-        checkAllSubjectExists(attendanceStatisticsList);
+        checkAllScheduleExists(attendanceStatisticsList);
         attendanceRepository.saveAll(attendanceStatisticsList);
         return ResponseEntity
                 .ok()
@@ -124,12 +124,11 @@ public class AttendanceStatisticServiceImpl implements AttendanceStatisticServic
         }
     }
 
-    private void checkAllSubjectExists(List<AttendanceStatistics> attendanceStatisticsList) {
-        Set<Long> subjectIds = new HashSet<>();
-        attendanceStatisticsList.forEach(a->subjectIds.add(a.getSchedule().getSubject().getId()));
-        List<Subject> subjectList = subjectRepository.findAllById(subjectIds);
-        if(subjectList.size() < subjectIds.size()) {
-            throw new NotFoundException("One or more subjects weren't found in DB");
+    private void checkAllScheduleExists(List<AttendanceStatistics> attendanceStatisticsList) {
+        List<Schedule> schedules =
+                scheduleRepository.findAllById(attendanceStatisticsList.stream().map(stat->stat.getSchedule().getId()).toList());
+        if(schedules.size() != attendanceStatisticsList.size()){
+            throw new NotFoundException("One or more schedules weren't found");
         }
     }
 
