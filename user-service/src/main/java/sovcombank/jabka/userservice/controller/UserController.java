@@ -28,7 +28,7 @@ public class UserController implements UserApiDelegate {
     private final static String MAPPING_DELETE_ONE = "/{id}";
 
 
-    private final static String MAPPING_GET_BY_GROUP = "/group/{group_number}";
+    private final static String MAPPING_GET_BY_GROUP = "/group";
 
     private final AuthService authService;
 
@@ -51,8 +51,9 @@ public class UserController implements UserApiDelegate {
 
     @Override
     @GetMapping(MAPPING_GET_BY_GROUP)
-    public ResponseEntity<List<UserOpenApi>> getUsersByGroupNumber(@PathVariable("group_number") String groupNumber) {
-        return ResponseEntity.ok(userMapper.toListOpenApi(userService.getUsersByGroupNumber(groupNumber)));
+    public ResponseEntity<List<UserOpenApi>> getUsersByGroupNumber(@RequestBody String groupNumber) {
+        String groupName = groupNumber.replaceAll("\"", "");
+        return ResponseEntity.ok(userMapper.toListOpenApi(userService.getUsersByGroupNumber(groupName)));
     }
 
     @Override

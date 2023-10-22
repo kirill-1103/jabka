@@ -255,7 +255,7 @@ paths:
 
 
 
-  /user/group/{group_number}:
+  /user/group:
     get:
       security:
         - bearerAuth: []
@@ -263,12 +263,12 @@ paths:
       operationId: getUsersByGroupNumber
       tags:
         - User
-      parameters:
-        - in: path
-          name: group_number
-          required: true
-          schema:
-            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
 
       responses:
         '200':

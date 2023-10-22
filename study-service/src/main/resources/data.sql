@@ -24,7 +24,9 @@ ON CONFLICT DO NOTHING;
 
 INSERT INTO schedule (id, date_time, group_id, subject_id, class_format, auditorium, link_for_the_class,
                       professor_professor_id)
-VALUES (DEFAULT, '2023-10-23 13:00:00',
+VALUES
+
+        (DEFAULT, '2023-10-23 13:00:00',
             (select id from study_groups where name = 'Group A'),
             (select id from subject where name = 'Subject A'),
         'IN_PERSON', 'Room A101', 'https://example.com/class1', 1),

@@ -30,8 +30,8 @@ public class HomeworkController implements HomeworkApiDelegate {
     @Override
     public ResponseEntity<Void> createHomework(
             @Valid @PathVariable(name = "materialsId") Long materialsId,
-            @RequestBody HomeworkOpenAPI homework,
-            @RequestBody List<MultipartFile> files
+            @RequestPart("homework") HomeworkOpenAPI homework,
+            @RequestPart("files") List<MultipartFile> files
     ) {
         homeworkService.createHomework(materialsId, homework, files);
         return ResponseEntity.ok().build();
