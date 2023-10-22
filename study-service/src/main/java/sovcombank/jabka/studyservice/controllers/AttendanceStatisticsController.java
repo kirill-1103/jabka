@@ -103,7 +103,7 @@ public class AttendanceStatisticsController implements AttendanceStatisticsApiDe
             Map<Long, UserOpenApi> idUserMap = new HashMap<>();
             users.forEach(user->idUserMap.put(user.getId(),user));
             for(int i = 0;i<userIds.size();i++){
-                statisticsOpenApi.get(i).setUser(idUserMap.get(statisticsOpenApi.get(i).getStudentId()));
+                statisticsOpenApi.get(i).setStudentId(idUserMap.get(statisticsOpenApi.get(i).getStudentId()).getId());
             }
             return statisticsOpenApi;
         } catch (ApiException e) {
