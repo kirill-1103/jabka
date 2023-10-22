@@ -10,29 +10,29 @@ import sovcombank.jabka.studyservice.models.Subject;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {SubjectMapper.class, DateMapper.class, SubjectIdMapperImpl.class})
+@Mapper(componentModel = "spring", uses = {SubjectMapper.class, DateMapper.class, SubjectIdMapperImpl.class, StudyGroupIdMapper.class})
 public interface ScheduleMapper {
 
     @Mapping(target = "professor", expression = "java(professorFromId(scheduleOpenAPI.getProfessorId()))")
     @Mapping(target = "dateTime", source = "date", dateFormat = "yyyy-MM-dd HH:mm:ss")
-    @Mapping(target = "group", source = "studyGroup")
+    @Mapping(target = "group", source = "studyGroupId")
     Schedule toSchedule(ScheduleOpenAPI scheduleOpenAPI);
 
     @Mapping(target = "professor", expression = "java(professorFromId(scheduleOpenAPI.getProfessorId()))")
     @Mapping(target = "dateTime", source = "date", dateFormat = "yyyy-MM-dd HH:mm:ss")
-    @Mapping(target = "group", source = "studyGroup")
+    @Mapping(target = "group", source = "studyGroupId")
     List<Schedule> toSchedule(List<ScheduleOpenAPI> scheduleOpenAPI);
 
 
     @Mapping(target = "professorId", expression = "java(professorToId(schedule.getProfessor()))")
     @Mapping(target = "date", source = "dateTime", dateFormat = "yyyy-MM-dd'T'HH:mm:ssXXX")
-    @Mapping(target = "studyGroup", source = "group")
+    @Mapping(target = "studyGroupId", source = "group")
     @Mapping(target = "subjectId", source = "subject")
     ScheduleOpenAPI toOpenAPI(Schedule schedule);
 
     @Mapping(target = "professorId", expression = "java(professorToId(schedule.getProfessor()))")
     @Mapping(target = "date", source = "dateTime", dateFormat = "yyyy-MM-dd'T'HH:mm:ssXXX")
-    @Mapping(target = "studyGroup", source = "group")
+    @Mapping(target = "studyGroupId", source = "group")
     List<ScheduleOpenAPI> toOpenAPI(List<Schedule> schedule);
 
     default ProfessorIdTable professorFromId (Long id){

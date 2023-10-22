@@ -13,25 +13,27 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {StudyMaterialsIdMapper.class})
 public interface SubjectMapper {
 
     @Mapping(target = "editorsIds", expression = "java(idsToProfessorIds(subjectOpenAPI.getEditorsIds()))")
+    @Mapping(target = "studyMaterials", source = "studyMaterialsIds")
     Subject toSubject(SubjectOpenAPI subjectOpenAPI);
 
     @Mapping(target = "editorsIds", expression = "java(idsToProfessorIds(subjectOpenAPI.getEditorsIds()))")
+    @Mapping(target = "studyMaterials", source = "studyMaterialsIds")
     List<Subject> toSubject(List<SubjectOpenAPI> subjectOpenAPI);
 
     @Mapping(target = "editorsIds", expression = "java(professorsToEditorsIds(subject.getEditorsIds()))")
     @Mapping(target = "studyGroupsIds", expression = "java(groupsToIds(subject.getStudyGroup()))")
     @Mapping(target = "scheduleIds", expression = "java(schedulesToIds(subject.getSchedule()))")
-    @Mapping(target = "studyMaterials",ignore = true)
+    @Mapping(target = "studyMaterialsIds", source = "studyMaterials")
     SubjectOpenAPI toOpenAPI(Subject subject);
 
     @Mapping(target = "editorsIds", expression = "java(professorsToEditorsIds(subject.getEditorsIds()))")
     @Mapping(target = "studyGroupsIds", expression = "java(groupsToIds(subject.getStudyGroup()))")
     @Mapping(target = "scheduleIds", expression = "java(schedulesToIds(subject.getSchedule()))")
-    @Mapping(target = "studyMaterials",ignore = true)
+    @Mapping(target = "studyMaterialsIds", source = "studyMaterials")
     List<SubjectOpenAPI> toOpenAPI(List<Subject> subject);
 
     default List<Long> groupsToIds(Set<StudyGroup> studyGroups){

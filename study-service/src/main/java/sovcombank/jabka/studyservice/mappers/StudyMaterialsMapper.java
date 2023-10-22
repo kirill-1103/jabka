@@ -7,7 +7,7 @@ import sovcombank.jabka.studyservice.models.StudyMaterials;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = SubjectMapper.class)
+@Mapper(componentModel = "spring", uses = {SubjectMapper.class, SubjectIdMapper.class})
 public interface StudyMaterialsMapper {
 
 
