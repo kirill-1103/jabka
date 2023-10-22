@@ -25,9 +25,8 @@ import sovcombank.jabka.studyservice.repositories.StudyGroupRepository;
 import sovcombank.jabka.studyservice.repositories.SubjectRepository;
 import sovcombank.jabka.studyservice.services.interfaces.AttendanceStatisticService;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,9 +47,9 @@ public class AttendanceStatisticServiceImpl implements AttendanceStatisticServic
         if (attendanceStatisticsOpenApi == null || attendanceStatisticsOpenApi.isEmpty()) {
             throw new BadRequestException("Attendance Statistics List is Empty");
         }
+        checkAllScheduleExists(attendanceStatisticsOpenApi);
         List<AttendanceStatistics> attendanceStatisticsList = attendanceMapper.toListAttendanceStatistics(attendanceStatisticsOpenApi);
         checkAllStudentsExists(attendanceStatisticsList);
-        checkAllScheduleExists(attendanceStatisticsList);
         attendanceRepository.saveAll(attendanceStatisticsList);
         return ResponseEntity
                 .ok()
@@ -124,10 +123,11 @@ public class AttendanceStatisticServiceImpl implements AttendanceStatisticServic
         }
     }
 
-    private void checkAllScheduleExists(List<AttendanceStatistics> attendanceStatisticsList) {
+    private void checkAllScheduleExists(List<AttendanceStatisticsOpenApi> attendanceStatisticsOpenApiList) {
         List<Schedule> schedules =
-                scheduleRepository.findAllById(attendanceStatisticsList.stream().map(stat->stat.getSchedule().getId()).toList());
-        if(schedules.size() != attendanceStatisticsList.size()){
+                scheduleRepository.findAllById(attendanceStatisticsOpenApiList.stream().map(AttendanceStatisticsOpenApi::getScheduleId).toList());
+        Set<Long> ids = attendanceStatisticsOpenApiList.stream().map(AttendanceStatisticsOpenApi::getScheduleId).collect(Collectors.toSet());
+        if(schedules.size() != ids.size()){
             throw new NotFoundException("One or more schedules weren't found");
         }
     }
