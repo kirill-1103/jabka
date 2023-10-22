@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 import ru.sovcombank.openapi.model.ERoleOpenApi;
 import ru.sovcombank.openapi.model.SignupRequestOpenApi;
 import ru.sovcombank.openapi.model.UpdateUserOpenApi;
@@ -128,7 +129,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserEntity> getUsersByIds(List<Long> ids) {
-        return userRepository.findByIdIn(ids);
+        return userRepository.findAllById(ids);
     }
 
     @Override
