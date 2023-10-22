@@ -47,7 +47,7 @@ public class AttendanceStatisticsController implements AttendanceStatisticsApiDe
     public ResponseEntity<AttendanceStatisticsOpenApi> getStatisticsById(@PathVariable Long id) {
         AttendanceStatistics attendanceStatistics = attendanceStatisticService.getById(id);
         AttendanceStatisticsOpenApi attendanceStatisticsOpenApi = attendanceMapper.toOpenApi(attendanceStatistics);
-        Long userId = attendanceStatisticsOpenApi.getUserId();
+        Long userId = attendanceStatisticsOpenApi.getStudentId();
         ApiResponse<UserOpenApi> userOpenApiResponse = null;
         try {
             userOpenApiResponse = userApi.showUserInfoWithHttpInfo(userId);
@@ -87,7 +87,7 @@ public class AttendanceStatisticsController implements AttendanceStatisticsApiDe
 
     private List<AttendanceStatisticsOpenApi> getAttendanceOpenApiList(List<AttendanceStatistics> statistics){
         List<AttendanceStatisticsOpenApi> statisticsOpenApi = attendanceMapper.toOpenApiList(statistics);
-        List<Long> userIds = statisticsOpenApi.stream().map(s -> s.getUserId()).toList();
+        List<Long> userIds = statisticsOpenApi.stream().map(s -> s.getStudentId()).toList();
         try {
             ApiResponse<List<UserOpenApi>> usersResponse = userApi.getUsersByIdsWithHttpInfo(userIds);
             if(!okResponse(usersResponse)){
