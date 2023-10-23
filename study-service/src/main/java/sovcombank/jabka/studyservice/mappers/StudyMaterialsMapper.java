@@ -18,8 +18,10 @@ public interface StudyMaterialsMapper {
     List<StudyMaterials> toStudyMaterials(List<StudyMaterialsOpenAPI> studyMaterialsOpenAPI);
 
     @Mapping(target = "subjectId", source = "subject")
+    @Mapping(target = "homeworkIds", expression = "java(studyMaterials.getHomeworks().stream().map(h->h.getId()).toList())")
     StudyMaterialsOpenAPI toOpenAPI(StudyMaterials studyMaterials);
 
     @Mapping(target = "subjectId", source = "subject")
+    @Mapping(target = "homeworkIds", expression = "java(studyMaterials.getHomeworks().stream().map(h->h.getId()).toList())")
     List<StudyMaterialsOpenAPI> toOpenAPI(List<StudyMaterials> studyMaterials);
 }
