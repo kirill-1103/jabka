@@ -3,6 +3,13 @@ server:
   error:
     include-message: always
     include-binding-errors: always
+  ssl:
+    key-store: classpath:springboot.p12
+    key-store-password: password
+    key-store-type: pkcs12
+    key-alias: springboot
+    key-password: password
+    client-auth: NEED
 
 
 spring:
