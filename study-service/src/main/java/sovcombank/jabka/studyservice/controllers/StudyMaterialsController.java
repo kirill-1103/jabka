@@ -74,7 +74,7 @@ public class StudyMaterialsController implements MaterialsApiDelegate {
     @GetMapping("/subject/{subjectId}")
     @Override
     public ResponseEntity<List<StudyMaterialsOpenAPI>> getMaterialsBySubjectId(
-            @Valid @PathVariable(name = "id") Long subjectId
+            @Valid @PathVariable(name = "subjectId") Long subjectId
     ) {
         List<StudyMaterials> materials = studyMaterialsService.getMaterialsBySubjectId(subjectId);
         return ResponseEntity.ok(toMaterialsOpenApi(materials));

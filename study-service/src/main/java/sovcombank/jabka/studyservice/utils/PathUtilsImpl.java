@@ -12,6 +12,7 @@ public class PathUtilsImpl implements PathUtils {
     };
 
     private final static String[] AUTHORIZED_PATHS = new String[]{
+            
     };
 
     @Override
