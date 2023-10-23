@@ -1,4 +1,4 @@
-package sovcombank.jabka.newsservice;
+package sovcombank.jabka.newsservice.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

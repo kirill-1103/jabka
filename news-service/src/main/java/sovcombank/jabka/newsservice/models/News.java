@@ -12,8 +12,11 @@ import java.util.List;
 @Table(name = "news")
 public class News {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "news_sequence_generator")
+    @SequenceGenerator(name = "news_sequence_generator", sequenceName = "news_sequence", allocationSize = 1)
     private Long id;
+    @Column(name = "creation_date")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
     private String header;
     @Column(length = 10485760)

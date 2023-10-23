@@ -14,8 +14,8 @@ spring:
     url: jdbc:postgresql://localhost:5434/jabka_news
   jpa:
     defer-datasource-initialization: true
-    hibernate:
-      ddl-auto: update
+#    hibernate:
+#      ddl-auto: update
     show_sql: true
     properties:
       hibernate:

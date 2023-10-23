@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.sovkombank.openapi.model.NewsOpenAPI;
-import sovcombank.jabka.newsservice.NewsRepository;
+import sovcombank.jabka.newsservice.repositories.NewsRepository;
 import sovcombank.jabka.newsservice.mappers.NewsMapper;
 import sovcombank.jabka.newsservice.models.News;
 import sovcombank.jabka.newsservice.services.interfaces.NewsService;
