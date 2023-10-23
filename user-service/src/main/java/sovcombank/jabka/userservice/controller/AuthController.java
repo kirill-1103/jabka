@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
@@ -47,6 +48,7 @@ public class AuthController implements AuthorizationApiDelegate {
 
     @Override
     @PostMapping(MAPPING_AUTH)
+    @PreAuthorize("isAnonymous()")
     public ResponseEntity<JwtResponseOpenApi> authenticateUser(@RequestBody LoginRequestOpenApi loginRequestOpenApi) {
         JwtResponseOpenApi jwtResponseOpenApi = authService.createTokenAndAuthorized(loginRequestOpenApi);
         return ResponseEntity.ok(jwtResponseOpenApi);
@@ -54,6 +56,7 @@ public class AuthController implements AuthorizationApiDelegate {
 
     @Override
     @PostMapping(MAPPING_REGISTRATION)
+    @PreAuthorize("isAnonymous()")
     public ResponseEntity<Void> registerUser(@RequestBody SignupRequestOpenApi signupRequestOpenApi) {
 
         UserEntity user = userService.saveOrUpdate(signupRequestOpenApi);
@@ -64,6 +67,7 @@ public class AuthController implements AuthorizationApiDelegate {
 
     @Override
     @GetMapping(MAPPING_UPDATE_TOKEN)
+    @PreAuthorize("isAnonymous()")
     public ResponseEntity<JwtResponseOpenApi> updateUserToken(@RequestBody UserOpenApi userOpenApi) {
         String authenticatedName = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!authenticatedName.equals(userOpenApi.getLogin())) {
@@ -74,6 +78,7 @@ public class AuthController implements AuthorizationApiDelegate {
 
     @Override
     @GetMapping(MAPPING_ACTIVATION)
+    @PreAuthorize("isAnonymous()")
     public ResponseEntity<Void> activateUser(@RequestParam(name = "token") String token) {
         return authService.activateUser(token);
     }
@@ -81,6 +86,7 @@ public class AuthController implements AuthorizationApiDelegate {
     @Override
     @Transactional
     @PutMapping(MAPPING_RECOVERY)
+    @PreAuthorize("isAnonymous()")
     public ResponseEntity<Void> recoveryPassword(@RequestBody String body,
                                                  @RequestParam(name = "token") String token) {
         return authService.recoveryPassword(body, token);
@@ -89,6 +95,7 @@ public class AuthController implements AuthorizationApiDelegate {
     @Override
     @Transactional
     @PutMapping(MAPPING_FORGET)
+    @PreAuthorize("isAnonymous()")
     public ResponseEntity<Void> sendRecoveryPasswordMail(@RequestBody String body) {
         return authService.sendRecoveryPasswordMail(body);
     }

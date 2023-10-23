@@ -2,6 +2,7 @@ package sovcombank.jabka.userservice.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.sovcombank.openapi.api.ApplicantRequestApiDelegate;
 import ru.sovcombank.openapi.model.ApplicantRequestOpenApi;
@@ -19,6 +20,7 @@ public class ApplicantRequestController implements ApplicantRequestApiDelegate {
 
     @Override
     @PostMapping
+    @PreAuthorize("hasRole('ENROLLEE')")
     public ResponseEntity<ApplicantRequestOpenApi> addApplicantRequest(@RequestBody  ApplicantRequestOpenApi applicantRequestOpenApi) {
         return ResponseEntity.ok(applicantRequestService.add(applicantRequestOpenApi)
                 .map(applicantRequestMapper::toApplicantRequestOpenApi)
@@ -27,6 +29,7 @@ public class ApplicantRequestController implements ApplicantRequestApiDelegate {
 
     @Override
     @GetMapping("/user/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR') or hasRole('COMMITTE')")
     public ResponseEntity<ApplicantRequestOpenApi> applicantRequestByUserId(@PathVariable  Long id) {
         return ResponseEntity.ok(applicantRequestService.findByUserId(id)
                 .map(applicantRequestMapper::toApplicantRequestOpenApi)
@@ -35,6 +38,7 @@ public class ApplicantRequestController implements ApplicantRequestApiDelegate {
 
     @Override
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public ResponseEntity<Void> deleteApplicantRequest(@PathVariable  Long id) {
         applicantRequestService.delete(id);
         return ResponseEntity.ok().build();
@@ -42,6 +46,7 @@ public class ApplicantRequestController implements ApplicantRequestApiDelegate {
 
     @Override
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR') or hasRole('COMMITTE')")
     public ResponseEntity<List<ApplicantRequestOpenApi>> getAllApplicantRequests() {
         return ResponseEntity.ok(applicantRequestService.getAll()
                 .stream()
@@ -51,6 +56,7 @@ public class ApplicantRequestController implements ApplicantRequestApiDelegate {
 
     @Override
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR') or hasRole('COMMITTE')")
     public ResponseEntity<ApplicantRequestOpenApi> showApplicantRequestInfo(@PathVariable Long id) {
         return ResponseEntity.ok(applicantRequestService.findById(id)
                 .map(applicantRequestMapper::toApplicantRequestOpenApi).get());
@@ -58,6 +64,7 @@ public class ApplicantRequestController implements ApplicantRequestApiDelegate {
 
     @Override
     @PutMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR') or hasRole('COMMITTE')")
     public ResponseEntity<ApplicantRequestOpenApi> updateApplicantRequest(@RequestBody ApplicantRequestOpenApi applicantRequestOpenApi) {
         return ResponseEntity.ok(applicantRequestService.update(applicantRequestOpenApi)
                 .map(applicantRequestMapper::toApplicantRequestOpenApi).get());

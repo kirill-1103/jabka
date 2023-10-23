@@ -3,6 +3,7 @@ package sovcombank.jabka.userservice.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.sovcombank.openapi.api.UserApiDelegate;
 import ru.sovcombank.openapi.model.JwtResponseOpenApi;
@@ -34,6 +35,7 @@ public class UserController implements UserApiDelegate {
 
     @Override
     @DeleteMapping(MAPPING_DELETE_ONE)
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.ok().build();
@@ -41,6 +43,7 @@ public class UserController implements UserApiDelegate {
 
     @Override
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public ResponseEntity<List<UserOpenApi>> getAllUsers() {
         return ResponseEntity.ok(userService.getAll()
                 .stream()
@@ -51,6 +54,7 @@ public class UserController implements UserApiDelegate {
 
     @Override
     @GetMapping(MAPPING_GET_BY_GROUP)
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public ResponseEntity<List<UserOpenApi>> getUsersByGroupNumber(@RequestBody String groupNumber) {
         String groupName = groupNumber.replaceAll("\"", "");
         return ResponseEntity.ok(userMapper.toListOpenApi(userService.getUsersByGroupNumber(groupName)));
@@ -58,6 +62,8 @@ public class UserController implements UserApiDelegate {
 
     @Override
     @GetMapping(MAPPING_GET_ONE)
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STUDENT') or hasRole('MODERATOR') or hasRole('TEACHER') " +
+            "or hasRole('CURATOR') or hasRole('COMMITTE') or hasRole('ENROLLEE')")
     public ResponseEntity<UserOpenApi> showUserInfo(@PathVariable  Long id) {
         UserOpenApi userOpenApi = userMapper.toUserOpenApi(userService.getUserById(id));
         userOpenApi.setPassword(null);
@@ -66,6 +72,8 @@ public class UserController implements UserApiDelegate {
 
     @Override
     @PutMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STUDENT') or hasRole('MODERATOR') or hasRole('TEACHER') " +
+            "or hasRole('CURATOR') or hasRole('COMMITTE') or hasRole('ENROLLEE')")
     public ResponseEntity<JwtResponseOpenApi> updateUser(@RequestBody  UpdateUserOpenApi updateUserOpenApi) {
         userService.update(updateUserOpenApi);
         JwtResponseOpenApi token = authService.createAuthToken(updateUserOpenApi.getNewUser());
@@ -75,6 +83,7 @@ public class UserController implements UserApiDelegate {
 
     @Override
     @PostMapping("/users/update")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public ResponseEntity<Void> updateUsers(@RequestBody  List<UserOpenApi> usersOpenApi) {
         userService.updateUsers(usersOpenApi);
         return ResponseEntity.ok().build();
@@ -82,6 +91,7 @@ public class UserController implements UserApiDelegate {
 
     @Override
     @PostMapping("/ids")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public ResponseEntity<List<UserOpenApi>> getUsersByIds(@RequestBody List<Long> ids) {
         return ResponseEntity.ok(
                 userMapper.toListOpenApi(userService.getUsersByIds(ids))
