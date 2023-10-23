@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.sovcombank.openapi.model.StudyMaterialsBody;
+import org.springframework.web.multipart.MultipartFile;
 import ru.sovcombank.openapi.model.StudyMaterialsOpenAPI;
 import sovcombank.jabka.studyservice.exceptions.BadRequestException;
 import sovcombank.jabka.studyservice.exceptions.NotFoundException;
@@ -40,15 +40,14 @@ public class StudyMaterialsServiceImpl implements StudyMaterialsService {
 
     @Transactional
     @Override
-    public ResponseEntity<Void> createMaterials(StudyMaterialsBody studyMaterialsBody) {
-        StudyMaterialsOpenAPI studyMaterialsOpenAPI = studyMaterialsBody.getStudyMaterials();
+    public ResponseEntity<Void> createMaterials(StudyMaterialsOpenAPI studyMaterialsOpenAPI,
+                                                List<MultipartFile> files) {
         StudyMaterials studyMaterials = materialsMapper.toStudyMaterials(studyMaterialsOpenAPI);
         if (!subjectRepository.existsById(studyMaterials.getSubject().getId())) {
             return ResponseEntity
                     .notFound()
                     .build();
         }
-        List<Resource> files = studyMaterialsBody.getFiles();
         setMaterialsFileNamesAndSaveFiles(files, studyMaterials);
         materialsRepository.save(studyMaterials);
         return ResponseEntity
@@ -97,8 +96,8 @@ public class StudyMaterialsServiceImpl implements StudyMaterialsService {
 
     @Transactional
     @Override
-    public ResponseEntity<Void> updateMaterials(StudyMaterialsBody studyMaterialsBody) {
-        StudyMaterialsOpenAPI studyMaterialsOpenAPI = studyMaterialsBody.getStudyMaterials();
+    public ResponseEntity<Void> updateMaterials(StudyMaterialsOpenAPI studyMaterialsOpenAPI,
+                                                List<MultipartFile> files) {
         Optional<StudyMaterials> studyMaterialsOpt = materialsRepository.findById(studyMaterialsOpenAPI.getId());
         if (studyMaterialsOpt.isEmpty()) {
             return ResponseEntity
@@ -106,7 +105,6 @@ public class StudyMaterialsServiceImpl implements StudyMaterialsService {
                     .build();
         }
         StudyMaterials updatedMaterials = materialsMapper.toStudyMaterials(studyMaterialsOpenAPI);
-        List<Resource> files = studyMaterialsBody.getFiles();
         setMaterialsFileNamesAndSaveFiles(files, updatedMaterials);
         materialsRepository.save(updatedMaterials);
         return ResponseEntity
@@ -127,7 +125,7 @@ public class StudyMaterialsServiceImpl implements StudyMaterialsService {
         return subject.getStudyMaterials().stream().toList();
     }
 
-    private void setMaterialsFileNamesAndSaveFiles(List<Resource> files,
+    private void setMaterialsFileNamesAndSaveFiles(List<MultipartFile> files,
                                                    StudyMaterials studyMaterials) {
         if (files.isEmpty()) {
             throw new BadRequestException("Files is empty");
@@ -135,8 +133,8 @@ public class StudyMaterialsServiceImpl implements StudyMaterialsService {
         Set<FileName> fileNames = files.stream()
                 .map((file) -> {
                             FileName fileName = FileName.builder()
-                                    .initialName(file.getFilename())
-                                    .nameS3(fileService.generateMaterialsFileName(file.getFilename(), studyMaterials.getType()))
+                                    .initialName(file.getOriginalFilename())
+                                    .nameS3(fileService.generateMaterialsFileName(file.getOriginalFilename(), studyMaterials.getType()))
                                     .build();
                             fileService.save(getMaterialsFilePath(fileName), file);
                             return fileName;

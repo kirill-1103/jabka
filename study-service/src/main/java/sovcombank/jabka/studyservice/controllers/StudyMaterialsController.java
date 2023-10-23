@@ -4,8 +4,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.sovcombank.openapi.api.MaterialsApiDelegate;
-import ru.sovcombank.openapi.model.StudyMaterialsBody;
 import ru.sovcombank.openapi.model.StudyMaterialsOpenAPI;
 import ru.sovcombank.openapi.model.StudyMaterialsType;
 import sovcombank.jabka.studyservice.mappers.StudyMaterialsMapper;
@@ -29,9 +29,10 @@ public class StudyMaterialsController implements MaterialsApiDelegate {
 
     @PostMapping
     @Override
-    public ResponseEntity<Void> createMaterials(@RequestBody StudyMaterialsBody studyMaterialsBody
+    public ResponseEntity<Void> createMaterials(@RequestPart("studyMaterials") StudyMaterialsOpenAPI studyMaterialsOpenAPI,
+                                                @RequestPart("files") List<MultipartFile> files
     ) {
-        return studyMaterialsService.createMaterials(studyMaterialsBody);
+        return studyMaterialsService.createMaterials(studyMaterialsOpenAPI, files);
     }
 
     @DeleteMapping("/{id}")
@@ -64,8 +65,10 @@ public class StudyMaterialsController implements MaterialsApiDelegate {
 
     @PutMapping
     @Override
-    public ResponseEntity<Void> updateMaterials(@RequestBody StudyMaterialsBody studyMaterialsBody) {
-        return studyMaterialsService.updateMaterials(studyMaterialsBody);
+    public ResponseEntity<Void> updateMaterials(@RequestPart("studyMaterials") StudyMaterialsOpenAPI studyMaterialsOpenApi,
+                                                @RequestPart("files") List<MultipartFile> files
+    ) {
+        return studyMaterialsService.updateMaterials(studyMaterialsOpenApi, files);
     }
 
     @GetMapping("/subject/{subjectId}")

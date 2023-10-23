@@ -11,11 +11,15 @@ import java.util.List;
 public interface StudyMaterialsMapper {
 
 
+    @Mapping(target = "subject", source = "subjectId")
     StudyMaterials toStudyMaterials(StudyMaterialsOpenAPI studyMaterialsOpenAPI);
 
+    @Mapping(target = "subject", source = "subjectId")
     List<StudyMaterials> toStudyMaterials(List<StudyMaterialsOpenAPI> studyMaterialsOpenAPI);
 
+    @Mapping(target = "subjectId", source = "subject")
     StudyMaterialsOpenAPI toOpenAPI(StudyMaterials studyMaterials);
 
+    @Mapping(target = "subjectId", source = "subject")
     List<StudyMaterialsOpenAPI> toOpenAPI(List<StudyMaterials> studyMaterials);
 }

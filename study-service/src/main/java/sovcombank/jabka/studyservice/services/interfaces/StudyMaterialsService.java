@@ -1,10 +1,8 @@
 package sovcombank.jabka.studyservice.services.interfaces;
 
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import ru.sovcombank.openapi.model.StudyMaterialsBody;
+import org.springframework.web.multipart.MultipartFile;
 import ru.sovcombank.openapi.model.StudyMaterialsOpenAPI;
 import sovcombank.jabka.studyservice.models.StudyMaterials;
 
@@ -12,10 +10,10 @@ import java.util.List;
 
 @Service
 public interface StudyMaterialsService {
-    ResponseEntity<Void> createMaterials(StudyMaterialsBody studyMaterialsBody);
+    ResponseEntity<Void> createMaterials(StudyMaterialsOpenAPI studyMaterialsOpenAPI, List<MultipartFile> files);
     ResponseEntity<Void> deleteMaterials(Long id);
     List<StudyMaterials> getAllMaterials();
     StudyMaterials getMaterialsById(Long id);
-    ResponseEntity<Void> updateMaterials(StudyMaterialsBody studyMaterialsBody);
+    ResponseEntity<Void> updateMaterials(StudyMaterialsOpenAPI studyMaterialsOpenAPI, List<MultipartFile> files);
     List<StudyMaterials> getMaterialsBySubjectId(Long subjectId);
 }
