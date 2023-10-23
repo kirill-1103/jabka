@@ -14,6 +14,7 @@ import sovcombank.jabka.studyservice.mappers.StudyMaterialsMapper;
 import sovcombank.jabka.studyservice.models.FileName;
 import sovcombank.jabka.studyservice.models.StudyMaterials;
 import sovcombank.jabka.studyservice.models.Subject;
+import sovcombank.jabka.studyservice.repositories.FileNameRepository;
 import sovcombank.jabka.studyservice.repositories.HomeworkRepository;
 import sovcombank.jabka.studyservice.repositories.StudyMaterialsRepository;
 import sovcombank.jabka.studyservice.repositories.SubjectRepository;
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
 public class StudyMaterialsServiceImpl implements StudyMaterialsService {
     private final StudyMaterialsMapper materialsMapper;
     private final StudyMaterialsRepository materialsRepository;
+    private final FileNameRepository fileRepository;
     private final FileService fileService;
     private final FileNameService fileNameService;
     private final SubjectRepository subjectRepository;
@@ -65,6 +67,12 @@ public class StudyMaterialsServiceImpl implements StudyMaterialsService {
                     .build();
         }
         StudyMaterials studyMaterials = studyMaterialsOpt.get();
+        List<Long> fileIds = studyMaterials
+                .getAttachedFiles()
+                .stream()
+                .map(file -> file.getId())
+                .collect(Collectors.toList());
+        fileRepository.deleteAllById(fileIds);
         studyMaterials.getAttachedFiles()
                 .forEach((fileName) -> fileService.removeFileByPath(getMaterialsFilePath(fileName)));
         materialsRepository.deleteById(id);
