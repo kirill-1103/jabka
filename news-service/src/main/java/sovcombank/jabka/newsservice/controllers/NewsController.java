@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.sovkombank.openapi.api.NewsApi;
 import ru.sovkombank.openapi.api.NewsApiDelegate;
 import ru.sovkombank.openapi.model.NewsOpenAPI;
+import sovcombank.jabka.libs.security.config.SecurityConfig;
 import sovcombank.jabka.newsservice.services.interfaces.NewsService;
 
 import java.util.List;
