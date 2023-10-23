@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM node:12
 ENV TZ=Europe/Moscow
 ENV MAVEN_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.text=ALL-UNNAMED --add-opens java.desktop/sun.awt=ALL-UNNAMED"
 

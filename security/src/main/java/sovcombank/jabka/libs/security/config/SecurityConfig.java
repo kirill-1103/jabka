@@ -36,32 +36,32 @@ public class SecurityConfig {
         if (pathUtils.getForStudent().length != 0) {
             http.authorizeHttpRequests(request -> request
                     .requestMatchers(pathUtils.getForStudent())
-                    .hasRole(Role.STUDENT.getValue()));
+                    .hasRole(Role.STUDENT.getValue().substring(5)));
         }
         if (pathUtils.getForAdmin().length != 0) {
             http.authorizeHttpRequests(request -> request
                     .requestMatchers(pathUtils.getForAdmin())
-                    .hasRole(Role.ADMIN.getValue()));
+                    .hasRole(Role.ADMIN.getValue().substring(5)));
         }
         if (pathUtils.getForCommitte().length != 0) {
             http.authorizeHttpRequests(request -> request
                     .requestMatchers(pathUtils.getForCommitte())
-                    .hasRole(Role.COMMITTE.getValue()));
+                    .hasRole(Role.COMMITTE.getValue().substring(5)));
         }
         if (pathUtils.getForCurator().length != 0) {
             http.authorizeHttpRequests(request -> request
                     .requestMatchers(pathUtils.getForCurator())
-                    .hasRole(Role.CURATOR.getValue()));
+                    .hasRole(Role.CURATOR.getValue().substring(5)));
         }
         if (pathUtils.getForEnrollee().length != 0) {
             http.authorizeHttpRequests(request -> request
                     .requestMatchers(pathUtils.getForEnrollee())
-                    .hasRole(Role.ENROLLEE.getValue()));
+                    .hasRole(Role.ENROLLEE.getValue().substring(5)));
         }
         if (pathUtils.getForModerator().length != 0) {
             http.authorizeHttpRequests(request -> request
                     .requestMatchers(pathUtils.getForModerator())
-                    .hasRole(Role.MODERATOR.getValue()));
+                    .hasRole(Role.MODERATOR.getValue().substring(5)));
         }
         return http
                 .formLogin(form -> form.disable())
