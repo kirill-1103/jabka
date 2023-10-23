@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.*;
 import ru.sovcombank.openapi.api.MaterialsApiDelegate;
 import ru.sovcombank.openapi.model.StudyMaterialsBody;
 import ru.sovcombank.openapi.model.StudyMaterialsOpenAPI;
+import ru.sovcombank.openapi.model.StudyMaterialsType;
 import sovcombank.jabka.studyservice.mappers.StudyMaterialsMapper;
 import sovcombank.jabka.studyservice.models.FileName;
 import sovcombank.jabka.studyservice.models.StudyMaterials;
+import sovcombank.jabka.studyservice.services.interfaces.HomeworkService;
 import sovcombank.jabka.studyservice.services.interfaces.StudyMaterialsService;
 
 import java.util.Iterator;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 public class StudyMaterialsController implements MaterialsApiDelegate {
     private final StudyMaterialsService studyMaterialsService;
     private final StudyMaterialsMapper materialsMapper;
+    private final HomeworkService homeworkService;
 
     @PostMapping
     @Override
@@ -41,8 +44,13 @@ public class StudyMaterialsController implements MaterialsApiDelegate {
     @Override
     public ResponseEntity<List<StudyMaterialsOpenAPI>> getAllMaterials() {
         List<StudyMaterials> studyMaterials = studyMaterialsService.getAllMaterials();
+        List<StudyMaterialsOpenAPI> studyMaterialsOpenAPI = toMaterialsOpenApi(studyMaterials);
+        studyMaterialsOpenAPI
+                .stream()
+                .filter(materials -> materials.getType().equals(StudyMaterialsType.TASK))
+                .forEach(materials -> materials.setHomeworkIds(homeworkService.getIdsByTaskId(materials.getId())));
         return ResponseEntity
-                .ok(toMaterialsOpenApi(studyMaterials));
+                .ok(studyMaterialsOpenAPI);
     }
 
     @GetMapping("/{id}")

@@ -28,4 +28,7 @@ public interface HomeworkService {
     void updateHomework(HomeworkOpenAPI homework, List<MultipartFile> file);
 
     void grade(Long homeworkId, GradeHomeworkRequestOpenApi gradeHomeworkRequestOpenApi);
+
+    List<Homework> getByTaskId(Long taskId);
+    List<Long> getIdsByTaskId(Long taskId);
 }

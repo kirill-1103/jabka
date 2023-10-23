@@ -1319,18 +1319,18 @@ components:
     StudyMaterialsOpenAPI:
       type: object
       required:
-        - studyMaterialsType
+        - type
         - subjectId
         - materialsText
       properties:
         id:
           type: integer
           format: int64
-        studyMaterialsType:
+        type:
           $ref: "#/components/schemas/StudyMaterialsType"
         materialsText:
           type: string
-        subject:
+        subjectId:
           type: integer
           format: int64
         homeworkIds:

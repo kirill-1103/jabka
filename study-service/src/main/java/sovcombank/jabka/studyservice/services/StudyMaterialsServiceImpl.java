@@ -14,6 +14,7 @@ import sovcombank.jabka.studyservice.mappers.StudyMaterialsMapper;
 import sovcombank.jabka.studyservice.models.FileName;
 import sovcombank.jabka.studyservice.models.StudyMaterials;
 import sovcombank.jabka.studyservice.models.Subject;
+import sovcombank.jabka.studyservice.repositories.HomeworkRepository;
 import sovcombank.jabka.studyservice.repositories.StudyMaterialsRepository;
 import sovcombank.jabka.studyservice.repositories.SubjectRepository;
 import sovcombank.jabka.studyservice.services.interfaces.FileNameService;

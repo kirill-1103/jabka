@@ -159,11 +159,25 @@ public class HomeworkServiceImpl implements HomeworkService {
     }
 
     @Override
+    @Transactional
     public void grade(Long homeworkId, GradeHomeworkRequestOpenApi gradeHomeworkRequestOpenApi) {
         Homework homework = this.getHomeworkById(homeworkId);
         homework.setGrade(gradeHomeworkRequestOpenApi.getGrade().longValue());
         homework.setComment(gradeHomeworkRequestOpenApi.getComment());
         homeworkRepository.save(homework);
+    }
+    @Override
+    @Transactional
+    public List<Homework> getByTaskId(Long taskId){
+        return homeworkRepository.findByTaskId(taskId);
+    }
+
+    @Override
+    public List<Long> getIdsByTaskId(Long taskId) {
+        return getByTaskId(taskId)
+                .stream()
+                .map(hw -> hw.getId())
+                .collect(Collectors.toList());
     }
 
     private String getFilePath(FileName fileName) {

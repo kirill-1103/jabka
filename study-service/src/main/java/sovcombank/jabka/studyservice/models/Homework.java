@@ -36,5 +36,4 @@ public class Homework {
 
     @ManyToOne
     private StudyMaterials task;
-
 }
