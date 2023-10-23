@@ -19,7 +19,7 @@ public class News {
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
     private String header;
-    @Column(length = 10485760)
+    @Column(length = 1048576)
     private String text;
     private List<String> hashtags;
     private List<String> imgs;
