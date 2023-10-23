@@ -1,4 +1,4 @@
-FROM node:12
+FROM node:18
 ENV TZ=Europe/Moscow
 ENV MAVEN_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.text=ALL-UNNAMED --add-opens java.desktop/sun.awt=ALL-UNNAMED"
 
@@ -7,10 +7,7 @@ WORKDIR ./front
 
 COPY /front .
 
-RUN apt-get update
-RUN apt-get install nvm -y
-RUN apt-get install npm -y
-RUN apt-get nvm install node -y
+
 RUN npm i
 
 CMD ["npm", "run","dev"]
