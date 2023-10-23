@@ -3,6 +3,7 @@ package sovcombank.jabka.studyservice.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.sovcombank.openapi.ApiException;
 import ru.sovcombank.openapi.ApiResponse;
@@ -31,12 +32,15 @@ public class AttendanceStatisticsController implements AttendanceStatisticsApiDe
 
     @Override
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR') or hasRole('TEACHER')")
     public ResponseEntity<Void> addStatistics(@RequestBody List<AttendanceStatisticsOpenApi> attendanceStatisticsOpenApi) {
         return attendanceStatisticService.saveStatistics(attendanceStatisticsOpenApi);
     }
 
     @Override
     @GetMapping("/group/{group_id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR') or hasRole('TEACHER') " +
+            "or hasRole('CURATOR')")
     public ResponseEntity<List<AttendanceStatisticsOpenApi>> getStatisticsByGroupId(@PathVariable("group_id") Long groupId) {
         List<AttendanceStatistics> statistics = attendanceStatisticService.getStatisticsByGroupId(groupId);
         return ResponseEntity.ok(getAttendanceOpenApiList(statistics));
@@ -44,6 +48,7 @@ public class AttendanceStatisticsController implements AttendanceStatisticsApiDe
 
     @Override
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public ResponseEntity<AttendanceStatisticsOpenApi> getStatisticsById(@PathVariable Long id) {
         AttendanceStatistics attendanceStatistics = attendanceStatisticService.getById(id);
         AttendanceStatisticsOpenApi attendanceStatisticsOpenApi = attendanceMapper.toOpenApi(attendanceStatistics);
@@ -67,6 +72,7 @@ public class AttendanceStatisticsController implements AttendanceStatisticsApiDe
 
     @Override
     @GetMapping("/subject/{subject_id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR') or hasRole('TEACHER')")
     public ResponseEntity<List<AttendanceStatisticsOpenApi>> getStatisticsBySubjectId(
             @PathVariable("subject_id") Long subjectId
     ) {
@@ -77,6 +83,7 @@ public class AttendanceStatisticsController implements AttendanceStatisticsApiDe
 
     @GetMapping("/schedule/{scheduleId}")
     @Override
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR') or hasRole('TEACHER')")
     public ResponseEntity<List<AttendanceStatisticsOpenApi>> getStatisticsBySchedule(
             @PathVariable("scheduleId") Long scheduleId
     ){

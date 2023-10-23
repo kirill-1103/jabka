@@ -4,6 +4,7 @@ package sovcombank.jabka.studyservice.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.sovcombank.openapi.api.HomeworkApiDelegate;
@@ -29,6 +30,7 @@ public class HomeworkController implements HomeworkApiDelegate {
 
     @PostMapping("/materials/{materialsId}")
     @Override
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR') or hasRole('TEACHER')")
     public ResponseEntity<Void> createHomework(
             @Valid @PathVariable(name = "materialsId") Long materialsId,
             @RequestPart("homework") HomeworkOpenAPI homework,
@@ -40,6 +42,7 @@ public class HomeworkController implements HomeworkApiDelegate {
 
     @DeleteMapping("/{homeworkId}")
     @Override
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR') or hasRole('TEACHER')")
     public ResponseEntity<Void> deleteHomework(
             @Valid @PathVariable(name = "homeworkId") Long homeworkId
     ) {
@@ -49,6 +52,7 @@ public class HomeworkController implements HomeworkApiDelegate {
 
     @GetMapping("/materials/{materialsId}/all")
     @Override
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR') or hasRole('TEACHER')")
     public ResponseEntity<List<HomeworkOpenAPI>> getAllHomeworksByMaterials(
             @Valid @PathVariable(name = "materialsId") Long materialsId
     ) {
@@ -58,6 +62,7 @@ public class HomeworkController implements HomeworkApiDelegate {
 
     @Override
     @PutMapping("/grade/{homeworkId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR') or hasRole('TEACHER')")
     public ResponseEntity<Void> gradeHomework(@PathVariable Long homeworkId,@RequestBody GradeHomeworkRequestOpenApi gradeHomeworkRequestOpenApi) {
         homeworkService.grade(homeworkId, gradeHomeworkRequestOpenApi);
         return ResponseEntity.ok().build();
@@ -65,6 +70,8 @@ public class HomeworkController implements HomeworkApiDelegate {
 
     @GetMapping("/{homework_id}")
     @Override
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STUDENT') or hasRole('MODERATOR') or hasRole('TEACHER')" +
+            "or hasRole('CURATOR')")
     public ResponseEntity<HomeworkOpenAPI> getHomeworkById(
             @Valid @PathVariable("homework_id") Long homeworkId
     ) {
@@ -76,6 +83,8 @@ public class HomeworkController implements HomeworkApiDelegate {
 
     @GetMapping("/materials/{materialsId}/student/{studentId}")
     @Override
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR') or hasRole('TEACHER') " +
+            "or hasRole('STUDENT') or hasRole('CURATOR')")
     public ResponseEntity<HomeworkOpenAPI> getHomeworkByStudentAndMaterials(
             @Valid @PathVariable(name = "materialsId") Long materialsId,
             @Valid @PathVariable(name = "studentId") Long studentId
@@ -88,6 +97,8 @@ public class HomeworkController implements HomeworkApiDelegate {
 
     @GetMapping("/student/{studentId}")
     @Override
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR') or hasRole('TEACHER') " +
+            "or hasRole('STUDENT') or hasRole('CURATOR')")
     public ResponseEntity<List<HomeworkOpenAPI>> getHomeworkByStudentId(
             @Valid @PathVariable(name = "studentId") Long studentId
     ) {
@@ -97,6 +108,8 @@ public class HomeworkController implements HomeworkApiDelegate {
 
     @PutMapping("/{homework_id}")
     @Override
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR') or hasRole('TEACHER') " +
+            "or hasRole('STUDENT') or hasRole('CURATOR')")
     public ResponseEntity<Void> updateHomework(
             @Valid @PathVariable(name = "homework_id") Long homeworkId,
             @RequestPart("homework") HomeworkOpenAPI homework,

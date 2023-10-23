@@ -7,6 +7,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,8 @@ public class FileDownloadController implements FileDownloadApiDelegate {
 
     @Override
     @GetMapping("/download/homework/{fileId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STUDENT') or hasRole('MODERATOR') or hasRole('TEACHER') " +
+            "or hasRole('CURATOR')")
     public ResponseEntity<Resource> downloadHomeworkFileById(@PathVariable Long fileId) {
         String name = fileNameService.getNameByFileId(fileId);
         ResponseEntity<ByteArrayResource> responseEntity =
@@ -39,6 +42,8 @@ public class FileDownloadController implements FileDownloadApiDelegate {
 
     @Override
     @GetMapping("/download/materials/{fileId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STUDENT') or hasRole('MODERATOR') or hasRole('TEACHER') " +
+            "or hasRole('CURATOR') or hasRole('COMMITTE')")
     public ResponseEntity<Resource> downloadMaterialsFileById(@PathVariable Long fileId) {
         String name = fileNameService.getNameByFileId(fileId);
         ResponseEntity<ByteArrayResource> responseEntity =
@@ -83,25 +88,4 @@ public class FileDownloadController implements FileDownloadApiDelegate {
                     .build();
         }
     }
-
-//    @GetMapping("/download/{materialsId}/all")
-//    //@Override
-//    public ResponseEntity<List<Resource>> downloadAllFilesBySubject(
-//            @Valid @PathVariable(name = "materialsId") Long materialsId
-//    ){
-//        List<String> paths = new ArrayList<>();
-//        Optional<StudyMaterials> materialsOpt = materialsRepository.findById(materialsId);
-//        if(materialsOpt.isEmpty()){
-//            throw new NotFoundException(String.format("Study Materials With Id %d Wasn't Found", materialsId));
-//        }
-//        StudyMaterials materials = materialsOpt.get();
-//        materials.getFileNames()
-//                .stream()
-//                .map(FileName::getNameS3)
-//                .forEach(paths::add);
-//        List<ByteArrayResource> allFiles = paths.stream()
-//                .map(fileService::getFileByPath)
-//                .collect(Collectors.toList());
-//        return ResponseEntity.ok().build();
-//    }
 }

@@ -3,6 +3,7 @@ package sovcombank.jabka.studyservice.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.sovcombank.openapi.api.MaterialsApiDelegate;
@@ -29,6 +30,7 @@ public class StudyMaterialsController implements MaterialsApiDelegate {
 
     @PostMapping
     @Override
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR') or hasRole('TEACHER')")
     public ResponseEntity<Void> createMaterials(@RequestPart("studyMaterials") StudyMaterialsOpenAPI studyMaterialsOpenAPI,
                                                 @RequestPart("files") List<MultipartFile> files
     ) {
@@ -37,12 +39,14 @@ public class StudyMaterialsController implements MaterialsApiDelegate {
 
     @DeleteMapping("/{id}")
     @Override
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR') or hasRole('TEACHER')")
     public ResponseEntity<Void> deleteMaterials(@Valid @PathVariable(name = "id") Long id) {
         return studyMaterialsService.deleteMaterials(id);
     }
 
     @GetMapping
     @Override
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR') or hasRole('TEACHER')")
     public ResponseEntity<List<StudyMaterialsOpenAPI>> getAllMaterials() {
         List<StudyMaterials> studyMaterials = studyMaterialsService.getAllMaterials();
         List<StudyMaterialsOpenAPI> studyMaterialsOpenAPI = toMaterialsOpenApi(studyMaterials);
@@ -56,6 +60,8 @@ public class StudyMaterialsController implements MaterialsApiDelegate {
 
     @GetMapping("/{id}")
     @Override
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR') or hasRole('TEACHER') " +
+            "or hasRole('STUDENT') or hasRole('CURATOR')")
     public ResponseEntity<StudyMaterialsOpenAPI> getMaterialsById(
             @Valid @PathVariable(name = "id") Long id
     ) {
@@ -65,6 +71,7 @@ public class StudyMaterialsController implements MaterialsApiDelegate {
 
     @PutMapping
     @Override
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR') or hasRole('TEACHER')")
     public ResponseEntity<Void> updateMaterials(@RequestPart("studyMaterials") StudyMaterialsOpenAPI studyMaterialsOpenApi,
                                                 @RequestPart("files") List<MultipartFile> files
     ) {
@@ -73,6 +80,8 @@ public class StudyMaterialsController implements MaterialsApiDelegate {
 
     @GetMapping("/subject/{subjectId}")
     @Override
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR') or hasRole('TEACHER') " +
+            "or hasRole('STUDENT') or hasRole('CURATOR')")
     public ResponseEntity<List<StudyMaterialsOpenAPI>> getMaterialsBySubjectId(
             @Valid @PathVariable(name = "subjectId") Long subjectId
     ) {

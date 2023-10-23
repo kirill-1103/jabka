@@ -12,7 +12,14 @@ public class PathUtilsImpl implements PathUtils {
     };
 
     private final static String[] AUTHORIZED_PATHS = new String[]{
-            
+            "/api/study/attendance-statistics/**",
+            "/api/study/download/**",
+            "/api/study/homework/**",
+            "/api/study/schedule/**",
+            "/api/study/group/**",
+            "/api/study/materials/**",
+            "/api/study/subject/**"
+
     };
 
     @Override
@@ -27,36 +34,36 @@ public class PathUtilsImpl implements PathUtils {
 
     @Override
     public @NonNull String[] getForAdmin() {
-        return new String[0];
+        return AUTHORIZED_PATHS;
     }
 
     @Override
     public @NonNull String[] getForStudent() {
-        return new String[0];
+        return AUTHORIZED_PATHS;
     }
 
     @Override
     public @NonNull String[] getForTeacher() {
-        return new String[0];
+        return AUTHORIZED_PATHS;
     }
 
     @Override
     public @NonNull String[] getForCurator() {
-        return new String[0];
+        return AUTHORIZED_PATHS;
     }
 
     @Override
     public @NonNull String[] getForEnrollee() {
-        return new String[0];
+        return AUTHORIZED_PATHS;
     }
 
     @Override
     public @NonNull String[] getForCommitte() {
-        return new String[0];
+        return AUTHORIZED_PATHS;
     }
 
     @Override
     public @NonNull String[] getForModerator() {
-        return new String[0];
+        return AUTHORIZED_PATHS;
     }
 }
