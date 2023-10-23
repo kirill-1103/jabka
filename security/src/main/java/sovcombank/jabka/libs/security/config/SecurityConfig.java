@@ -65,6 +65,7 @@ public class SecurityConfig {
         }
         return http
                 .formLogin(form -> form.disable())
+                .requiresChannel((channel)->channel.anyRequest().requiresSecure())
                 .sessionManagement(management -> management
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(handling -> handling
