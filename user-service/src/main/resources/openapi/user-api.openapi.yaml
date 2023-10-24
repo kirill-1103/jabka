@@ -678,7 +678,3 @@ components:
           $ref: "#/components/schemas/UserOpenApi"
         newUser:
           $ref: "#/components/schemas/UserOpenApi"
-        
-          
-          
-
