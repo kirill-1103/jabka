@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { fetchAllUsers, getUserById } from "../../store/userReducer";
 import { useSelector } from "react-redux";
 
-const postBody = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel ea qui similique ullam fugiat beatae quisquam quia eum libero porro deleniti, mollitia facilis, quibusdam, culpa incidunt nobis! Fuga, ab ut!"
+const postBody = "";
 
 
 export function ProfessorItem() {

@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Dispatch } from "redux";
 import { RootState } from "./store";
 import axios from "axios";
+import localStorageService from "../services/localStorage.service.ts";
 
 export interface ISubject {
   id: number
@@ -53,7 +54,8 @@ export const fetchAllSubjects = () => {
   return async (dispatch: Dispatch) => {
     try {
       dispatch(fetchDataStart());
-      const response = await axios.get(`http://158.160.49.7:8080/api/study/subject`);
+      const response = await axios.get(`http://158.160.49.7:8080/api/study/subject`,
+          { headers: { Authorization: `Bearer `+localStorageService.getAccessToken() } })
       dispatch(fetchDataSuccess(response.data));
     } catch (error) {
       dispatch(fetchDataFailure("Что-то пошло не так"));

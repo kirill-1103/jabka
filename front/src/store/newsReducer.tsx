@@ -69,7 +69,6 @@ export const createNewsPost = (data: INews) => {
     try {
       dispatch(fetchDataStart());
       const token = localStorageService.getAccessToken();
-
       await axios.post(`http://158.160.49.7:8080/api/news`, data, { headers: { Authorization: `Bearer ${token}` } });
     } catch (error) {
       dispatch(fetchDataFailure("Что-то пошло не так"));

@@ -83,8 +83,8 @@ export const getUserApplications = () => (state: RootState) =>
   state.applications.entities;
 
   export const getApplicationById = (id: number | null) => (state: RootState) => {
-    if (state.applications.entities && id) {
-      return state.applications.entities.find((n) => n.user.id === id);
+    if (state.application.entities && id) {
+      return state.application.entities;
     }
   };
 

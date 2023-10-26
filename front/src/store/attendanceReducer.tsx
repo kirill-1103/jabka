@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Dispatch } from "redux";
 import { RootState } from "./store";
 import axios from "axios";
+import localStorageService from "../services/localStorage.service.ts";
 
 export interface IAttendance {
   scheduleId: number
@@ -50,7 +51,8 @@ export const fetchAllAttendanceById = (id: number) => {
   return async (dispatch: Dispatch) => {
     try {
       dispatch(fetchDataStart());
-      const response = await axios.get(`http://158.160.49.7:8080/api/study/attendance-statistics/${id}`);
+      const response = await axios.get(`http://158.160.49.7:8080/api/study/attendance-statistics/${id}`,
+          { headers: { Authorization: `Bearer `+localStorageService.getAccessToken() }});
       dispatch(fetchDataSuccess(response.data));
     } catch (error) {
       dispatch(fetchDataFailure("Что-то пошло не так"));

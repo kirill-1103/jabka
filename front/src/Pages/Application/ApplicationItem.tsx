@@ -43,9 +43,9 @@ export default function Application() {
     }
   }, [reqError]);
 
-  // useEffect(() => {
-  //   dispatch(getUserApplicationById(Number(userId)))
-  // }, []);
+  useEffect(() => {
+    dispatch(getUserApplicationById(Number(userId)))
+  }, []);
 
   function handleFindColor(a: IApplication) {
     if (a.requestStatus === 'ON_MODERATION') {

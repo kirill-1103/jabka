@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Dispatch } from "redux";
 import { RootState } from "./store";
 import axios from "axios";
+import localStorageService from "../services/localStorage.service.ts";
 
 export interface ISchedule {
   id: number
@@ -92,7 +93,8 @@ export const getFullSchedule = () => {
   return async (dispatch: Dispatch) => {
     try {
       dispatch(fetchDataStart());
-      const response = await axios.get(`http://158.160.49.7:8080/api/study/schedule`);
+      const response = await axios.get(`http://158.160.49.7:8080/api/study/schedule`,
+          { headers: { Authorization: `Bearer `+localStorageService.getAccessToken() } });
       dispatch(fetchDataSuccess(response.data));
 
     } catch (error) {
