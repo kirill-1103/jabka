@@ -138,7 +138,7 @@ components:
       type: object
       required:
         - header
-        - creationDate
+        - date
         - text
         - hashtags
       properties:
@@ -147,7 +147,7 @@ components:
           format: int64
         header:
           type: string
-        creationDate:
+        date:
           type: string
           format: date-time
         text:

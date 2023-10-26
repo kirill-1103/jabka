@@ -110,7 +110,7 @@ export const getUserApplicationById = (id: number) => {
 
       dispatch(fetchDataStart());
       const response = await axios.get(`http://158.160.49.7:8080/api/user/request/user/${id}`,
-       {headers: {'Authorization': `Bearer ${token}`}});
+       {headers: {'Authorization': `Bearer ${token}`}});'' +
       dispatch(fetchDataSuccess(response.data));
     } catch (error) {
       dispatch(fetchDataEnd());

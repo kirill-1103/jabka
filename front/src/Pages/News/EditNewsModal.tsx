@@ -56,7 +56,8 @@ export default function EditNewsModal({open, post, handleClose, isEdit}: Props) 
   const submit = () => {
     if (isEdit) {
       dispatch(editNewsPost(formValues as INews))
-      dispatch(fetchNews())
+      dispatch(fetchNews()).then(()=>{
+      })
     } else {
       dispatch(createNewsPost(formValues as INews))
       dispatch(fetchNews())
@@ -85,11 +86,9 @@ export default function EditNewsModal({open, post, handleClose, isEdit}: Props) 
       errors.header = "Добавьте теги!";
     }
 
-
     if (!values.text) {
       errors.text = "Это поле не может быть пустым!";
     }
-
 
     return errors
   };
