@@ -66,10 +66,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     public List<Schedule> getByGroupId(Long id) {
         groupRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("Group with id %d not found", id)));
-        List<Subject> subjects = subjectRepository.findByStudyGroupId(id);
-        return subjects.stream()
-                .flatMap(subject -> subject.getSchedule().stream())
-                .toList();
+        List<Schedule> schedules = scheduleRepository.findByGroupId(id);
+        return schedules;
     }
 
     @Override

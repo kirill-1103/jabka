@@ -8,7 +8,7 @@ import sovcombank.jabka.libs.security.interfaces.PathUtils;
 public class PathUtilsImpl implements PathUtils {
 
     private final static String[] PUBLIC_PATHS = new String[]{
-            "/**"
+
     };
 
     private final static String[] AUTHORIZED_PATHS = new String[]{
@@ -19,7 +19,6 @@ public class PathUtilsImpl implements PathUtils {
             "/api/study/group/**",
             "/api/study/materials/**",
             "/api/study/subject/**"
-
     };
 
     @Override
