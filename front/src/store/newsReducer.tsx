@@ -4,6 +4,7 @@ import { Dispatch } from "redux";
 import { RootState } from "./store";
 import axios from "axios";
 import localStorageService from "../services/localStorage.service";
+import {formatDate} from "../utils/formatDate.tsx";
 
 export interface INews {
   header: string;
@@ -68,6 +69,7 @@ export const createNewsPost = (data: INews) => {
   return async (dispatch: Dispatch) => {
     try {
       dispatch(fetchDataStart());
+      data.date = new Date().toISOString().slice(0, -5) + '+03:00';
       const token = localStorageService.getAccessToken();
       await axios.post(`http://158.160.49.7:8080/api/news`, data, { headers: { Authorization: `Bearer ${token}` } });
     } catch (error) {
@@ -82,7 +84,7 @@ export const editNewsPost = (data: INews) => {
     try {
       dispatch(fetchDataStart());
       const token = localStorageService.getAccessToken();
-
+      data.date = new Date().toISOString().slice(0, -5) + '+03:00';
       await axios.put(`http://158.160.49.7:8080/api/news/${data.id}`, data, { headers: { Authorization: `Bearer ${token}` } });
     } catch (error) {
       dispatch(fetchDataFailure("Что-то пошло не так"));
