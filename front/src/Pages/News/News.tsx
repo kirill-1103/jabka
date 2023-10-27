@@ -55,7 +55,13 @@ function News() {
   }
   const filteredNews = filterNews(news);
   const count = filteredNews.length;
-  const sortedNews = filteredNews
+  const sortedNews = [...filteredNews].sort((a,b)=>{
+    if(a.date > b.date){
+      return -1;
+    }else{
+      return 1;
+    }
+  })
   const newsCrop = paginate(sortedNews, page, newsPerPage);
 
   return(

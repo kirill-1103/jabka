@@ -5,6 +5,7 @@ import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import { INews } from '../../store/newsReducer';
 import { useNavigate } from 'react-router-dom';
+import { formatDate} from "../../utils/formatDate";
 
 interface Props {
   post: INews,
@@ -36,7 +37,7 @@ function NewsCard({ post }: Props) {
             {hashtags.map((t) =><Typography key={t} mr={1} variant='caption' color='text.secondary'>{t}</Typography>)}
           </Box>
 
-          <Typography variant='caption' color= 'text.secondary'>{date}</Typography>
+          <Typography variant='caption' color= 'text.secondary'>{formatDate(date)}</Typography>
 
           </Box>
         </Box>

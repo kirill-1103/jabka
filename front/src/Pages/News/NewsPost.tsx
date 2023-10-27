@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { getPostById } from "../../store/newsReducer";
 import { useState } from "react";
 import EditNewsModal from "./EditNewsModal";
+import {formatDate} from "../../utils/formatDate";
 
 const postBody = ""
 
@@ -36,7 +37,7 @@ export default function NewsPost() {
       <Box m={3}>
         <Box display='flex' justifyContent='space-between'>
           <Typography variant="h4" color="primary">{post.header}</Typography>
-          <Typography variant='h6' color= 'text.secondary'>{post.date}</Typography>
+          <Typography variant='h6' color= 'text.secondary'>{formatDate(post.date)}</Typography>
         </Box>
 
         <Box display='flex'>
